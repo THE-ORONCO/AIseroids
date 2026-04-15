@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://cujdj2kfjxl54"]
+
+[ext_resource type="Script" uid="uid://c5gxdwhsxj7mf" path="res://entities/ship/ship.gd" id="1_wkkyv"]
+[ext_resource type="Texture2D" uid="uid://qghdlpidbh84" path="res://icon.svg" id="2_6r6hl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hpxva"]
+particle_flag_disable_z = true
+inherit_velocity_ratio = 0.505
+direction = Vector3(0, 1, 0)
+spread = 14.211
+initial_velocity_max = 148.59
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cnywj"]
+radius = 27.018513
+
+[node name="Space" type="Node2D" unique_id=930446752]
+
+[node name="Ship" type="RigidBody2D" parent="." unique_id=1115552861]
+position = Vector2(388, 194)
+gravity_scale = 0.0
+script = ExtResource("1_wkkyv")
+
+[node name="Icon" type="Sprite2D" parent="Ship" unique_id=685374534]
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("2_6r6hl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ship" unique_id=765870664]
+shape = SubResource("CircleShape2D_xikw6")
+
+[node name="ThrusterParticles" type="GPUParticles2D" parent="Ship" unique_id=115805436]
+amount = 50
+trail_enabled = true
+trail_lifetime = 0.2
+trail_sections = 2
+trail_section_subdivisions = 1
+process_material = SubResource("ParticleProcessMaterial_hpxva")
+
+[node name="Asteroids" type="Node2D" parent="." unique_id=1429533558]
+
+[node name="Asteroid" type="RigidBody2D" parent="Asteroids" unique_id=776901858]
+position = Vector2(142, 97)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Asteroids/Asteroid" unique_id=646425833]
+shape = SubResource("CircleShape2D_cnywj")
+
+[node name="Asteroid2" type="RigidBody2D" parent="Asteroids" unique_id=1700818394]
+position = Vector2(576, 267)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Asteroids/Asteroid2" unique_id=280811034]
+shape = SubResource("CircleShape2D_cnywj")
