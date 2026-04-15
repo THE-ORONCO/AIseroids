@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cunuddi5si8ua"]
+
+[ext_resource type="Script" uid="uid://c5gxdwhsxj7mf" path="res://entities/ship/ship.gd" id="1_tivcy"]
+[ext_resource type="Texture2D" uid="uid://qghdlpidbh84" path="res://icon.svg" id="2_alltn"]
+[ext_resource type="PackedScene" uid="uid://bgqdgtlshk4yf" path="res://entities/ship/shot.tscn" id="3_alltn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hpxva"]
+particle_flag_disable_z = true
+inherit_velocity_ratio = 0.505
+direction = Vector3(0, 1, 0)
+spread = 14.211
+initial_velocity_max = 148.59
+gravity = Vector3(0, 0, 0)
+
+[node name="Ship" type="RigidBody2D" unique_id=63985044]
+gravity_scale = 0.0
+script = ExtResource("1_tivcy")
+shot = ExtResource("3_alltn")
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=535061980]
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("2_alltn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1623896605]
+shape = SubResource("CircleShape2D_xikw6")
+
+[node name="ThrusterParticles" type="GPUParticles2D" parent="." unique_id=2098380072]
+amount = 50
+trail_enabled = true
+trail_lifetime = 0.2
+trail_sections = 2
+trail_section_subdivisions = 1
+process_material = SubResource("ParticleProcessMaterial_hpxva")
+
+[node name="Muzzle" type="Marker2D" parent="." unique_id=1752905442]
+unique_name_in_owner = true
+position = Vector2(0, -23)
