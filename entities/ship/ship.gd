@@ -44,6 +44,7 @@ func _strafe() -> void:
 func _fire() -> void:
 	if ship_controller.shoot():
 		var bullet: Shot = shot.instantiate()
+		bullet.add_to_group("SplitsAsteroids")
 		bullet.transform = muzzle.global_transform
 		bullet.linear_velocity = self.linear_velocity
 		get_parent().add_child(bullet)

@@ -7,6 +7,8 @@
 
 [node name="Shot" type="RigidBody2D" unique_id=1892472417]
 gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_c3aqg")
 
 [node name="Hitbox" type="CollisionShape2D" parent="." unique_id=2006140537]
