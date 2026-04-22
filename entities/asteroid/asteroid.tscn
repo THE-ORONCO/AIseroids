@@ -7,6 +7,8 @@
 radius = 27.018513
 
 [node name="Asteroid" type="RigidBody2D" unique_id=1246036190]
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("1_20vrb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1671072178]
