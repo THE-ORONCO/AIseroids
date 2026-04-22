@@ -16,6 +16,7 @@ gravity = Vector3(0, 0, 0)
 
 [node name="Ship" type="RigidBody2D" unique_id=63985044]
 gravity_scale = 0.0
+angular_damp = 100.0
 script = ExtResource("1_tivcy")
 shot = ExtResource("3_alltn")
 
