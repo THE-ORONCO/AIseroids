@@ -1,3 +1,4 @@
+class_name Ship
 extends RigidBody2D
 
 @export var ship_controller: ShipController
