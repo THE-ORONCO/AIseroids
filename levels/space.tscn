@@ -2,12 +2,19 @@
 
 [ext_resource type="PackedScene" uid="uid://cunuddi5si8ua" path="res://entities/ship/ship.tscn" id="1_wkkyv"]
 [ext_resource type="PackedScene" uid="uid://tm3wubyfx7r" path="res://entities/asteroid/asteroid.tscn" id="2_6r6hl"]
+[ext_resource type="Script" uid="uid://c1lvascsck38x" path="res://components/player_controller.gd" id="2_xikw6"]
+[ext_resource type="PackedScene" uid="uid://dq5kaans1s87n" path="res://entities/wrap/wrap.tscn" id="4_xikw6"]
 
 [node name="Space" type="Node2D" unique_id=930446752]
 
-[node name="Ship" parent="." unique_id=63985044 instance=ExtResource("1_wkkyv")]
+[node name="Ship" parent="." unique_id=63985044 node_paths=PackedStringArray("ship_controller") instance=ExtResource("1_wkkyv")]
 position = Vector2(388, 194)
+ship_controller = NodePath("PlayerController")
 rotation_speed = 1.0
+
+[node name="PlayerController" type="Node" parent="Ship" unique_id=17223958]
+script = ExtResource("2_xikw6")
+metadata/_custom_type_script = "uid://c1lvascsck38x"
 
 [node name="Asteroids" type="Node2D" parent="." unique_id=1429533558]
 
@@ -19,3 +26,5 @@ position = Vector2(672, 385)
 
 [node name="Asteroid3" parent="Asteroids" unique_id=1243500852 instance=ExtResource("2_6r6hl")]
 position = Vector2(658, 131)
+
+[node name="Wrap" parent="." unique_id=396805770 instance=ExtResource("4_xikw6")]

@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://c5gxdwhsxj7mf" path="res://entities/ship/ship.gd" id="1_tivcy"]
 [ext_resource type="Texture2D" uid="uid://qghdlpidbh84" path="res://icon.svg" id="2_alltn"]
 [ext_resource type="PackedScene" uid="uid://bgqdgtlshk4yf" path="res://entities/ship/shot.tscn" id="3_alltn"]
+[ext_resource type="Script" uid="uid://clls47afawh5h" path="res://entities/ship/sensor_suite.gd" id="4_tua1r"]
+[ext_resource type="Script" uid="uid://cngsnhnnpaxnx" path="res://components/advanced_raycast_sensor_2D.gd" id="5_3if2u"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
 
@@ -16,6 +18,7 @@ gravity = Vector3(0, 0, 0)
 
 [node name="Ship" type="RigidBody2D" unique_id=63985044]
 gravity_scale = 0.0
+angular_damp = 100.0
 script = ExtResource("1_tivcy")
 shot = ExtResource("3_alltn")
 
@@ -37,3 +40,13 @@ process_material = SubResource("ParticleProcessMaterial_hpxva")
 [node name="Muzzle" type="Marker2D" parent="." unique_id=1752905442]
 unique_name_in_owner = true
 position = Vector2(0, -23)
+
+[node name="SensorSuite" type="Node2D" parent="." unique_id=704550922]
+script = ExtResource("4_tua1r")
+
+[node name="RaySensor" type="Node2D" parent="SensorSuite" unique_id=1112416718]
+unique_name_in_owner = true
+script = ExtResource("5_3if2u")
+n_rays = 60.0
+ray_length = 300
+metadata/_custom_type_script = "uid://cngsnhnnpaxnx"

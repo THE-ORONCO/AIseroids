@@ -1,4 +1,7 @@
+class_name Ship
 extends RigidBody2D
+
+@export var ship_controller: ShipController
 
 @export_group("movement")
 @export_range(1, 3000) var thruster_power: float = 500.
@@ -28,13 +31,14 @@ func _physics_process(delta: float) -> void:
 	self.linear_velocity = self.linear_velocity.normalized() * clamp(linear_velocity.length(), 0 , max_velocity) 
 
 func _rotate(delta: float) -> void:
-	var rotation_input: float = Input.get_axis("rotate_left", "rotate_right")
+	var rotation_input: float = ship_controller.turn()
 	if abs(rotation_input) >= 0.1 :
 		self.rotate(rotation_input * rotation_speed * delta)
 
 func _thrust() -> void:
-	if Input.is_action_pressed("thrust"):
-		var thrust = (Vector2.UP * thruster_power).rotated(self.rotation)
+	var thrust_input := ship_controller.thrust()
+	if thrust_input > 0:
+		var thrust = (Vector2.UP * thruster_power * thrust_input).rotated(self.rotation)
 		self.apply_central_force(thrust)
 		thruster_particles.emitting = true
 	else: 
@@ -45,7 +49,7 @@ func _strafe() -> void:
 	self.apply_central_force(self.transform.x * strafe * strafe_power)
 
 func _fire() -> void:
-	if Input.is_action_just_pressed("fire"):
+	if ship_controller.shoot():
 		var bullet: Shot = shot.instantiate()
 		bullet.add_to_group("SplitsAsteroids")
 		bullet.transform = muzzle.global_transform

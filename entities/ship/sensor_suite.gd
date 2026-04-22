@@ -1,0 +1,23 @@
+class_name SensorSuite
+extends Node2D
+
+@export_range(0, 15) 
+var ray_history_size := 5
+
+@onready var ray_sensor: AdvancedRaycastSensor2D = %RaySensor
+
+var _ray_sensor_history: Array[Array]
+
+func _ready() -> void:
+	var ray_count: int = int(ray_sensor.n_rays) * 2 # *2 because we also track the type of entity
+	_ray_sensor_history = []
+	for i in range(ray_history_size):
+		var observations := []
+		observations.resize(ray_count)
+		observations.fill(0)
+		_ray_sensor_history.append(observations)
+
+func _physics_process(_delta: float) -> void:
+	var obs := ray_sensor.get_observation()
+	_ray_sensor_history.pop_back()
+	_ray_sensor_history.push_front(obs)
