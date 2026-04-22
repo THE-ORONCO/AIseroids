@@ -50,12 +50,13 @@ func split(body: Node) -> void:
 		)
 		get_parent().add_child.call_deferred(asteroid_instance)
 		await asteroid_instance.ready
-		asteroid_instance.icon.apply_scale(self.scale * unit_circle_radius)
-		asteroid_instance.collision_shape_2d.shape.radius = new_radius
+		asteroid_instance.icon.apply_scale(self.icon.scale * unit_circle_radius)
+		var new_collision_shape = CircleShape2D.new()
+		new_collision_shape.radius = new_radius
+		asteroid_instance.collision_shape_2d.shape = new_collision_shape
 		asteroid_instance.position = position + push_direction * (radius - new_radius)
 		asteroid_instance.apply_central_impulse(push_direction)
 		self.queue_free()
-
 
 func _calc_circle_radius(circle_count: int) -> float:
 	match circle_count:
