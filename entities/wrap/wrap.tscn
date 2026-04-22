@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://dq5kaans1s87n"]
+
+[ext_resource type="Script" uid="uid://dmmjh0xkiue7i" path="res://entities/wrap/wrap.gd" id="1_5p32g"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1ukqr"]
+normal = Vector2(0, 1)
+distance = 1.3
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5p32g"]
+normal = Vector2(1, 0)
+distance = 1.3
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_vf4cr"]
+normal = Vector2(-1, 0)
+distance = 1.3
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_v864s"]
+distance = 1.3
+
+[node name="Wrap" type="Area2D" unique_id=396805770]
+script = ExtResource("1_5p32g")
+
+[node name="top" type="CollisionShape2D" parent="." unique_id=1222697310]
+unique_name_in_owner = true
+shape = SubResource("WorldBoundaryShape2D_1ukqr")
+
+[node name="left" type="CollisionShape2D" parent="." unique_id=1601739409]
+unique_name_in_owner = true
+shape = SubResource("WorldBoundaryShape2D_5p32g")
+
+[node name="right" type="CollisionShape2D" parent="." unique_id=1058563151]
+unique_name_in_owner = true
+shape = SubResource("WorldBoundaryShape2D_vf4cr")
+
+[node name="bottom" type="CollisionShape2D" parent="." unique_id=520693081]
+unique_name_in_owner = true
+shape = SubResource("WorldBoundaryShape2D_v864s")

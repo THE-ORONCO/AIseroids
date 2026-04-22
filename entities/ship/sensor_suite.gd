@@ -17,7 +17,7 @@ func _ready() -> void:
 		observations.fill(0)
 		_ray_sensor_history.append(observations)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var obs := ray_sensor.get_observation()
 	_ray_sensor_history.pop_back()
 	_ray_sensor_history.push_front(obs)
