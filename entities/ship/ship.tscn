@@ -78,7 +78,7 @@ process_material = SubResource("ParticleProcessMaterial_hpxva")
 
 [node name="Muzzle" type="Marker2D" parent="." unique_id=1752905442]
 unique_name_in_owner = true
-position = Vector2(0, -23)
+position = Vector2(0, -31)
 
 [node name="SensorSuite" type="Node2D" parent="." unique_id=704550922]
 script = ExtResource("4_tua1r")
