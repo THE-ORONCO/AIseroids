@@ -15,19 +15,12 @@ extends RigidBody2D
 @onready var thruster_particles: GPUParticles2D = $ThrusterParticles
 @onready var muzzle: Marker2D = %Muzzle
 
-var _screen_size: Vector2:
-	get: return self.get_viewport_rect().size
-
 func _physics_process(delta: float) -> void:
 	_rotate(delta)
 	_thrust()
 	_strafe()
 	_fire()
 		
-	self.position = MoveUtils.screen_wrap(self.position, _screen_size)
-	
-	print(self.linear_velocity.normalized())
-	print(linear_velocity.length())
 	self.linear_velocity = self.linear_velocity.normalized() * clamp(linear_velocity.length(), 0 , max_velocity) 
 
 func _rotate(delta: float) -> void:

@@ -107,10 +107,17 @@ func calculate_raycasts() -> Array:
 		ray.enabled = true
 		ray.force_raycast_update()
 		
+		var collider := ray.get_collider()
+		if collider is Wrap:
+			var wrap: Wrap = collider
+			
+			var global_target := ray.global_position + ray.target_position
+			
+		
 		var distance = _get_raycast_distance(ray)
 		distances.append(distance)
 		
-		var collider = ray.get_collider()
+		#var collider = ray.get_collider()
 		types.append(ShapeId.identify(collider))
 		
 		ray.enabled = false

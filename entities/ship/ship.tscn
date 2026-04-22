@@ -7,14 +7,51 @@
 [ext_resource type="Script" uid="uid://cngsnhnnpaxnx" path="res://components/advanced_raycast_sensor_2D.gd" id="5_3if2u"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
+radius = 14.3178215
+
+[sub_resource type="Curve" id="Curve_tua1r"]
+_data = [Vector2(0, 0), 0.0, 2.669076, 0, 0, Vector2(0.27272725, 0.4451902), 0.0, 0.0, 0, 0, Vector2(0.4545455, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_53e7a"]
+curve = SubResource("Curve_tua1r")
+
+[sub_resource type="Curve" id="Curve_3if2u"]
+_limits = [0.0, 100.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 89.26175), 255.14087, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_tua1r"]
+curve = SubResource("Curve_3if2u")
+
+[sub_resource type="Curve" id="Curve_3ywi2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.61616164, 0), -1.1442977, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_1h6wo"]
+curve = SubResource("Curve_3ywi2")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hpxva"]
 particle_flag_disable_z = true
-inherit_velocity_ratio = 0.505
+emission_shape = 3
+emission_box_extents = Vector3(4.07, 1, 1)
 direction = Vector3(0, 1, 0)
-spread = 14.211
-initial_velocity_max = 148.59
+spread = 0.0
+initial_velocity_min = 130.61
+initial_velocity_max = 324.1
 gravity = Vector3(0, 0, 0)
+damping_min = 41.868004
+damping_max = 59.419003
+damping_curve = SubResource("CurveTexture_tua1r")
+scale_min = 0.0
+scale_max = 20.0
+scale_curve = SubResource("CurveTexture_1h6wo")
+alpha_curve = SubResource("CurveTexture_53e7a")
+turbulence_enabled = true
+turbulence_noise_strength = 0.1
+turbulence_noise_speed_random = 4.0
+turbulence_influence_min = 0.0
+turbulence_influence_max = 0.08800001
 
 [node name="Ship" type="RigidBody2D" unique_id=63985044]
 gravity_scale = 0.0
@@ -23,14 +60,16 @@ script = ExtResource("1_tivcy")
 shot = ExtResource("3_alltn")
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=535061980]
-scale = Vector2(0.1875, 0.1875)
+position = Vector2(0, 2.9802322e-08)
+scale = Vector2(0.12499999, 0.20312499)
 texture = ExtResource("2_alltn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1623896605]
 shape = SubResource("CircleShape2D_xikw6")
 
 [node name="ThrusterParticles" type="GPUParticles2D" parent="." unique_id=2098380072]
-amount = 50
+position = Vector2(0, 12)
+amount = 200
 trail_enabled = true
 trail_lifetime = 0.2
 trail_sections = 2
@@ -47,6 +86,7 @@ script = ExtResource("4_tua1r")
 [node name="RaySensor" type="Node2D" parent="SensorSuite" unique_id=1112416718]
 unique_name_in_owner = true
 script = ExtResource("5_3if2u")
+collision_mask = 17
 n_rays = 60.0
 ray_length = 300
 metadata/_custom_type_script = "uid://cngsnhnnpaxnx"
