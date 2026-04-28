@@ -2,6 +2,7 @@ class_name Ship
 extends RigidBody2D
 
 @export var ship_controller: ShipController
+@export var health_manager: HealthManager
 
 @export_group("movement")
 @export_range(1, 3000) var thruster_power: float = 500.
@@ -14,6 +15,16 @@ extends RigidBody2D
 
 @onready var thruster_particles: GPUParticles2D = $ThrusterParticles
 @onready var muzzle: Marker2D = %Muzzle
+@onready var health_bar: HealthBar = $HealthBar
+
+
+func _ready() -> void:
+	if health_manager == null:
+		health_manager = HealthManager.new(self, 10)
+	health_bar.set_up_progress_bar(health_manager)
+	if not self.body_entered.is_connected(_check_for_damage):
+		self.body_entered.connect(_check_for_damage)
+
 
 func _physics_process(delta: float) -> void:
 	_rotate(delta)
@@ -45,6 +56,16 @@ func _fire() -> void:
 	if ship_controller.shoot():
 		var bullet: Shot = shot.instantiate()
 		bullet.add_to_group("SplitsAsteroids")
+		if bullet.damage > 0:
+			add_to_group("DamageCollider")
 		bullet.transform = muzzle.global_transform
-		bullet.linear_velocity = self.linear_velocity
+		bullet.linear_velocity = self.linear_velocity  
+	
 		get_parent().add_child(bullet)
+
+
+func _check_for_damage(body: Node) -> void:
+	print("check")
+	if body.is_in_group("DamageCollider"):
+		print(body.damage)
+		health_manager.apply_health_change(-(body.damage))

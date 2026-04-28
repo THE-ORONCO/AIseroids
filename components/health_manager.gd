@@ -2,7 +2,7 @@ class_name HealthManager
 extends Resource
 
 
-signal health_changed(new_health: int, change_amount: int)
+signal health_changed(new_health: int)
 signal health_reached_zero()
 
 @export var health_current: int:
