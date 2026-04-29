@@ -18,15 +18,21 @@ func _ready() -> void:
 	reload_timer.timeout.connect(_reload)
 
 func fire(reference_velocity: Vector2) -> void:
-	if _current_bullets > 0 && shot_cooldown.is_stopped():
-		var bullet: Shot = shot.instantiate()
-		bullet.add_to_group("SplitsAsteroids")
-		if bullet.damage > 0:
-			bullet.add_to_group("DamageCollider")
-		bullet.transform = self.global_transform
-		bullet.linear_velocity = reference_velocity  
+	if _current_bullets <= 0 :
+		print("no bullets left!")
+		return 
+	if !shot_cooldown.is_stopped():
+		print("the weapon is on cooldown")
+		return
 
-		get_tree().root.add_child(bullet)
+	var bullet: Shot = shot.instantiate()
+	bullet.add_to_group("SplitsAsteroids")
+	if bullet.damage > 0:
+		bullet.add_to_group("DamageCollider")
+	bullet.transform = self.global_transform
+	bullet.linear_velocity = reference_velocity  
+
+	get_tree().root.add_child(bullet)
 
 func _reload() -> void:
 	self._current_bullets = move_toward(_current_bullets, max_bullets, 1)

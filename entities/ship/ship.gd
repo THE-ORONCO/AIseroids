@@ -66,7 +66,6 @@ func _fire() -> void:
 	if ship_controller.shoot:
 		muzzle.fire(self.linear_velocity)
 
-
 func _check_for_damage(body: Node) -> void:
 	print("check")
 	if body.is_in_group("DamageCollider"):
