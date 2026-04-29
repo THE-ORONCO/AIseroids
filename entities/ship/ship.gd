@@ -33,7 +33,9 @@ func _ready() -> void:
 	health_manager.health_changed.connect(func(nh): 
 		ship_controller.health = nh
 		)
-
+	ScoreKeeper.score_changed.connect(func(ns):
+		ship_controller.score = ns
+		)
 
 func _physics_process(delta: float) -> void:
 	_rotate(delta)

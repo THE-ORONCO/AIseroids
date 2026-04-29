@@ -33,6 +33,9 @@ var reward := 0.0
 var n_steps := 0
 var needs_reset := false
 
+var _score_delta := 0.
+var _health_delta := 0.
+
 func _ready():
 	add_to_group("AGENT")
 
@@ -43,8 +46,7 @@ func get_obs() -> Dictionary:
 
 
 func get_reward() -> float:
-	
-	return 0.0
+	return _score_delta - _health_delta
 
 
 func get_action_space() -> Dictionary:
@@ -99,6 +101,8 @@ func get_obs_space():
 func reset():
 	n_steps = 0
 	needs_reset = false
+	_score_delta = 0.
+	_health_delta = 0.
 
 
 func reset_if_done():

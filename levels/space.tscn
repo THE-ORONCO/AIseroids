@@ -13,7 +13,7 @@
 
 [node name="Ship" parent="." unique_id=63985044 node_paths=PackedStringArray("ship_controller") instance=ExtResource("1_wkkyv")]
 position = Vector2(388, 194)
-ship_controller = NodePath("PlayerController")
+ship_controller = NodePath("AiController")
 
 [node name="HealthBar" parent="Ship" unique_id=1407290129 instance=ExtResource("3_8ud6f")]
 unique_name_in_owner = true
@@ -51,7 +51,7 @@ position = Vector2(658, 131)
 position = Vector2(388, 194)
 script = ExtResource("3_hpxva")
 controller = NodePath("../Ship/AiController")
-control_mode = 1
+control_mode = 2
 metadata/_custom_type_script = "uid://cyfdarom6vnim"
 
 [node name="Sync" type="Node" parent="ShipBrain2D" unique_id=482778712]

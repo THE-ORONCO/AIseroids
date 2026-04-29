@@ -11,6 +11,7 @@ var turn: float = 0.0:
 var shoot: bool = false
 
 var health: int = 0
+var score: int = 0
 
 func get_sensor_info() -> Array:
 	if sensor != null:

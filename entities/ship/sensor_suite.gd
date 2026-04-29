@@ -34,4 +34,10 @@ func deactivate():
 	ray_sensor.deactivate()
 
 func get_observation() -> Array:
-	return _ray_sensor_history
+	return flatten(_ray_sensor_history)
+	
+static func flatten(nested: Array[Array]) -> Array:
+	var flat = []
+	for array in nested:
+		flat.append_array(flat)
+	return flat
