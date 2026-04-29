@@ -4,9 +4,6 @@ extends RigidBody2D
 
 const ASTEROID = preload("uid://tm3wubyfx7r")
 
-
-var _screen_size: Vector2:
-	get: return self.get_viewport_rect().size
 var splits: bool = true
 
 ## Amount of asteroids generated on split
@@ -55,6 +52,8 @@ func split(body: Node) -> void:
 		asteroid_instance.collision_shape_2d.shape = new_collision_shape
 		asteroid_instance.position = position + push_direction * (radius - new_radius)
 		asteroid_instance.apply_central_impulse(push_direction * split_force)
+	
+	SignalBus.signal_asteroid_destoryed(radius)
 	self.queue_free()
 
 func _calc_circle_radius(circle_count: int) -> float:

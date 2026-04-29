@@ -81,6 +81,7 @@ unique_name_in_owner = true
 position = Vector2(0, -31)
 
 [node name="SensorSuite" type="Node2D" parent="." unique_id=704550922]
+unique_name_in_owner = true
 script = ExtResource("4_tua1r")
 
 [node name="RaySensor" type="Node2D" parent="SensorSuite" unique_id=1112416718]
