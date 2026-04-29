@@ -8,12 +8,13 @@
 [ext_resource type="Script" uid="uid://cyfdarom6vnim" path="res://components/ship_brain_2d.gd" id="3_hpxva"]
 [ext_resource type="PackedScene" uid="uid://dq5kaans1s87n" path="res://entities/wrap/wrap.tscn" id="4_xikw6"]
 [ext_resource type="Script" uid="uid://cecwd02nv3ery" path="res://addons/godot_rl_agents/sync.gd" id="5_fxxkj"]
+[ext_resource type="PackedScene" uid="uid://dfgoxvdismwwp" path="res://ui_elements/hud.tscn" id="9_0ho8g"]
 
 [node name="Space" type="Node2D" unique_id=930446752]
 
 [node name="Ship" parent="." unique_id=63985044 node_paths=PackedStringArray("ship_controller") instance=ExtResource("1_wkkyv")]
 position = Vector2(388, 194)
-ship_controller = NodePath("AiController")
+ship_controller = NodePath("PlayerController")
 
 [node name="HealthBar" parent="Ship" unique_id=1407290129 instance=ExtResource("3_8ud6f")]
 unique_name_in_owner = true
@@ -57,3 +58,5 @@ metadata/_custom_type_script = "uid://cyfdarom6vnim"
 [node name="Sync" type="Node" parent="ShipBrain2D" unique_id=482778712]
 script = ExtResource("5_fxxkj")
 metadata/_custom_type_script = "uid://cecwd02nv3ery"
+
+[node name="HUD" parent="." unique_id=1906941366 instance=ExtResource("9_0ho8g")]
