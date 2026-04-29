@@ -84,7 +84,7 @@ func _spawn_nodes():
 			Vector2(ray_length * cos(deg_to_rad(angle)), ray_length * sin(deg_to_rad(angle)))
 		)
 		ray.set_name("node_" + str(i))
-		ray.enabled = false
+		ray.enabled = true
 		ray.collide_with_areas = collide_with_areas
 		ray.collide_with_bodies = collide_with_bodies
 		ray.collision_mask = collision_mask
@@ -120,7 +120,7 @@ func calculate_raycasts() -> Array:
 		#var collider = ray.get_collider()
 		types.append(ShapeId.identify(collider))
 		
-		ray.enabled = false
+		#ray.enabled = false
 	
 	result.append_array(distances)
 	result.append_array(types)

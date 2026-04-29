@@ -10,15 +10,14 @@ extends RigidBody2D
 @export_range(.1, 5.) var rotation_speed: float = 3.
 @export_range(1, 5000) var max_velocity: float = 1000.
 @export_range(1, 5000) var max_force: float = 1000.
-@export_group("shooting")
-@export var shot: PackedScene
 
 @onready var thruster_particles: GPUParticles2D = $ThrusterParticles
-@onready var muzzle: Marker2D = %Muzzle
+@onready var muzzle: Muzzle = %Muzzle
 @onready var sensor_suit: SensorSuite = %SensorSuite
 @onready var health_bar: HealthBar = %HealthBar
 @onready var invincibility_timer: Timer = %InvincibilityTimer
 
+const DEFAULT_MUZZLE = preload("uid://c2qcohstk8elv")
 
 
 func _ready() -> void:
@@ -65,14 +64,7 @@ func _strafe() -> void:
 
 func _fire() -> void:
 	if ship_controller.shoot:
-		var bullet: Shot = shot.instantiate()
-		bullet.add_to_group("SplitsAsteroids")
-		if bullet.damage > 0:
-			bullet.add_to_group("DamageCollider")
-		bullet.transform = muzzle.global_transform
-		bullet.linear_velocity = self.linear_velocity  
-	
-		get_parent().add_child(bullet)
+		muzzle.fire(self.linear_velocity)
 
 
 func _check_for_damage(body: Node) -> void:

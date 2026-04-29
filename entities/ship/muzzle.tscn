@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://c2qcohstk8elv"]
+
+[ext_resource type="Script" uid="uid://dqhsuij8ucipf" path="res://entities/ship/muzzle.gd" id="1_b073n"]
+
+[node name="Muzzle" type="Marker2D" unique_id=571023481]
+script = ExtResource("1_b073n")
+
+[node name="ShotCooldown" type="Timer" parent="." unique_id=443521892]
+unique_name_in_owner = true
+one_shot = true
+
+[node name="ReloadTimer" type="Timer" parent="." unique_id=908491114]
+unique_name_in_owner = true
+autostart = true

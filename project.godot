@@ -41,6 +41,7 @@ folder_colors={
 
 SplitsAsteroids="Bodies that split asteroids on collision"
 DamageCollider=""
+Muzzle="marks muzzles to be used in a ship"
 
 [input]
 
