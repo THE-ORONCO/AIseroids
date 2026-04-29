@@ -2,26 +2,41 @@ class_name Muzzle
 extends Marker2D
 
 @export var shot: PackedScene
-@export_range(1, 100) var max_bullets: int = 5
+@export_range(1, 100) var max_shots: int = 5
 @export_range(0.01, 2.) var cooldown: float = .3
 @export_range(0.1, 3.) var reload_time: float = 1.
 
-@onready var shot_cooldown: Timer = %ShotCooldown
+@onready var shot_cooldown_timer: Timer = %ShotCooldown
 @onready var reload_timer: Timer = %ReloadTimer
 
-var _current_bullets: int = 0
+var _current_shots: int = 0
+
+var current_shots: int:
+	get: return _current_shots
+var cooldown_left: float:
+	get: return shot_cooldown_timer.time_left
+var time_till_reload: float:
+	get: return reload_timer.time_left
 
 func _ready() -> void:
-	_current_bullets = max_bullets
-	shot_cooldown.wait_time = cooldown
+	_current_shots = max_shots
+	shot_cooldown_timer.wait_time = cooldown
 	reload_timer.wait_time = reload_time
 	reload_timer.timeout.connect(_reload)
 
+func get_state_for_ai() -> Array:
+	return [
+		max_shots,
+		_current_shots,
+		shot_cooldown_timer.time_left,
+		reload_timer.time_left,
+	]
+
 func fire(reference_velocity: Vector2) -> void:
-	if !shot_cooldown.is_stopped():
+	if !shot_cooldown_timer.is_stopped():
 		print("the weapon is on cooldown")
 		return
-	if _current_bullets <= 0 :
+	if _current_shots <= 0 :
 		print("no bullets left!")
 		return 
 
@@ -34,9 +49,13 @@ func fire(reference_velocity: Vector2) -> void:
 
 	get_tree().root.add_child(bullet)
 	
-	_current_bullets -= 1
-	shot_cooldown.start()
+	_current_shots -= 1
+	shot_cooldown_timer.start()
+	
+	if reload_timer.is_stopped():
+		reload_timer.start()
 
 func _reload() -> void:
-	self._current_bullets = move_toward(_current_bullets, max_bullets, 1)
-	
+	self._current_shots = move_toward(_current_shots, max_shots, 1)
+	if _current_shots >= max_shots:
+		reload_timer.stop()

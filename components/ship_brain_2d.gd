@@ -41,7 +41,13 @@ func _ready():
 
 
 func get_obs() -> Dictionary:
-	var obs := controller.get_sensor_info()
+	var ship_info := controller.get_ship_state()
+	var sensor_info := controller.get_sensor_info()
+	
+	var obs := []
+	obs.append_array(ship_info)
+	print(ship_info)
+	obs.append_array(sensor_info)
 	return {"obs": obs}
 
 

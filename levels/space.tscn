@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cunuddi5si8ua" path="res://entities/ship/ship.tscn" id="1_wkkyv"]
 [ext_resource type="PackedScene" uid="uid://tm3wubyfx7r" path="res://entities/asteroid/asteroid.tscn" id="2_6r6hl"]
+[ext_resource type="Script" uid="uid://cwpdff414g0ql" path="res://components/health_manager.gd" id="2_qp5ya"]
 [ext_resource type="Script" uid="uid://c1lvascsck38x" path="res://components/player_controller.gd" id="2_xikw6"]
 [ext_resource type="PackedScene" uid="uid://bocdkmbu367mf" path="res://ui_elements/health_bar.tscn" id="3_8ud6f"]
 [ext_resource type="Script" uid="uid://byg35am8mp2j0" path="res://components/ai_controller.gd" id="3_cnywj"]
@@ -10,11 +11,16 @@
 [ext_resource type="Script" uid="uid://cecwd02nv3ery" path="res://addons/godot_rl_agents/sync.gd" id="5_fxxkj"]
 [ext_resource type="PackedScene" uid="uid://dfgoxvdismwwp" path="res://ui_elements/hud.tscn" id="9_0ho8g"]
 
+[sub_resource type="Resource" id="Resource_kgq6g"]
+script = ExtResource("2_qp5ya")
+metadata/_custom_type_script = "uid://cwpdff414g0ql"
+
 [node name="Space" type="Node2D" unique_id=930446752]
 
 [node name="Ship" parent="." unique_id=63985044 node_paths=PackedStringArray("ship_controller") groups=["Muzzle"] instance=ExtResource("1_wkkyv")]
 position = Vector2(388, 194)
-ship_controller = NodePath("PlayerController")
+ship_controller = NodePath("AiController")
+health_manager = SubResource("Resource_kgq6g")
 
 [node name="HealthBar" parent="Ship" unique_id=1407290129 instance=ExtResource("3_8ud6f")]
 unique_name_in_owner = true
@@ -52,7 +58,7 @@ position = Vector2(658, 131)
 position = Vector2(388, 194)
 script = ExtResource("3_hpxva")
 controller = NodePath("../Ship/AiController")
-control_mode = 1
+control_mode = 2
 metadata/_custom_type_script = "uid://cyfdarom6vnim"
 
 [node name="Sync" type="Node" parent="ShipBrain2D" unique_id=482778712]

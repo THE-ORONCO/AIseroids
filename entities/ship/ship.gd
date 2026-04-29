@@ -43,9 +43,17 @@ func _physics_process(delta: float) -> void:
 	_thrust()
 	_strafe()
 	_fire()
-		
+	
+	_update_ship_info()
+	
 	self.linear_velocity = self.linear_velocity.normalized() * clamp(linear_velocity.length(), 0 , max_velocity) 
 	
+func _update_ship_info() -> void:
+	ship_controller.shots_max = muzzle.max_shots
+	ship_controller.current_shots = muzzle.current_shots
+	ship_controller.time_till_reload = muzzle.time_till_reload
+	ship_controller.shot_cooldown = muzzle.cooldown_left
+
 func _rotate(delta: float) -> void:
 	var rotation_input: float = ship_controller.turn
 	if abs(rotation_input) >= 0.1 :

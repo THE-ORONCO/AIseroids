@@ -1,4 +1,3 @@
-@tool
 class_name Wrap
 extends Area2D
 
@@ -16,6 +15,8 @@ var _wrap_candidates: Dictionary[RigidBody2D,RigidBody2D] = {}
 # - each object would get a buffer the size of its collision
 # - the velocity direction of the object would be the deciding factor on if the shape teleports or not 
 func _ready() -> void:
+	if Engine.is_editor_hint(): return
+	
 	get_viewport().size_changed.connect(move_boundaries_to_screen_border)
 	move_boundaries_to_screen_border.call_deferred()
 
@@ -100,6 +101,8 @@ func _on_body_exited(body: Node2D) -> void:
 		_wrap_candidates.erase(body)
 
 func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint(): return 
+	
 	for body: RigidBody2D in self.get_overlapping_bodies():
 		if body is not RigidBody2D:
 			continue
