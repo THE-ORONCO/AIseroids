@@ -6,6 +6,9 @@ const ASTEROID = preload("uid://tm3wubyfx7r")
 
 var splits: bool = true
 
+## TODO remove
+var damage := 1 
+
 ## Amount of asteroids generated on split
 @export var split_count: int = 5:
 	set(value): 

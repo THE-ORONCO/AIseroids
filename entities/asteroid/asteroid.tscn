@@ -6,7 +6,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_cnywj"]
 radius = 75.0
 
-[node name="Asteroid" type="RigidBody2D" unique_id=1246036190]
+[node name="Asteroid" type="RigidBody2D" unique_id=1246036190 groups=["DamageCollider"]]
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_20vrb")

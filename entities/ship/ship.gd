@@ -16,7 +16,9 @@ extends RigidBody2D
 @onready var thruster_particles: GPUParticles2D = $ThrusterParticles
 @onready var muzzle: Marker2D = %Muzzle
 @onready var sensor_suit: SensorSuite = %SensorSuite
-@onready var health_bar: HealthBar = $HealthBar
+@onready var health_bar: HealthBar = %HealthBar
+@onready var invincibility_timer: Timer = %InvincibilityTimer
+
 
 
 func _ready() -> void:
@@ -27,6 +29,10 @@ func _ready() -> void:
 	health_bar.set_up_progress_bar(health_manager)
 	if not self.body_entered.is_connected(_check_for_damage):
 		self.body_entered.connect(_check_for_damage)
+		
+	health_manager.health_changed.connect(func(nh): 
+		ship_controller.health = nh
+		)
 
 
 func _physics_process(delta: float) -> void:
@@ -60,7 +66,7 @@ func _fire() -> void:
 		var bullet: Shot = shot.instantiate()
 		bullet.add_to_group("SplitsAsteroids")
 		if bullet.damage > 0:
-			add_to_group("DamageCollider")
+			bullet.add_to_group("DamageCollider")
 		bullet.transform = muzzle.global_transform
 		bullet.linear_velocity = self.linear_velocity  
 	
@@ -70,5 +76,11 @@ func _fire() -> void:
 func _check_for_damage(body: Node) -> void:
 	print("check")
 	if body.is_in_group("DamageCollider"):
-		print(body.damage)
-		health_manager.apply_health_change(-(body.damage))
+		if invincibility_timer.is_stopped():
+			print(body.damage)
+			health_manager.apply_health_change(-(body.damage))
+			invincibility_timer.start()
+			print("took damage")
+		else:
+			print("invincible")
+		# TODO apply force to both rigid bodies to push them appart

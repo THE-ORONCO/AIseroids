@@ -43,7 +43,7 @@ func get_obs() -> Dictionary:
 
 
 func get_reward() -> float:
-	assert(false, "the get_reward method is not implemented when extending from ai_controller")
+	
 	return 0.0
 
 

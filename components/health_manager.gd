@@ -32,7 +32,7 @@ func apply_health_change(health_change: int) -> void:
 		return
 	health_current += health_change
 	_apply_health_change_visuals(health_change)
-	health_changed.emit(health_current, health_change)
+	health_changed.emit(health_current)
 	if health_current <= 0:
 		health_reached_zero.emit()
 

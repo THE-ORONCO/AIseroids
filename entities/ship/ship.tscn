@@ -93,3 +93,8 @@ collision_mask = 17
 n_rays = 60.0
 ray_length = 300
 metadata/_custom_type_script = "uid://cngsnhnnpaxnx"
+
+[node name="InvincibilityTimer" type="Timer" parent="." unique_id=977439268]
+unique_name_in_owner = true
+wait_time = 0.2
+one_shot = true

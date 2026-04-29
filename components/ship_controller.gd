@@ -10,6 +10,7 @@ var turn: float = 0.0:
 	set(val): turn = clampf(val, -1., 1.)
 var shoot: bool = false
 
+var health: int = 0
 
 func get_sensor_info() -> Array:
 	if sensor != null:
