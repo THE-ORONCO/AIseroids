@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c5gxdwhsxj7mf" path="res://entities/ship/ship.gd" id="1_tivcy"]
 [ext_resource type="Texture2D" uid="uid://qghdlpidbh84" path="res://icon.svg" id="2_alltn"]
 [ext_resource type="PackedScene" uid="uid://bgqdgtlshk4yf" path="res://entities/ship/shot.tscn" id="3_alltn"]
+[ext_resource type="PackedScene" uid="uid://c2qcohstk8elv" path="res://entities/ship/muzzle.tscn" id="4_53e7a"]
 [ext_resource type="Script" uid="uid://clls47afawh5h" path="res://entities/ship/sensor_suite.gd" id="4_tua1r"]
 [ext_resource type="Script" uid="uid://cngsnhnnpaxnx" path="res://components/advanced_raycast_sensor_2D.gd" id="5_3if2u"]
 
@@ -59,7 +60,6 @@ contact_monitor = true
 max_contacts_reported = 1
 angular_damp = 100.0
 script = ExtResource("1_tivcy")
-shot = ExtResource("3_alltn")
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=535061980]
 position = Vector2(0, 2.9802322e-08)
@@ -78,10 +78,6 @@ trail_sections = 2
 trail_section_subdivisions = 1
 process_material = SubResource("ParticleProcessMaterial_hpxva")
 
-[node name="Muzzle" type="Marker2D" parent="." unique_id=1752905442]
-unique_name_in_owner = true
-position = Vector2(0, -48)
-
 [node name="SensorSuite" type="Node2D" parent="." unique_id=704550922]
 unique_name_in_owner = true
 script = ExtResource("4_tua1r")
@@ -98,3 +94,8 @@ metadata/_custom_type_script = "uid://cngsnhnnpaxnx"
 unique_name_in_owner = true
 wait_time = 0.2
 one_shot = true
+
+[node name="Muzzle" parent="." unique_id=571023481 instance=ExtResource("4_53e7a")]
+unique_name_in_owner = true
+position = Vector2(0, -47)
+shot = ExtResource("3_alltn")
