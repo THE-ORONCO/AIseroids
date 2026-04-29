@@ -20,7 +20,6 @@ extends RigidBody2D
 @onready var invincibility_timer: Timer = %InvincibilityTimer
 
 
-
 func _ready() -> void:
 	ship_controller.sensor = sensor_suit
 
@@ -29,7 +28,10 @@ func _ready() -> void:
 	health_bar.set_up_progress_bar(health_manager)
 	if not self.body_entered.is_connected(_check_for_damage):
 		self.body_entered.connect(_check_for_damage)
-		
+	
+	health_manager.health_reached_zero.connect(
+		get_tree().reload_current_scene.call_deferred
+	)
 	health_manager.health_changed.connect(func(nh): 
 		ship_controller.health = nh
 		)

@@ -14,7 +14,7 @@
 
 [node name="Ship" parent="." unique_id=63985044 node_paths=PackedStringArray("ship_controller") instance=ExtResource("1_wkkyv")]
 position = Vector2(388, 194)
-ship_controller = NodePath("PlayerController")
+ship_controller = NodePath("AiController")
 
 [node name="HealthBar" parent="Ship" unique_id=1407290129 instance=ExtResource("3_8ud6f")]
 unique_name_in_owner = true

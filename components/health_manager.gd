@@ -6,8 +6,7 @@ signal health_changed(new_health: int)
 signal health_reached_zero()
 
 @export var health_current: int:
-	set(value):
-		health_current = clamp(0, value, health_max)
+	set(value): health_current = clamp(0, value, health_max)
 @export var health_max: int:
 	set(value):
 		health_max = max(1, value)
