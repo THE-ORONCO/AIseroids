@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://baw6jdbx8dn5d"]
+
+[ext_resource type="Script" uid="uid://bm1kq8odif4vj" path="res://levels/training_grounds.gd" id="1_7a0de"]
+
+[node name="TrainingGrounds" type="Node2D" unique_id=1955271162]
+script = ExtResource("1_7a0de")
+x = 3
+y = 5
+
+[node name="Camera" type="Camera2D" parent="." unique_id=468554817]
+anchor_mode = 0
+zoom = Vector2(0.3, 0.3)

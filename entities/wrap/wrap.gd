@@ -1,6 +1,9 @@
 class_name Wrap
 extends Area2D
 
+@export var fit_to_screen: bool = true
+@export var fallback_size: Vector2 = Vector2(500., 500.)
+
 @onready var top: CollisionShape2D = %top
 @onready var left: CollisionShape2D = %left
 @onready var right: CollisionShape2D = %right
@@ -17,12 +20,18 @@ var _wrap_candidates: Dictionary[RigidBody2D,RigidBody2D] = {}
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
 	
-	get_viewport().size_changed.connect(move_boundaries_to_screen_border)
-	move_boundaries_to_screen_border.call_deferred()
-
+	if fit_to_screen:
+		get_viewport().size_changed.connect(move_boundaries_to_screen_border)
+		move_boundaries_to_screen_border.call_deferred()
+	else:
+		extent = fallback_size
+		update_border_positions(extent)
+	
 func move_boundaries_to_screen_border() -> void:
 	extent = self.get_viewport_rect().size
+	update_border_positions(extent)
 
+func update_border_positions(extent: Vector2) -> void:
 	top.position.x = extent.x / 2
 	
 	left.position.y = extent.y / 2
@@ -32,8 +41,6 @@ func move_boundaries_to_screen_border() -> void:
 	
 	right.position.x = extent.x
 	right.position.y = extent.y / 2
-
-
 #
 #func wrap_ray(target_pos: Vector2, direction: Vector2, margin: Vector2) -> Vector2:
 	#var wrap_delta: Vector2 = Vector2.ZERO
