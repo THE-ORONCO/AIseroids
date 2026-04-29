@@ -4,14 +4,16 @@
 [ext_resource type="PackedScene" uid="uid://tm3wubyfx7r" path="res://entities/asteroid/asteroid.tscn" id="2_6r6hl"]
 [ext_resource type="Script" uid="uid://c1lvascsck38x" path="res://components/player_controller.gd" id="2_xikw6"]
 [ext_resource type="PackedScene" uid="uid://bocdkmbu367mf" path="res://ui_elements/health_bar.tscn" id="3_hpxva"]
+[ext_resource type="Script" uid="uid://byg35am8mp2j0" path="res://components/ai_controller.gd" id="3_cnywj"]
+[ext_resource type="Script" uid="uid://cyfdarom6vnim" path="res://components/ship_brain_2d.gd" id="3_hpxva"]
 [ext_resource type="PackedScene" uid="uid://dq5kaans1s87n" path="res://entities/wrap/wrap.tscn" id="4_xikw6"]
+[ext_resource type="Script" uid="uid://cecwd02nv3ery" path="res://addons/godot_rl_agents/sync.gd" id="5_fxxkj"]
 
 [node name="Space" type="Node2D" unique_id=930446752]
 
 [node name="Ship" parent="." unique_id=63985044 node_paths=PackedStringArray("ship_controller") instance=ExtResource("1_wkkyv")]
 position = Vector2(388, 194)
 ship_controller = NodePath("PlayerController")
-rotation_speed = 1.0
 
 [node name="PlayerController" type="Node" parent="Ship" unique_id=17223958]
 script = ExtResource("2_xikw6")
@@ -22,6 +24,21 @@ clip_contents = true
 custom_minimum_size = Vector2(40, 10)
 anchors_preset = -1
 size_flags_horizontal = 3
+
+[node name="AiController" type="Node" parent="Ship" unique_id=1417991273]
+script = ExtResource("3_cnywj")
+metadata/_custom_type_script = "uid://byg35am8mp2j0"
+
+[node name="ShipBrain2D" type="Node2D" parent="Ship/AiController" unique_id=1396777666 node_paths=PackedStringArray("controller")]
+position = Vector2(388, 194)
+script = ExtResource("3_hpxva")
+controller = NodePath("..")
+control_mode = 1
+metadata/_custom_type_script = "uid://cyfdarom6vnim"
+
+[node name="Sync" type="Node" parent="Ship/AiController/ShipBrain2D" unique_id=482778712]
+script = ExtResource("5_fxxkj")
+metadata/_custom_type_script = "uid://cecwd02nv3ery"
 
 [node name="Asteroids" type="Node2D" parent="." unique_id=1429533558]
 
