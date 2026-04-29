@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://cyfdarom6vnim" path="res://components/ship_brain_2d.gd" id="3_hpxva"]
 [ext_resource type="PackedScene" uid="uid://dq5kaans1s87n" path="res://entities/wrap/wrap.tscn" id="4_xikw6"]
 [ext_resource type="Script" uid="uid://cecwd02nv3ery" path="res://addons/godot_rl_agents/sync.gd" id="5_fxxkj"]
+[ext_resource type="Script" uid="uid://dd478rmnll5y" path="res://components/asteroid_spawner.gd" id="6_kgq6g"]
 [ext_resource type="PackedScene" uid="uid://dfgoxvdismwwp" path="res://ui_elements/hud.tscn" id="9_0ho8g"]
 
 [sub_resource type="Resource" id="Resource_kgq6g"]
@@ -41,15 +42,16 @@ metadata/_custom_type_script = "uid://c1lvascsck38x"
 script = ExtResource("3_cnywj")
 metadata/_custom_type_script = "uid://byg35am8mp2j0"
 
-[node name="Asteroids" type="Node2D" parent="." unique_id=1429533558]
+[node name="AsteroidSpawner" type="Node2D" parent="." unique_id=1429533558]
+script = ExtResource("6_kgq6g")
 
-[node name="Asteroid" parent="Asteroids" unique_id=1246036190 instance=ExtResource("2_6r6hl")]
+[node name="Asteroid" parent="AsteroidSpawner" unique_id=1246036190 instance=ExtResource("2_6r6hl")]
 position = Vector2(142, 97)
 
-[node name="Asteroid2" parent="Asteroids" unique_id=1293160063 instance=ExtResource("2_6r6hl")]
+[node name="Asteroid2" parent="AsteroidSpawner" unique_id=1293160063 instance=ExtResource("2_6r6hl")]
 position = Vector2(672, 385)
 
-[node name="Asteroid3" parent="Asteroids" unique_id=1243500852 instance=ExtResource("2_6r6hl")]
+[node name="Asteroid3" parent="AsteroidSpawner" unique_id=1243500852 instance=ExtResource("2_6r6hl")]
 position = Vector2(658, 131)
 
 [node name="Wrap" parent="." unique_id=396805770 instance=ExtResource("4_xikw6")]
