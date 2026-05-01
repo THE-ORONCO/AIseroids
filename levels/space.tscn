@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://cujdj2kfjxl54"]
 
 [ext_resource type="PackedScene" uid="uid://cunuddi5si8ua" path="res://entities/ship/ship.tscn" id="1_wkkyv"]
-[ext_resource type="PackedScene" uid="uid://tm3wubyfx7r" path="res://entities/asteroid/asteroid.tscn" id="2_6r6hl"]
 [ext_resource type="Script" uid="uid://cwpdff414g0ql" path="res://components/health_manager.gd" id="2_qp5ya"]
 [ext_resource type="Script" uid="uid://c1lvascsck38x" path="res://components/player_controller.gd" id="2_xikw6"]
 [ext_resource type="PackedScene" uid="uid://bocdkmbu367mf" path="res://ui_elements/health_bar.tscn" id="3_8ud6f"]
@@ -44,15 +43,6 @@ metadata/_custom_type_script = "uid://byg35am8mp2j0"
 
 [node name="AsteroidSpawner" type="Node2D" parent="." unique_id=1429533558]
 script = ExtResource("6_kgq6g")
-
-[node name="Asteroid" parent="AsteroidSpawner" unique_id=1246036190 instance=ExtResource("2_6r6hl")]
-position = Vector2(142, 97)
-
-[node name="Asteroid2" parent="AsteroidSpawner" unique_id=1293160063 instance=ExtResource("2_6r6hl")]
-position = Vector2(672, 385)
-
-[node name="Asteroid3" parent="AsteroidSpawner" unique_id=1243500852 instance=ExtResource("2_6r6hl")]
-position = Vector2(658, 131)
 
 [node name="Wrap" parent="." unique_id=396805770 instance=ExtResource("4_xikw6")]
 

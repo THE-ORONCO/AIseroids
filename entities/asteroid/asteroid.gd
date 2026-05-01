@@ -28,6 +28,7 @@ func _ready() -> void:
 	if not body_entered.is_connected(split):
 		body_entered.connect(split)
 
+
 func split(body: Node) -> void:
 	if not (body.is_in_group("SplitsAsteroids") and splits):
 		return
@@ -58,6 +59,7 @@ func split(body: Node) -> void:
 	
 	SignalBus.signal_asteroid_destoryed(radius)
 	self.queue_free()
+
 
 func _calc_circle_radius(circle_count: int) -> float:
 	match circle_count:
