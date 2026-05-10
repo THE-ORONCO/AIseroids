@@ -4,17 +4,19 @@ extends RigidBody2D
 
 const ASTEROID = preload("uid://tm3wubyfx7r")
 
-var splits: bool = true
+var splits: bool = false
 
 ## TODO remove
 var damage := 1 
 
 ## Amount of asteroids generated on split
-@export var split_count: int = 5:
+@export var split_count: int = 3:
 	set(value): 
 		value = clamp(value, 1, 6)
 		split_count = value
 @export var split_force: int = 500
+@export var split_delay: float = 0.5 # seconds
+@export var impulse_threshold: float = 200.0  # impulse threshold to trigger split
 @export var min_radius: float = 10
 
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
@@ -22,15 +24,30 @@ var damage := 1
 
 
 func _ready() -> void:
+	get_tree().create_timer(split_delay).timeout.connect(func(): splits = true)
 	if collision_shape_2d.shape is not CircleShape2D:
 		push_warning("collison shape is not a circle")
 		splits = false
-	if not body_entered.is_connected(split):
-		body_entered.connect(split)
 
 
-func split(body: Node) -> void:
-	if not (body.is_in_group("SplitsAsteroids") and splits):
+func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
+	var contact_count := state.get_contact_count()
+	for i in range(contact_count):
+		var collider_obj := state.get_contact_collider_object(i)
+		if not collider_obj:
+			continue
+		if collider_obj.is_in_group("SplitsAsteroids"):
+			split()
+			return
+		if collider_obj is Asteroid:
+			var impulse_vec := state.get_contact_impulse(i)
+			if impulse_vec.length() >= impulse_threshold:
+				split()
+				return
+
+
+func split() -> void:
+	if not splits:
 		return
 	var radius: float = collision_shape_2d.shape.radius
 	var rotation_delta: float = 2. * PI / split_count

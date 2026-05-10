@@ -4,11 +4,13 @@ const MAX_ATTEMPTS := 50
 
 var asteroid := preload("uid://tm3wubyfx7r")
 var spawn_delay: int = 3 # seconds
-var instances_max: int = 10
+var instances_max: int = 100
 var spawn_force: float = 500.0 # tweak impulse strength
+var rng: RandomNumberGenerator
+
 
 func _ready():
-	randomize()
+	rng = RandomNumberGenerator.new()
 	var spawn_timer := Timer.new()
 	spawn_timer.timeout.connect(spawn)
 	add_child(spawn_timer)
@@ -46,7 +48,7 @@ func _get_spawn_position() -> Vector2:
 	var viewport := get_viewport()
 	var size = viewport.size
 	var canvas_transform := viewport.get_canvas_transform()
-	var edge := randi() % 4
+	var edge := rng.randi() % 4
 	var spawn_point: Vector2
 	match edge:
 		0: spawn_point = Vector2(randf_range(0.0, size.x), -size.y)
