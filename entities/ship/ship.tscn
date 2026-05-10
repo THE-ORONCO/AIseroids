@@ -7,9 +7,6 @@
 [ext_resource type="Script" uid="uid://clls47afawh5h" path="res://entities/ship/sensor_suite.gd" id="4_tua1r"]
 [ext_resource type="Script" uid="uid://cngsnhnnpaxnx" path="res://components/advanced_raycast_sensor_2D.gd" id="5_3if2u"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
-radius = 33.955853
-
 [sub_resource type="Curve" id="Curve_tua1r"]
 _data = [Vector2(0, 0), 0.0, 2.669076, 0, 0, Vector2(0.27272725, 0.4451902), 0.0, 0.0, 0, 0, Vector2(0.4545455, 0), 0.0, 0.0, 0, 0]
 point_count = 3
@@ -54,20 +51,15 @@ turbulence_noise_speed_random = 4.0
 turbulence_influence_min = 0.0
 turbulence_influence_max = 0.08800001
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
+radius = 33.955853
+
 [node name="Ship" type="RigidBody2D" unique_id=63985044]
 gravity_scale = 0.0
 contact_monitor = true
 max_contacts_reported = 1
 angular_damp = 100.0
 script = ExtResource("1_tivcy")
-
-[node name="Icon" type="Sprite2D" parent="." unique_id=535061980]
-position = Vector2(0, 2.9802322e-08)
-scale = Vector2(0.308, 0.5)
-texture = ExtResource("2_alltn")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1623896605]
-shape = SubResource("CircleShape2D_xikw6")
 
 [node name="ThrusterParticles" type="GPUParticles2D" parent="." unique_id=2098380072]
 position = Vector2(0, 12)
@@ -77,6 +69,17 @@ trail_lifetime = 0.2
 trail_sections = 2
 trail_section_subdivisions = 1
 process_material = SubResource("ParticleProcessMaterial_hpxva")
+
+[node name="Icon" type="Polygon2D" parent="." unique_id=676736838]
+position = Vector2(0, 2.9802322e-08)
+scale = Vector2(0.5, 0.5)
+offset = Vector2(-64, -67)
+texture = ExtResource("2_alltn")
+polygon = PackedVector2Array(8, 120, 64.000015, 0, 120.000015, 120, 64.000015, 112)
+uv = PackedVector2Array(8, 120, 64.000015, 0, 120.000015, 120, 64.000015, 112)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1623896605]
+shape = SubResource("CircleShape2D_xikw6")
 
 [node name="SensorSuite" type="Node2D" parent="." unique_id=704550922]
 unique_name_in_owner = true
