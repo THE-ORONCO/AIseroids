@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dq5kaans1s87n"]
 
 [ext_resource type="Script" uid="uid://dmmjh0xkiue7i" path="res://entities/wrap/wrap.gd" id="1_5p32g"]
+[ext_resource type="Script" uid="uid://dkcks5ih618bu" path="res://entities/wrap/follow_border.gd" id="2_1ukqr"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1ukqr"]
 normal = Vector2(0, 1)
@@ -25,17 +26,45 @@ script = ExtResource("1_5p32g")
 unique_name_in_owner = true
 shape = SubResource("WorldBoundaryShape2D_1ukqr")
 
+[node name="top2" type="CollisionShape2D" parent="." unique_id=1184999125 node_paths=PackedStringArray("to_follow")]
+position = Vector2(0, -30)
+shape = SubResource("WorldBoundaryShape2D_1ukqr")
+script = ExtResource("2_1ukqr")
+to_follow = NodePath("../top")
+offset = Vector2(0, -30)
+
 [node name="left" type="CollisionShape2D" parent="." unique_id=1601739409]
 unique_name_in_owner = true
 shape = SubResource("WorldBoundaryShape2D_5p32g")
+
+[node name="left2" type="CollisionShape2D" parent="." unique_id=1242407759 node_paths=PackedStringArray("to_follow")]
+position = Vector2(-30, 0)
+shape = SubResource("WorldBoundaryShape2D_5p32g")
+script = ExtResource("2_1ukqr")
+to_follow = NodePath("../left")
+offset = Vector2(-30, 0)
 
 [node name="right" type="CollisionShape2D" parent="." unique_id=1058563151]
 unique_name_in_owner = true
 shape = SubResource("WorldBoundaryShape2D_vf4cr")
 
+[node name="right2" type="CollisionShape2D" parent="." unique_id=1118589107 node_paths=PackedStringArray("to_follow")]
+position = Vector2(30, 0)
+shape = SubResource("WorldBoundaryShape2D_vf4cr")
+script = ExtResource("2_1ukqr")
+to_follow = NodePath("../right")
+offset = Vector2(30, 0)
+
 [node name="bottom" type="CollisionShape2D" parent="." unique_id=520693081]
 unique_name_in_owner = true
 shape = SubResource("WorldBoundaryShape2D_v864s")
+
+[node name="bottom2" type="CollisionShape2D" parent="." unique_id=1771594636 node_paths=PackedStringArray("to_follow")]
+position = Vector2(0, 30)
+shape = SubResource("WorldBoundaryShape2D_v864s")
+script = ExtResource("2_1ukqr")
+to_follow = NodePath("../bottom")
+offset = Vector2(0, 30)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

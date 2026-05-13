@@ -53,6 +53,7 @@ position = Vector2(672, 385)
 position = Vector2(658, 131)
 
 [node name="Wrap" parent="." unique_id=396805770 instance=ExtResource("4_xikw6")]
+fit_to_screen = false
 
 [node name="ShipBrain2D" type="Node2D" parent="." unique_id=1396777666 node_paths=PackedStringArray("controller")]
 position = Vector2(388, 194)
@@ -66,3 +67,6 @@ script = ExtResource("5_fxxkj")
 metadata/_custom_type_script = "uid://cecwd02nv3ery"
 
 [node name="HUD" parent="." unique_id=1906941366 instance=ExtResource("9_0ho8g")]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1711227385]
+position = Vector2(344, 190)
