@@ -51,7 +51,10 @@ extends ISensor2D
 		_update()
 
 var _angles = []
-var rays := []
+var _froms: Array[Vector2]= []
+var _tos: Array[Vector2]= []
+
+var rays :Array[RayCast2D]= []
 
 
 func _update():
@@ -63,6 +66,14 @@ func _update():
 				if ray is RayCast2D:
 					remove_child(ray)
 
+
+func _draw() -> void:
+	var debug_count := _froms.size()
+	for i in range(debug_count):
+		var from := to_local(_froms[i])
+		var to := to_local(_tos[i])
+		var col := Color.RED.lerp(Color.BLUE, float(i) / float(debug_count))
+		draw_line(from, to, col, 2)
 
 func _ready() -> void:
 	_spawn_nodes()
@@ -103,29 +114,91 @@ func calculate_raycasts() -> Array:
 	var distances: Array[float] = []
 	var types: Array[ShapeId.EntityType] = []
 	
+	if debug_draw:
+		_froms.clear()
+		_tos.clear()
+		queue_redraw()
+
+	var state := get_world_2d().get_direct_space_state()
+	
 	for ray: RayCast2D in rays:
-		ray.enabled = true
-		ray.force_raycast_update()
+		var from := ray.global_position
+		var delta := ray.position + ray.target_position
+		var to := from + delta
 		
-		var collider := ray.get_collider()
-		if collider is Wrap:
-			var wrap: Wrap = collider
-			
-			var global_target := ray.global_position + ray.target_position
-			
 		
-		var distance = _get_raycast_distance(ray)
+		#ray.enabled = true
+		#var collider := ray.get_collider()
+		#if collider is Wrap:
+			#
+			#var wrap: Wrap = collider
+			#var pos_before := ray.global_position
+			#var collision_pos := ray.get_collision_point()
+			#var ray_direction := (ray.target_position - ray.position).normalized()
+			#var wrap_delta := wrap.wrap_ray(collision_pos, ray_direction)
+			#ray.global_position += wrap_delta
+			#
+#
+			#ray.force_raycast_update()
+			#collider = ray.get_collider()
+			#
+			#
+			#ray.global_position = pos_before
+
+		# add some offest so that the raycasts are cast through the ship and wrapped correctly
+			
+		var cast_result: Dictionary = _cast_wrapping(from, to, ray.collision_mask)
+
+		var distance := 0.0
+		if cast_result:
+			var length: float = (ray.global_position - cast_result.position).length()
+			length = clamp(distance, 0.0, ray_length)
+			distance =  (ray_length - length) / ray_length
+		# _get_raycast_distance(ray)
 		distances.append(distance)
 		
-		#var collider = ray.get_collider()
-		types.append(ShapeId.identify(collider))
+		var shape_type: ShapeId.EntityType = ShapeId.EntityType.NOTHING
+		if cast_result:
+			var collider = cast_result.collider
+			shape_type = ShapeId.identify(collider)
+		types.append(shape_type)
 		
-		#ray.enabled = false
+		
+		ray.enabled = false
 	
 	result.append_array(distances)
 	result.append_array(types)
 	
 	return result
+
+func _cast_wrapping(from: Vector2, to: Vector2, mask: int, max_depth := 3, depth := 0) -> Dictionary:
+	if depth > max_depth:
+		return {}
+
+	var state := get_world_2d().get_direct_space_state()
+	var query:= PhysicsRayQueryParameters2D.create(from, to)
+	query.collision_mask = mask
+	query.collide_with_areas = true
+	query.collide_with_bodies = true
+	
+	var result: Dictionary = state.intersect_ray(query)
+	
+	_froms.append(from)
+
+	if result:
+		_tos.append(result.position)
+
+		if result.collider is Wrap:
+			var wrap: Wrap = result.collider
+			var hit_pos: Vector2 = result.position
+			var direction := (to - from).normalized()
+			var shift_delta := wrap.wrap_ray(hit_pos, to)
+			return _cast_wrapping(hit_pos + shift_delta, to + shift_delta, mask, 3, depth + 1)
+		else:
+			return result
+	else:
+		_tos.append(to)
+		return {}
 
 
 func _get_raycast_distance(ray: RayCast2D) -> float:

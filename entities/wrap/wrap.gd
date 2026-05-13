@@ -41,27 +41,25 @@ func update_border_positions(extent: Vector2) -> void:
 	
 	right.position.x = extent.x
 	right.position.y = extent.y / 2
-#
-#func wrap_ray(target_pos: Vector2, direction: Vector2, margin: Vector2) -> Vector2:
-	#var wrap_delta: Vector2 = Vector2.ZERO
-	#if direction.x < 0.:
-		#print("left")
-		#if target_pos.x + margin <= self.global_position.x:
-			#print("\twrap")
-			#wrap_delta.x += extent.x
-	#elif direction.x > 0.:
-		#print("right")
-		#if target_pos.x + margin >= self.global_position.x + extent.x:
-			#print("\twrap")
-			#wrap_delta.x -= extent.x
-#
-	#if direction.y < 0.:
-		#print("up")
-	#elif direction.y > 0:
-		## down collider
-		#print("down")
-	#
-	#return target_pos + wrap_delta
+
+
+
+func wrap_ray(pos: Vector2, target: Vector2) -> Vector2:
+	var wrap_delta: Vector2 = Vector2.ZERO
+	pos = to_local(pos)
+	target = to_local(target)
+
+	if target.x < 0.0 || pos.x < 0.0: # moving left
+		wrap_delta.x += extent.x
+	elif target.x > extent.x || pos.x > extent.x: # moving right
+		wrap_delta.x -= extent.x
+
+	if target.y < 0.0 || pos.y < 0.0: # moving up
+		wrap_delta.y += extent.y
+	elif target.y > extent.y || pos.y > extent.y: # moving down
+		wrap_delta.y -= extent.y
+	
+	return wrap_delta
 
 
 
@@ -81,7 +79,7 @@ func wrap_delta_aabb(pos: Vector2, direction: Vector2, aabb: Rect2) -> Vector2:
 			wrap_delta.x += extent.x + entity_width
 	elif direction.x > 0.: # moving right
 		var right_wrap_bound := self.global_position.x + extent.x
-		var left_entity_bound := pos.x + margin_left
+		var left_entity_bound := pos.x - margin_left
 		if left_entity_bound >= right_wrap_bound:
 			wrap_delta.x -= extent.x + entity_width
 

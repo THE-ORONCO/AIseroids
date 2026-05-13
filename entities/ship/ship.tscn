@@ -7,6 +7,9 @@
 [ext_resource type="Script" uid="uid://clls47afawh5h" path="res://entities/ship/sensor_suite.gd" id="4_tua1r"]
 [ext_resource type="Script" uid="uid://cngsnhnnpaxnx" path="res://components/advanced_raycast_sensor_2D.gd" id="5_3if2u"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
+radius = 30.0
+
 [sub_resource type="Curve" id="Curve_tua1r"]
 _data = [Vector2(0, 0), 0.0, 2.669076, 0, 0, Vector2(0.27272725, 0.4451902), 0.0, 0.0, 0, 0, Vector2(0.4545455, 0), 0.0, 0.0, 0, 0]
 point_count = 3
@@ -51,9 +54,6 @@ turbulence_noise_speed_random = 4.0
 turbulence_influence_min = 0.0
 turbulence_influence_max = 0.08800001
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
-radius = 33.955853
-
 [node name="Ship" type="RigidBody2D" unique_id=63985044]
 gravity_scale = 0.0
 contact_monitor = true
@@ -89,6 +89,7 @@ script = ExtResource("4_tua1r")
 unique_name_in_owner = true
 script = ExtResource("5_3if2u")
 collision_mask = 17
+collide_with_areas = true
 n_rays = 60.0
 ray_length = 300
 metadata/_custom_type_script = "uid://cngsnhnnpaxnx"
