@@ -2,7 +2,7 @@ class_name Ship
 extends RigidBody2D
 
 @export var ship_controller: ShipController
-@export var health_manager: HealthManager
+@export var health_manager: HealthManager = null
 
 @export_group("movement")
 @export_range(1, 3000) var thruster_power: float = 500.
@@ -30,6 +30,9 @@ func _ready() -> void:
 	
 	health_manager.health_reached_zero.connect(
 		get_tree().reload_current_scene.call_deferred
+	)
+	health_manager.health_reached_zero.connect(
+		func(): ScoreKeeper.score = 0
 	)
 	health_manager.health_changed.connect(func(nh): 
 		ship_controller.health = nh
