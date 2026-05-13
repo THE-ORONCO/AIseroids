@@ -3,11 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://cunuddi5si8ua" path="res://entities/ship/ship.tscn" id="1_wkkyv"]
 [ext_resource type="Script" uid="uid://cwpdff414g0ql" path="res://components/health_manager.gd" id="2_qp5ya"]
 [ext_resource type="Script" uid="uid://c1lvascsck38x" path="res://components/player_controller.gd" id="2_xikw6"]
-[ext_resource type="PackedScene" uid="uid://bocdkmbu367mf" path="res://ui_elements/health_bar.tscn" id="3_8ud6f"]
 [ext_resource type="Script" uid="uid://byg35am8mp2j0" path="res://components/ai_controller.gd" id="3_cnywj"]
 [ext_resource type="Script" uid="uid://cyfdarom6vnim" path="res://components/ship_brain_2d.gd" id="3_hpxva"]
 [ext_resource type="PackedScene" uid="uid://dq5kaans1s87n" path="res://entities/wrap/wrap.tscn" id="4_xikw6"]
-[ext_resource type="Script" uid="uid://cecwd02nv3ery" path="res://addons/godot_rl_agents/sync.gd" id="5_fxxkj"]
 [ext_resource type="Script" uid="uid://dd478rmnll5y" path="res://components/asteroid_spawner.gd" id="6_kgq6g"]
 [ext_resource type="PackedScene" uid="uid://dfgoxvdismwwp" path="res://ui_elements/hud.tscn" id="9_0ho8g"]
 
@@ -19,19 +17,8 @@ metadata/_custom_type_script = "uid://cwpdff414g0ql"
 
 [node name="Ship" parent="." unique_id=63985044 node_paths=PackedStringArray("ship_controller") groups=["Muzzle"] instance=ExtResource("1_wkkyv")]
 position = Vector2(388, 194)
-ship_controller = NodePath("PlayerController")
+ship_controller = NodePath("AiController")
 health_manager = SubResource("Resource_kgq6g")
-
-[node name="HealthBar" parent="Ship" unique_id=1407290129 instance=ExtResource("3_8ud6f")]
-unique_name_in_owner = true
-clip_contents = true
-custom_minimum_size = Vector2(40, 10)
-anchors_preset = -1
-offset_left = -20.0
-offset_top = -5.0
-offset_right = 20.0
-offset_bottom = 5.0
-size_flags_horizontal = 3
 
 [node name="PlayerController" type="Node" parent="Ship" unique_id=17223958]
 script = ExtResource("2_xikw6")
@@ -51,14 +38,10 @@ fit_to_screen = false
 position = Vector2(388, 194)
 script = ExtResource("3_hpxva")
 controller = NodePath("../Ship/AiController")
-control_mode = 1
+control_mode = 2
 metadata/_custom_type_script = "uid://cyfdarom6vnim"
-
-[node name="Sync" type="Node" parent="ShipBrain2D" unique_id=482778712]
-script = ExtResource("5_fxxkj")
-metadata/_custom_type_script = "uid://cecwd02nv3ery"
 
 [node name="HUD" parent="." unique_id=1906941366 instance=ExtResource("9_0ho8g")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1711227385]
-position = Vector2(344, 190)
+position = Vector2(371, 223)

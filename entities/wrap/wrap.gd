@@ -4,12 +4,27 @@ extends Area2D
 @export var fit_to_screen: bool = true
 @export var fallback_size: Vector2 = Vector2(500., 500.)
 
-@onready var top: CollisionShape2D = %top
-@onready var left: CollisionShape2D = %left
-@onready var right: CollisionShape2D = %right
-@onready var bottom: CollisionShape2D = %bottom
+@export_range(1., 50.) var ship_size := 30.:
+	set(val):
+		ray_wrap.ship_size = val
+		ship_size = ship_size
 
-var extent: Vector2
+@onready var topr: CollisionShape2D = %topr
+@onready var bottomr: CollisionShape2D = %bottomr
+@onready var leftr: CollisionShape2D = %leftr
+@onready var rightr: CollisionShape2D = %rightr
+@onready var ray_wrap: RayWrap = %RayWrap
+
+@onready var topl: CollisionShape2D = %topl
+@onready var bottoml: CollisionShape2D = %bottoml
+@onready var leftl: CollisionShape2D = %leftl
+@onready var rightl: CollisionShape2D = %rightl
+
+
+var extent: Vector2:
+	set(val):
+		ray_wrap.extent = val
+		extent = val
 
 var _wrap_candidates: Dictionary[RigidBody2D,RigidBody2D] = {}
 
@@ -26,40 +41,59 @@ func _ready() -> void:
 	else:
 		extent = fallback_size
 		update_border_positions(extent)
+		
+	ray_wrap.extent = extent
+	ray_wrap.ship_size = ship_size
 	
 func move_boundaries_to_screen_border() -> void:
 	extent = self.get_viewport_rect().size
 	update_border_positions(extent)
 
 func update_border_positions(extent: Vector2) -> void:
-	top.position.x = extent.x / 2
+	_resize_area_blocks()
+	_resize_lines()
+
+func _resize_area_blocks() -> void:
+	var half_ship_size := ship_size / 2.
+	topr.position.x = extent.x / 2.
+	topr.position.y = 0.0 - half_ship_size
+	topr.shape.size.x = extent.x + 2 * ship_size
+	topr.shape.size.y = ship_size
 	
-	left.position.y = extent.y / 2
+	bottomr.position.x = extent.x / 2.
+	bottomr.position.y = extent.y + half_ship_size
+	bottomr.shape.size.x = extent.x + 2 * ship_size
+	bottomr.shape.size.y = ship_size
 	
-	bottom.position.x = extent.x / 2
-	bottom.position.y = extent.y
+	leftr.position.x = 0.0 - half_ship_size
+	leftr.position.y = extent.y / 2.
+	leftr.shape.size.x = ship_size
+	leftr.shape.size.y = extent.y
 	
-	right.position.x = extent.x
-	right.position.y = extent.y / 2
+	rightr.position.x = extent.x + half_ship_size
+	rightr.position.y = extent.y / 2.
+	rightr.shape.size.x = ship_size
+	rightr.shape.size.y = extent.y
 
 
-
-func wrap_ray(pos: Vector2, target: Vector2) -> Vector2:
-	var wrap_delta: Vector2 = Vector2.ZERO
-	pos = to_local(pos)
-	target = to_local(target)
-
-	if target.x < 0.0 || pos.x < 0.0: # moving left
-		wrap_delta.x += extent.x
-	elif target.x > extent.x || pos.x > extent.x: # moving right
-		wrap_delta.x -= extent.x
-
-	if target.y < 0.0 || pos.y < 0.0: # moving up
-		wrap_delta.y += extent.y
-	elif target.y > extent.y || pos.y > extent.y: # moving down
-		wrap_delta.y -= extent.y
+func _resize_lines() -> void:
+	var tl := Vector2(-ship_size, -ship_size)
+	var tr := Vector2(extent.x + ship_size, -ship_size)
+	var bl := Vector2(-ship_size, extent.y + ship_size)
+	var br := Vector2(extent.x + ship_size, extent.y + ship_size)
 	
-	return wrap_delta
+	topl.shape.a = tl
+	topl.shape.b = tr
+	
+	bottoml.shape.a = bl
+	bottoml.shape.b = br
+	
+	leftl.shape.a = tl
+	leftl.shape.b = bl
+	
+	rightl.shape.a = tr
+	rightl.shape.b = br
+
 
 
 

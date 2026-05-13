@@ -95,7 +95,7 @@ func _spawn_nodes():
 			Vector2(ray_length * cos(deg_to_rad(angle)), ray_length * sin(deg_to_rad(angle)))
 		)
 		ray.set_name("node_" + str(i))
-		ray.enabled = true
+		ray.enabled = false
 		ray.collide_with_areas = collide_with_areas
 		ray.collide_with_bodies = collide_with_bodies
 		ray.collision_mask = collision_mask
@@ -126,27 +126,6 @@ func calculate_raycasts() -> Array:
 		var delta := ray.position + ray.target_position
 		var to := from + delta
 		
-		
-		#ray.enabled = true
-		#var collider := ray.get_collider()
-		#if collider is Wrap:
-			#
-			#var wrap: Wrap = collider
-			#var pos_before := ray.global_position
-			#var collision_pos := ray.get_collision_point()
-			#var ray_direction := (ray.target_position - ray.position).normalized()
-			#var wrap_delta := wrap.wrap_ray(collision_pos, ray_direction)
-			#ray.global_position += wrap_delta
-			#
-#
-			#ray.force_raycast_update()
-			#collider = ray.get_collider()
-			#
-			#
-			#ray.global_position = pos_before
-
-		# add some offest so that the raycasts are cast through the ship and wrapped correctly
-			
 		var cast_result: Dictionary = _cast_wrapping(from, to, ray.collision_mask)
 
 		var distance := 0.0
@@ -188,8 +167,8 @@ func _cast_wrapping(from: Vector2, to: Vector2, mask: int, max_depth := 3, depth
 	if result:
 		_tos.append(result.position)
 
-		if result.collider is Wrap:
-			var wrap: Wrap = result.collider
+		if result.collider is RayWrap:
+			var wrap: RayWrap = result.collider
 			var hit_pos: Vector2 = result.position
 			var direction := (to - from).normalized()
 			var shift_delta := wrap.wrap_ray(hit_pos, to)

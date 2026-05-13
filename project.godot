@@ -81,6 +81,7 @@ fire={
 3d_physics/layer_1="player"
 3d_physics/layer_2="ball"
 2d_physics/layer_5="wrap"
+2d_physics/layer_6="wrap_ray"
 
 [physics]
 

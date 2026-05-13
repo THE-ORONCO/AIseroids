@@ -20,6 +20,10 @@ extends RigidBody2D
 const DEFAULT_MUZZLE = preload("uid://c2qcohstk8elv")
 
 func _ready() -> void:
+	if !ship_controller:
+		ship_controller = PlayerController.new()
+		self.add_child(ship_controller)
+	
 	ship_controller.sensor = sensor_suit
 
 	if health_manager == null:
