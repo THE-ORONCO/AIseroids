@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cujdj2kfjxl54"]
 
+[ext_resource type="Script" uid="uid://bmwuyyj2ededq" path="res://levels/space.gd" id="1_qp5ya"]
 [ext_resource type="PackedScene" uid="uid://cunuddi5si8ua" path="res://entities/ship/ship.tscn" id="1_wkkyv"]
 [ext_resource type="Script" uid="uid://c1lvascsck38x" path="res://components/player_controller.gd" id="2_xikw6"]
 [ext_resource type="Script" uid="uid://byg35am8mp2j0" path="res://components/ai_controller.gd" id="3_cnywj"]
@@ -9,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dfgoxvdismwwp" path="res://ui_elements/hud.tscn" id="9_0ho8g"]
 
 [node name="Space" type="Node2D" unique_id=930446752]
+script = ExtResource("1_qp5ya")
 
 [node name="Ship" parent="." unique_id=63985044 node_paths=PackedStringArray("ship_controller") groups=["Muzzle"] instance=ExtResource("1_wkkyv")]
 position = Vector2(388, 194)
@@ -22,8 +24,10 @@ metadata/_custom_type_script = "uid://c1lvascsck38x"
 script = ExtResource("3_cnywj")
 metadata/_custom_type_script = "uid://byg35am8mp2j0"
 
-[node name="AsteroidSpawner" type="Node2D" parent="." unique_id=1429533558]
+[node name="AsteroidSpawner" type="Node2D" parent="." unique_id=1429533558 node_paths=PackedStringArray("wrap_instance")]
+unique_name_in_owner = true
 script = ExtResource("6_kgq6g")
+wrap_instance = NodePath("../Wrap")
 
 [node name="Wrap" parent="." unique_id=396805770 instance=ExtResource("4_xikw6")]
 fit_to_screen = false
