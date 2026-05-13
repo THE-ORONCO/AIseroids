@@ -1,12 +1,16 @@
 [gd_scene format=3 uid="uid://baw6jdbx8dn5d"]
 
 [ext_resource type="Script" uid="uid://bm1kq8odif4vj" path="res://levels/training_grounds.gd" id="1_7a0de"]
+[ext_resource type="Script" uid="uid://cecwd02nv3ery" path="res://addons/godot_rl_agents/sync.gd" id="2_b1ftt"]
 
 [node name="TrainingGrounds" type="Node2D" unique_id=1955271162]
 script = ExtResource("1_7a0de")
-x = 3
-y = 5
+padding = 300
 
 [node name="Camera" type="Camera2D" parent="." unique_id=468554817]
 anchor_mode = 0
-zoom = Vector2(0.3, 0.3)
+zoom = Vector2(0.2, 0.2)
+
+[node name="Sync" type="Node" parent="." unique_id=489550980]
+script = ExtResource("2_b1ftt")
+metadata/_custom_type_script = "uid://cecwd02nv3ery"

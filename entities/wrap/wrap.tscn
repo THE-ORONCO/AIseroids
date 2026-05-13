@@ -1,70 +1,77 @@
 [gd_scene format=3 uid="uid://dq5kaans1s87n"]
 
 [ext_resource type="Script" uid="uid://dmmjh0xkiue7i" path="res://entities/wrap/wrap.gd" id="1_5p32g"]
-[ext_resource type="Script" uid="uid://dkcks5ih618bu" path="res://entities/wrap/follow_border.gd" id="2_1ukqr"]
+[ext_resource type="Script" uid="uid://ciimy6el1rb3g" path="res://entities/wrap/RayWrap.gd" id="2_1ukqr"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1ukqr"]
-normal = Vector2(0, 1)
-distance = 1.3
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ukqr"]
+size = Vector2(20, 30)
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5p32g"]
-normal = Vector2(1, 0)
-distance = 1.3
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vf4cr"]
+size = Vector2(20, 30)
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_vf4cr"]
-normal = Vector2(-1, 0)
-distance = 1.3
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v864s"]
+size = Vector2(20, 30)
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_v864s"]
-distance = 1.3
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a6ir7"]
+size = Vector2(20, 30)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_5p32g"]
+b = Vector2(163.42236, -22.784575)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_1ukqr"]
+b = Vector2(163.42236, -22.784575)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_vf4cr"]
+b = Vector2(163.42236, -22.784575)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_v864s"]
+b = Vector2(163.42236, -22.784575)
 
 [node name="Wrap" type="Area2D" unique_id=396805770]
 collision_layer = 16
 script = ExtResource("1_5p32g")
 
-[node name="top" type="CollisionShape2D" parent="." unique_id=1222697310]
+[node name="topr" type="CollisionShape2D" parent="." unique_id=9428417]
 unique_name_in_owner = true
-shape = SubResource("WorldBoundaryShape2D_1ukqr")
+shape = SubResource("RectangleShape2D_1ukqr")
 
-[node name="top2" type="CollisionShape2D" parent="." unique_id=1184999125 node_paths=PackedStringArray("to_follow")]
-position = Vector2(0, -30)
-shape = SubResource("WorldBoundaryShape2D_1ukqr")
-script = ExtResource("2_1ukqr")
-to_follow = NodePath("../top")
-offset = Vector2(0, -30)
-
-[node name="left" type="CollisionShape2D" parent="." unique_id=1601739409]
+[node name="bottomr" type="CollisionShape2D" parent="." unique_id=783942247]
 unique_name_in_owner = true
-shape = SubResource("WorldBoundaryShape2D_5p32g")
+shape = SubResource("RectangleShape2D_vf4cr")
 
-[node name="left2" type="CollisionShape2D" parent="." unique_id=1242407759 node_paths=PackedStringArray("to_follow")]
-position = Vector2(-30, 0)
-shape = SubResource("WorldBoundaryShape2D_5p32g")
-script = ExtResource("2_1ukqr")
-to_follow = NodePath("../left")
-offset = Vector2(-30, 0)
-
-[node name="right" type="CollisionShape2D" parent="." unique_id=1058563151]
+[node name="leftr" type="CollisionShape2D" parent="." unique_id=1564170019]
 unique_name_in_owner = true
-shape = SubResource("WorldBoundaryShape2D_vf4cr")
+shape = SubResource("RectangleShape2D_v864s")
 
-[node name="right2" type="CollisionShape2D" parent="." unique_id=1118589107 node_paths=PackedStringArray("to_follow")]
-position = Vector2(30, 0)
-shape = SubResource("WorldBoundaryShape2D_vf4cr")
-script = ExtResource("2_1ukqr")
-to_follow = NodePath("../right")
-offset = Vector2(30, 0)
-
-[node name="bottom" type="CollisionShape2D" parent="." unique_id=520693081]
+[node name="rightr" type="CollisionShape2D" parent="." unique_id=1039578907]
 unique_name_in_owner = true
-shape = SubResource("WorldBoundaryShape2D_v864s")
+shape = SubResource("RectangleShape2D_a6ir7")
 
-[node name="bottom2" type="CollisionShape2D" parent="." unique_id=1771594636 node_paths=PackedStringArray("to_follow")]
-position = Vector2(0, 30)
-shape = SubResource("WorldBoundaryShape2D_v864s")
+[node name="RayWrap" type="Area2D" parent="." unique_id=1463705423]
+unique_name_in_owner = true
+collision_layer = 32
+collision_mask = 0
 script = ExtResource("2_1ukqr")
-to_follow = NodePath("../bottom")
-offset = Vector2(0, 30)
+
+[node name="topl" type="CollisionShape2D" parent="RayWrap" unique_id=380086525]
+unique_name_in_owner = true
+shape = SubResource("SegmentShape2D_5p32g")
+debug_color = Color(0.871604, 0.16963598, 0.7490426, 0.41960785)
+
+[node name="bottoml" type="CollisionShape2D" parent="RayWrap" unique_id=1911408212]
+unique_name_in_owner = true
+shape = SubResource("SegmentShape2D_1ukqr")
+debug_color = Color(0.871604, 0.16963598, 0.7490426, 0.41960785)
+
+[node name="leftl" type="CollisionShape2D" parent="RayWrap" unique_id=1589260001]
+unique_name_in_owner = true
+shape = SubResource("SegmentShape2D_vf4cr")
+debug_color = Color(0.871604, 0.16963598, 0.7490426, 0.41960785)
+
+[node name="rightl" type="CollisionShape2D" parent="RayWrap" unique_id=2067112090]
+unique_name_in_owner = true
+shape = SubResource("SegmentShape2D_v864s")
+debug_color = Color(0.871604, 0.16963598, 0.7490426, 0.41960785)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

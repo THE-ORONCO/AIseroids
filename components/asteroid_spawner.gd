@@ -3,7 +3,7 @@ extends Node2D
 const MAX_ATTEMPTS := 50
 
 var asteroid := preload("uid://tm3wubyfx7r")
-var spawn_delay: int = 3 # seconds
+var spawn_delay: int = 10 # seconds
 var instances_max: int = 100
 var spawn_force: float = 500.0 # tweak impulse strength
 var rng: RandomNumberGenerator
