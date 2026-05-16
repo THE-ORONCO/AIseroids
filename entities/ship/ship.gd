@@ -1,13 +1,20 @@
 class_name Ship
 extends RigidBody2D
 
-@export var ship_controller: ShipController
+signal health_changed(new_health: int)
+signal health_reached_zero
+
+
+@export_range(0, 20) var max_health: int = 10
+
+@export_group("internals")
+@export var controller: ShipController
 @export var health_manager: HealthManager = null
 
 @export_group("movement")
 @export_range(1., 3000.) var thruster_power: float = 500.
 @export_range(1., 3000.) var strafe_power: float = 500.
-@export_range(.1, 5.) var rotation_speed: float = 3.
+@export_range(.1, 10.) var rotation_speed: float = 6.
 @export_range(1., 5000.) var max_velocity: float = 1000.
 @export_range(1., 5000.) var max_force: float = 1000.
 
@@ -19,12 +26,23 @@ extends RigidBody2D
 
 const DEFAULT_MUZZLE: PackedScene = preload("uid://c2qcohstk8elv")
 
-func _ready() -> void:
-	if !ship_controller:
-		ship_controller = PlayerController.new()
-		self.add_child(ship_controller)
+## resets the ship to its base state.
+## the reset_position is in global coordinates
+func reset_ship(reset_position: Vector2 = Vector2.ZERO) -> void:
+	health_manager.reset_health()
+	muzzle.reset_weapon()
+	self.set_deferred("linear_velocity", Vector2.ZERO)
+	self.set_deferred("angular_velocity", 0.)
+	self.set_deferred("rotation", 0.)
+	self.set_deferred("global_position", reset_position)
 	
-	ship_controller.sensor = sensor_suit
+
+func _ready() -> void:
+	if !controller:
+		controller = PlayerController.new()
+		self.add_child(controller)
+	
+	controller.sensor = sensor_suit
 
 	if health_manager == null:
 		health_manager = HealthManager.new(self, 10)
@@ -32,17 +50,10 @@ func _ready() -> void:
 	if not self.body_entered.is_connected(_check_for_damage):
 		self.body_entered.connect(_check_for_damage)
 	
-	health_manager.health_reached_zero.connect(
-		get_tree().reload_current_scene.call_deferred
-	)
-	health_manager.health_reached_zero.connect(
-		func(): ScoreKeeper.score = 0
-	)
+	health_manager.health_reached_zero.connect(health_reached_zero.emit)
 	health_manager.health_changed.connect(func(nh): 
-		ship_controller.health = nh
-		)
-	ScoreKeeper.score_changed.connect(func(ns):
-		ship_controller.score = ns
+		controller.health = nh
+		health_changed.emit(nh)
 		)
 
 func _physics_process(delta: float) -> void:
@@ -56,18 +67,18 @@ func _physics_process(delta: float) -> void:
 	self.linear_velocity = self.linear_velocity.normalized() * clamp(linear_velocity.length(), 0 , max_velocity) 
 	
 func _update_ship_info() -> void:
-	ship_controller.shots_max = muzzle.max_shots
-	ship_controller.current_shots = muzzle.current_shots
-	ship_controller.time_till_reload = muzzle.time_till_reload
-	ship_controller.shot_cooldown = muzzle.cooldown_left
+	controller.shots_max = muzzle.max_shots
+	controller.current_shots = muzzle.current_shots
+	controller.time_till_reload = muzzle.time_till_reload
+	controller.shot_cooldown = muzzle.cooldown_left
 
 func _rotate(delta: float) -> void:
-	var rotation_input: float = ship_controller.turn
+	var rotation_input: float = controller.turn
 	if abs(rotation_input) >= 0.1 :
 		self.rotate(rotation_input * rotation_speed * delta)
 
 func _thrust() -> void:
-	var thrust_input := ship_controller.thrust
+	var thrust_input := controller.thrust
 	if thrust_input > 0:
 		var thrust := (Vector2.UP * thruster_power * thrust_input).rotated(self.rotation)
 		self.apply_central_force(thrust)
@@ -80,7 +91,7 @@ func _strafe() -> void:
 	self.apply_central_force(self.transform.x * strafe * strafe_power)
 
 func _fire() -> void:
-	if ship_controller.shoot:
+	if controller.shoot:
 		muzzle.fire(self.linear_velocity)
 
 func _check_for_damage(body: Node) -> void:

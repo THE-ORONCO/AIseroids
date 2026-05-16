@@ -1,6 +1,8 @@
 class_name Wrap
 extends Area2D
 
+signal size_changed
+
 @export var fit_to_screen: bool = true
 @export var fallback_size: Vector2 = Vector2(500., 500.)
 
@@ -37,19 +39,20 @@ func _ready() -> void:
 	
 	if fit_to_screen:
 		get_viewport().size_changed.connect(move_boundaries_to_screen_border)
+		get_viewport().size_changed.connect(size_changed.emit)
 		move_boundaries_to_screen_border.call_deferred()
 	else:
 		extent = fallback_size
-		update_border_positions(extent)
+		update_border_positions()
 		
 	ray_wrap.extent = extent
 	ray_wrap.ship_size = ship_size
 	
 func move_boundaries_to_screen_border() -> void:
 	extent = self.get_viewport_rect().size
-	update_border_positions(extent)
+	update_border_positions()
 
-func update_border_positions(extent: Vector2) -> void:
+func update_border_positions() -> void:
 	_resize_area_blocks()
 	_resize_lines()
 
@@ -77,22 +80,22 @@ func _resize_area_blocks() -> void:
 
 
 func _resize_lines() -> void:
-	var tl := Vector2(-ship_size, -ship_size)
-	var tr := Vector2(extent.x + ship_size, -ship_size)
-	var bl := Vector2(-ship_size, extent.y + ship_size)
-	var br := Vector2(extent.x + ship_size, extent.y + ship_size)
+	var toplft := Vector2(-ship_size, -ship_size)
+	var toprgt := Vector2(extent.x + ship_size, -ship_size)
+	var botlft := Vector2(-ship_size, extent.y + ship_size)
+	var botrgt := Vector2(extent.x + ship_size, extent.y + ship_size)
 	
-	topl.shape.a = tl
-	topl.shape.b = tr
+	topl.shape.a = toplft
+	topl.shape.b = toprgt
 	
-	bottoml.shape.a = bl
-	bottoml.shape.b = br
+	bottoml.shape.a = botlft
+	bottoml.shape.b = botrgt
 	
-	leftl.shape.a = tl
-	leftl.shape.b = bl
+	leftl.shape.a = toplft
+	leftl.shape.b = botlft
 	
-	rightl.shape.a = tr
-	rightl.shape.b = br
+	rightl.shape.a = toprgt
+	rightl.shape.b = botrgt
 
 
 func wrap_delta_aabb(pos: Vector2, direction: Vector2, aabb: Rect2) -> Vector2:
@@ -137,7 +140,7 @@ func _on_body_exited(body: Node2D) -> void:
 	if body is RigidBody2D:
 		_wrap_candidates.erase(body)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if Engine.is_editor_hint(): return 
 	
 	for body: RigidBody2D in self.get_overlapping_bodies():

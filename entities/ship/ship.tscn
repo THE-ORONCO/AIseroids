@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c5gxdwhsxj7mf" path="res://entities/ship/ship.gd" id="1_tivcy"]
 [ext_resource type="Texture2D" uid="uid://qghdlpidbh84" path="res://icon.svg" id="2_alltn"]
-[ext_resource type="PackedScene" uid="uid://bgqdgtlshk4yf" path="res://entities/ship/shot.tscn" id="3_alltn"]
 [ext_resource type="PackedScene" uid="uid://c2qcohstk8elv" path="res://entities/ship/muzzle.tscn" id="4_53e7a"]
 [ext_resource type="Script" uid="uid://clls47afawh5h" path="res://entities/ship/sensor_suite.gd" id="4_tua1r"]
 [ext_resource type="Script" uid="uid://cngsnhnnpaxnx" path="res://components/advanced_raycast_sensor_2D.gd" id="5_3if2u"]
@@ -92,7 +91,8 @@ script = ExtResource("5_3if2u")
 collision_mask = 33
 collide_with_areas = true
 n_rays = 60.0
-ray_length = 300
+ray_length = 500
+debug_draw = false
 metadata/_custom_type_script = "uid://cngsnhnnpaxnx"
 
 [node name="InvincibilityTimer" type="Timer" parent="." unique_id=977439268]
@@ -102,8 +102,8 @@ one_shot = true
 
 [node name="Muzzle" parent="." unique_id=571023481 instance=ExtResource("4_53e7a")]
 unique_name_in_owner = true
-position = Vector2(0, -47)
-shot = ExtResource("3_alltn")
+position = Vector2(0, -68)
+cooldown = 0.09999999999999999
 
 [node name="HealthBar" parent="." unique_id=1407290129 instance=ExtResource("7_53e7a")]
 unique_name_in_owner = true

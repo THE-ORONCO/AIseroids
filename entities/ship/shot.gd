@@ -9,7 +9,7 @@ extends RigidBody2D
 
 func _ready() -> void:
 	self.linear_velocity = self.transform.y * -speed
-	despawn_timer.wait_time = despawn_after
+	despawn_timer.start(despawn_after)
 	body_entered.connect(func(_a): self.queue_free())
 
 

@@ -68,12 +68,13 @@ func _update():
 
 
 func _draw() -> void:
-	var debug_count := _froms.size()
-	for i in range(debug_count):
-		var from := to_local(_froms[i])
-		var to := to_local(_tos[i])
-		var col := Color.RED.lerp(Color.BLUE, float(i) / float(debug_count))
-		draw_line(from, to, col, 2)
+	if debug_draw:
+		var debug_count := _froms.size()
+		for i in range(debug_count):
+			var from := to_local(_froms[i])
+			var to := to_local(_tos[i])
+			var col := Color.RED.lerp(Color.BLUE, float(i) / float(debug_count))
+			draw_line(from, to, col, 2)
 
 func _ready() -> void:
 	_spawn_nodes()

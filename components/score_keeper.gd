@@ -15,3 +15,7 @@ func _ready() -> void:
 	bus.asteroid_destroyed.connect.call_deferred(
 		func(points):score += points
 	)
+
+## Reset the score
+func reset_score() -> void:
+	score = 0

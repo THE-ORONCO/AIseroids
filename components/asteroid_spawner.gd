@@ -1,3 +1,4 @@
+class_name AsteroidSpawner
 extends Node2D
 
 
@@ -13,19 +14,28 @@ var spawns: bool = true
 var rng: RandomNumberGenerator
 var spawn_timer: Timer
 
+signal finished_wave
 
 func _ready() -> void:
 	if wrap_instance == null:
 		push_error("No wrap assigned. Spawn position cannot be calculated")
 		spawns = false
 	rng = RandomNumberGenerator.new()
+	
 
-
+## Spawns a wave of asteroids that enter the play field from a random position outside
+## wave_size describes how many asteroids are spawned
+## spawn_delay defines how long the spawner waits between each asteroid
+## when finished the finished_wave signal is emmited
 func spawn_wave(wave_size: int, spawn_delay: float) -> void:
 	if wave_size < 1:
 		return
 	for i in range(wave_size):
-		get_tree().create_timer(spawn_delay * (i+1)).timeout.connect(spawn)
+		var wave_timer = get_tree().create_timer(spawn_delay * (i+1))
+		wave_timer.timeout.connect(spawn)
+		
+		if i + 1 == wave_size: # the last wave
+			wave_timer.timeout.connect(finished_wave.emit)
 
 
 func spawn() -> void:
@@ -49,7 +59,6 @@ func spawn() -> void:
 		last_position = spawn_position
 		if _is_position_free(collision_shape.shape, spawn_position):
 			instance.position = spawn_position
-			add_child(instance)
 			_apply_spawn_impulse(instance, edge)
 			return
 	
@@ -57,12 +66,14 @@ func spawn() -> void:
 	instance.position = last_position
 	_apply_spawn_impulse(instance, edge)
 
+## Frees all asteroids on the playfield
+func clear_asteroids() -> void:
+	for asteroid : Asteroid in self.get_children().filter(func(c): return c is Asteroid):
+		asteroid.queue_free()
 
-# Picks a spawn point outside the current wrap by chosing a random place on 
-# the edge of the wrap and adding an offset so the ASTEROID is spawned outside.
+## Picks a spawn point outside the current wrap by chosing a random place on 
+## the edge of the wrap and adding an offset so the ASTEROID is spawned outside.
 func _get_spawn_position(asteroid_radius: float, edge: int) -> Vector2:
-	var viewport := get_viewport()
-	var canvas_transform := viewport.get_canvas_transform()
 	var spawn_point: Vector2
 	var spawn_offset = asteroid_radius + 50 
 	var wrap_top = wrap_instance.position.y - spawn_offset
@@ -75,10 +86,10 @@ func _get_spawn_position(asteroid_radius: float, edge: int) -> Vector2:
 		2: spawn_point = Vector2(randf_range(wrap_left, wrap_right), wrap_bottom)
 		3: spawn_point = Vector2(wrap_right, randf_range(wrap_top, wrap_bottom))
 	
-	return canvas_transform * spawn_point
+	return spawn_point
 
 
-# Overlap test using direct space state
+## Overlap test using direct space state
 func _is_position_free(shape: Shape2D, pos: Vector2, margin: float = 0.01) -> bool:
 	var params := PhysicsShapeQueryParameters2D.new()
 	params.shape = shape
@@ -104,3 +115,4 @@ func _apply_spawn_impulse(body: RigidBody2D, edge: int) -> void:
 		3: target_pos = Vector2(wrap_left, randf_range(wrap_top, wrap_bottom))
 	var direction := target_pos - body.position
 	body.apply_central_impulse(direction.normalized() * spawn_force)
+	

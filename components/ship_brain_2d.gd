@@ -33,11 +33,13 @@ var reward := 0.0
 var n_steps := 0
 var needs_reset := false
 
-var _score_delta := 0.
-var _health_delta := 0.
+var _score_before := 0.
+var _health_before := 0.
 
 func _ready():
 	add_to_group("AGENT")
+	_score_before = controller.score
+	_health_before = controller.health
 
 
 func get_obs() -> Dictionary:
@@ -52,7 +54,20 @@ func get_obs() -> Dictionary:
 
 
 func get_reward() -> float:
-	return _score_delta - _health_delta
+	var r = 0.
+	var score_delta := absi(_score_before - controller.score)
+	var health_delta := absi(_health_before - controller.health)
+	
+	if controller.thrust > 0.1:
+		r += .01
+	
+	if controller.current_shots == 0 && controller.shoot:
+		r -= .1
+	
+	if controller.current_shots > 2 && health_delta >= 0:
+		r -= 1
+	
+	return r + score_delta - health_delta
 
 
 func get_action_space() -> Dictionary:
@@ -90,7 +105,7 @@ func get_action() -> Array:
 
 # -----------------------------------------------------------------------------#
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	n_steps += 1
 	if n_steps > reset_after:
 		needs_reset = true
@@ -107,8 +122,8 @@ func get_obs_space():
 func reset():
 	n_steps = 0
 	needs_reset = false
-	_score_delta = 0.
-	_health_delta = 0.
+	_score_before = controller.score
+	_health_before = controller.health
 
 
 func reset_if_done():

@@ -35,6 +35,11 @@ func apply_health_change(health_change: int) -> void:
 	if health_current <= 0:
 		health_reached_zero.emit()
 
+## Reset the health to the value specified
+func reset_health(to: int = health_max) -> void:
+	health_max = to
+	health_current = to
+	health_changed.emit(health_current)
 
 func _apply_health_change_visuals(health_change: int) -> void:
 	if not show_visual_feedback:
