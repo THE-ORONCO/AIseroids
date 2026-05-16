@@ -1,7 +1,7 @@
 class_name SensorSuite
 extends ISensor2D
 
-@export_range(0, 15) 
+@export_range(0., 15.)
 var ray_history_size := 5
 
 @onready var ray_sensor: AdvancedRaycastSensor2D = %RaySensor

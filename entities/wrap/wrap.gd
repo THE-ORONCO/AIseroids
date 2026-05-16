@@ -95,8 +95,6 @@ func _resize_lines() -> void:
 	rightl.shape.b = br
 
 
-
-
 func wrap_delta_aabb(pos: Vector2, direction: Vector2, aabb: Rect2) -> Vector2:
 	var wrap_delta: Vector2 = Vector2.ZERO
 	var margin_left: float = absf(aabb.position.x)

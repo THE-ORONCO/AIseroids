@@ -2,9 +2,10 @@ extends Node2D
 
 
 const MAX_ATTEMPTS := 50
-const ASTEROID = preload("uid://tm3wubyfx7r")
+const ASTEROID: PackedScene = preload("uid://tm3wubyfx7r")
 
 @export var wrap_instance: Wrap
+@export var bus: SignalBus
 
 var instances_max: int = 100
 var spawn_force: float = 500.0
@@ -33,14 +34,15 @@ func spawn() -> void:
 	if get_children().size() >= instances_max:
 		return
 	var instance := ASTEROID.instantiate() as Asteroid
+	instance.bus = bus
 	add_child(instance)
-	var collision_shape := instance.get_node_or_null("CollisionShape2D")
+	var collision_shape := instance.get_node_or_null(^"CollisionShape2D")
 	if not collision_shape or not collision_shape.shape:
 		push_error("ASTEROID scene needs a CollisionShape2D with a CircleShape2D.")
 		return
 	
 	var last_position := Vector2.ZERO
-	var edge = 0
+	var edge := 0
 	for i in range(MAX_ATTEMPTS):
 		edge = rng.randi() % 4
 		var spawn_position := _get_spawn_position(instance.collision_shape_2d.shape.radius, edge)
@@ -100,5 +102,5 @@ func _apply_spawn_impulse(body: RigidBody2D, edge: int) -> void:
 		1: target_pos = Vector2(wrap_right, randf_range(wrap_top, wrap_bottom))
 		2: target_pos = Vector2(randf_range(wrap_left, wrap_right), wrap_top)
 		3: target_pos = Vector2(wrap_left, randf_range(wrap_top, wrap_bottom))
-	var direction = target_pos - body.position
+	var direction := target_pos - body.position
 	body.apply_central_impulse(direction.normalized() * spawn_force)

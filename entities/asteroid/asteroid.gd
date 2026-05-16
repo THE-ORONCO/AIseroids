@@ -2,7 +2,7 @@ class_name Asteroid
 extends RigidBody2D
 
 
-const ASTEROID = preload("uid://tm3wubyfx7r")
+const ASTEROID: PackedScene = preload("uid://tm3wubyfx7r")
 
 var splits: bool = false
 
@@ -17,7 +17,8 @@ var damage := 1
 @export var split_force: int = 500
 @export var split_delay: float = 0.5 # seconds
 @export var impulse_threshold: float = 200.0  # impulse threshold to trigger split
-@export var min_radius: float = 10
+@export var min_radius: float = 10.
+@export var bus: SignalBus
 
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var icon: Sprite2D = $Icon
@@ -74,10 +75,11 @@ func split() -> void:
 		asteroid_instance.position = position + push_direction * (radius - new_radius)
 		asteroid_instance.apply_central_impulse(push_direction * split_force)
 	
-	SignalBus.signal_asteroid_destoryed(radius)
+	if bus:
+		bus.signal_asteroid_destoryed(radius)
 	self.queue_free()
 
-
+# see https://en.wikipedia.org/wiki/Circle_packing_in_a_circle
 func _calc_circle_radius(circle_count: int) -> float:
 	match circle_count:
 		2: return 1. / 2.

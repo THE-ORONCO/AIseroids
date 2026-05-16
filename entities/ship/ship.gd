@@ -5,11 +5,11 @@ extends RigidBody2D
 @export var health_manager: HealthManager = null
 
 @export_group("movement")
-@export_range(1, 3000) var thruster_power: float = 500.
-@export_range(1, 3000) var strafe_power: float = 500.
+@export_range(1., 3000.) var thruster_power: float = 500.
+@export_range(1., 3000.) var strafe_power: float = 500.
 @export_range(.1, 5.) var rotation_speed: float = 3.
-@export_range(1, 5000) var max_velocity: float = 1000.
-@export_range(1, 5000) var max_force: float = 1000.
+@export_range(1., 5000.) var max_velocity: float = 1000.
+@export_range(1., 5000.) var max_force: float = 1000.
 
 @onready var thruster_particles: GPUParticles2D = $ThrusterParticles
 @onready var muzzle: Muzzle = %Muzzle
@@ -17,7 +17,7 @@ extends RigidBody2D
 @onready var health_bar: HealthBar = %HealthBar
 @onready var invincibility_timer: Timer = %InvincibilityTimer
 
-const DEFAULT_MUZZLE = preload("uid://c2qcohstk8elv")
+const DEFAULT_MUZZLE: PackedScene = preload("uid://c2qcohstk8elv")
 
 func _ready() -> void:
 	if !ship_controller:
@@ -69,14 +69,14 @@ func _rotate(delta: float) -> void:
 func _thrust() -> void:
 	var thrust_input := ship_controller.thrust
 	if thrust_input > 0:
-		var thrust = (Vector2.UP * thruster_power * thrust_input).rotated(self.rotation)
+		var thrust := (Vector2.UP * thruster_power * thrust_input).rotated(self.rotation)
 		self.apply_central_force(thrust)
 		thruster_particles.emitting = true
 	else: 
 		thruster_particles.emitting = false
 
 func _strafe() -> void:
-	var strafe := Input.get_axis("strafe_left", "strafe_right")
+	var strafe := Input.get_axis(&"strafe_left", &"strafe_right")
 	self.apply_central_force(self.transform.x * strafe * strafe_power)
 
 func _fire() -> void:
@@ -85,7 +85,7 @@ func _fire() -> void:
 
 func _check_for_damage(body: Node) -> void:
 	print("check")
-	if body.is_in_group("DamageCollider"):
+	if body.is_in_group(&"DamageCollider"):
 		if invincibility_timer.is_stopped():
 			print(body.damage)
 			health_manager.apply_health_change(-(body.damage))

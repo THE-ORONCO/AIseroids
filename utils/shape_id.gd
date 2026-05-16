@@ -17,4 +17,5 @@ static func identify(thing: Node2D) -> EntityType:
 		var t when t is Shot:	return EntityType.SHOT
 		var t when t is Asteroid: return EntityType.ASTEROID
 		var _t: 				return EntityType.UNKNOWN
+	return EntityType.UNKNOWN
 		
