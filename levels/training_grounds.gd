@@ -13,6 +13,7 @@ const TRAINING_SPACE = preload("uid://6k24nqcbijxg")
 
 var spaces: Array[Space] = []
 var _camera_tween: Tweener = null
+var _zoom_tween: Tweener = null
 var _current_agent := 0
 
 func _ready() -> void:
@@ -31,7 +32,7 @@ func _ready() -> void:
 			
 			space.global_position = pos
 			
-			space.score_keeper.best_changed.connect(update_label)
+			space.score_keeper.best_changed.connect(func(_h): update_label())
 			
 			spaces.append(space)
 
@@ -47,6 +48,10 @@ func _process(delta: float) -> void:
 		_current_agent = ((_current_agent - 1 + spaces.size()) % spaces.size())
 		update_label()
 		place_camera(_current_agent)
+	if Input.is_action_just_pressed("ui_up"):
+		zoom_camera(.2)
+	if Input.is_action_just_pressed("ui_down"):
+		zoom_camera(-.2)
 		
 	
 func update_label() -> void:
@@ -68,5 +73,12 @@ func place_camera(agent_no: int) -> void:
 	var field_middle := space.global_position + space.wrap.extent / 2.
 	
 	if _camera_tween:
-		_camera_tween.cancel_free()
-	create_tween().set_trans(Tween.TRANS_CUBIC).tween_property(camera, "global_position", field_middle, .1)
+		_camera_tween.free()
+	create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT).tween_property(camera, "global_position", field_middle, .1)
+
+func zoom_camera(amount: float) -> void:
+	if camera.zoom.x + amount <= 0.01 || camera.zoom.x + amount > 10: return
+	if _zoom_tween:
+		_zoom_tween.free()
+	create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT).tween_property(camera, "zoom", camera.zoom + Vector2(amount, amount), .1)
+	
