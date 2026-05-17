@@ -8,7 +8,10 @@ signal health_reached_zero
 @export_range(0, 20) var max_health: int = 10
 
 @export_group("internals")
-@export var controller: ShipController
+@export var controller: ShipController:
+	set(val):
+		controller = val
+		controller.sensor = sensor_suit
 @export var health_manager: HealthManager = null
 
 @export_group("movement")

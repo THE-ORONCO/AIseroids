@@ -40,4 +40,5 @@ unique_name_in_owner = true
 script = ExtResource("9_cq26u")
 
 [node name="Hud" parent="." unique_id=421406941 node_paths=PackedStringArray("wrap_space") instance=ExtResource("7_ekpci")]
+unique_name_in_owner = true
 wrap_space = NodePath("../Wrap")

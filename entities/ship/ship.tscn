@@ -54,6 +54,9 @@ turbulence_influence_max = 0.08800001
 [sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
 radius = 30.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_tua1r"]
+radius = 70.0
+
 [node name="Ship" type="RigidBody2D" unique_id=63985044]
 gravity_scale = 0.0
 contact_monitor = true
@@ -92,8 +95,13 @@ collision_mask = 33
 collide_with_areas = true
 n_rays = 60.0
 ray_length = 500
-debug_draw = false
 metadata/_custom_type_script = "uid://cngsnhnnpaxnx"
+
+[node name="NearFieldSensor" type="Area2D" parent="SensorSuite" unique_id=898996425]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SensorSuite/NearFieldSensor" unique_id=1510114050]
+shape = SubResource("CircleShape2D_tua1r")
 
 [node name="InvincibilityTimer" type="Timer" parent="." unique_id=977439268]
 unique_name_in_owner = true
@@ -103,7 +111,7 @@ one_shot = true
 [node name="Muzzle" parent="." unique_id=571023481 instance=ExtResource("4_53e7a")]
 unique_name_in_owner = true
 position = Vector2(0, -68)
-cooldown = 0.09999999999999999
+cooldown = 0.1
 
 [node name="HealthBar" parent="." unique_id=1407290129 instance=ExtResource("7_53e7a")]
 unique_name_in_owner = true

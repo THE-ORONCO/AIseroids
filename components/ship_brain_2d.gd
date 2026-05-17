@@ -33,8 +33,9 @@ var reward := 0.0
 var n_steps := 0
 var needs_reset := false
 
-var _score_before := 0.
-var _health_before := 0.
+var _score_before := 0
+var _health_before := 0
+var _last_thrust_time := Time.get_ticks_msec()
 
 func _init(c: ShipController) -> void:
 	controller = c
@@ -57,15 +58,38 @@ func get_obs() -> Dictionary:
 
 
 func get_reward() -> float:
-	var r = 0.
+	var r := 0.
 	var score_delta := absi(_score_before - controller.score)
 	var health_delta := absi(_health_before - controller.health)
 	
+	# remember health and score for the next iteration
+	_score_before = controller.score
+	_health_before = controller.health
+	
+	# small negative reward if the agent tried to shoot when no shots were available
 	if controller.current_shots == 0 && controller.shoot:
+		r -= 1
+	
+	# small negative reward if the ship had bullets left but took damage
+	if controller.current_shots > 2 && health_delta >= 0:
 		r -= .1
 	
-	if controller.current_shots > 2 && health_delta >= 0:
-		r -= 1
+	# small bonus for keeping shots when not needed
+	if controller.current_shots > 4:
+		r += .05 * controller.current_shots
+	
+	# bonus reward if the thrust was not used and no damage was taken
+	var now := Time.get_ticks_msec()
+	if controller.thrust >= 0.001 || health_delta > 0:
+		_last_thrust_time = now
+	else:
+		var thrust_pause := now - _last_thrust_time
+		var no_thrust_reward := clampf(thrust_pause, 0., 1000.) / 1000. # up to 1 if no thrust for 1s
+		r += no_thrust_reward
+		
+	# small negative reward if too close to other objects
+	if controller.sensor is SensorSuite && (controller.sensor as SensorSuite).get_near_field_objects_count() > 0:
+		r -= (controller.sensor as SensorSuite).get_near_field_objects_count() * .2
 	
 	return r + score_delta - health_delta
 

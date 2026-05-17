@@ -5,6 +5,7 @@ extends ISensor2D
 var ray_history_size := 5
 
 @onready var ray_sensor: AdvancedRaycastSensor2D = %RaySensor
+@onready var near_field_sensor: Area2D = %NearFieldSensor
 
 var _ray_sensor_history: Array[Array]
 
@@ -40,6 +41,9 @@ func deactivate():
 func get_observation() -> Array:
 	return flatten(_ray_sensor_history)
 	
+func get_near_field_objects_count() -> int:
+	return near_field_sensor.get_overlapping_bodies().size()
+
 static func flatten(nested: Array[Array]) -> Array:
 	var flat = []
 	for array in nested:

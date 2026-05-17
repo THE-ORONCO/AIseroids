@@ -9,7 +9,7 @@ const TRAINING_SPACE = preload("uid://6k24nqcbijxg")
 @export_range(1, 500) var padding: int = 500
 
 @onready var camera: Camera2D = %Camera
-@onready var label: Label = %Label
+@onready var agent_label: Label = %AgentLabel
 
 var spaces: Array[Space] = []
 var _camera_tween: Tweener = null
@@ -31,6 +31,8 @@ func _ready() -> void:
 			
 			space.global_position = pos
 			
+			space.score_keeper.best_changed.connect(update_label)
+			
 			spaces.append(space)
 
 	place_camera.call_deferred(_current_agent)
@@ -39,16 +41,26 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_right"):
 		_current_agent = ((_current_agent + 1) % spaces.size())
-		update_label(_current_agent)
+		update_label()
 		place_camera(_current_agent)
 	if Input.is_action_just_pressed("ui_left"):
 		_current_agent = ((_current_agent - 1 + spaces.size()) % spaces.size())
-		update_label(_current_agent)
+		update_label()
 		place_camera(_current_agent)
 		
 	
-func update_label(agent_no: int) -> void:
-	label.text = "Agent %02d / %02d" % [agent_no + 1, spaces.size()]
+func update_label() -> void:
+	var best_score := 0
+	var best_agent := 0
+	for space_i in range(spaces.size()):
+		var space := spaces[space_i]
+		var best_in_space := space.score_keeper.best
+		if best_in_space > best_score:
+			best_score = space.score_keeper.best
+			best_agent = space_i
+		
+	agent_label.text = "Agent %02d / %02d" % [_current_agent + 1, spaces.size()] \
+					+  "\nBest: %05d  By: %02d" % [best_score, best_agent + 1]
 
 func place_camera(agent_no: int) -> void:
 	var actual_agent_no := clampi(agent_no, 0, spaces.size() - 1)
