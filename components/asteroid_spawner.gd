@@ -9,10 +9,9 @@ const ASTEROID: PackedScene = preload("uid://tm3wubyfx7r")
 @export var bus: SignalBus
 
 var instances_max: int = 100
-var spawn_force: float = 500.0
+var spawn_force: float = 300.0
 var spawns: bool = true
 var rng: RandomNumberGenerator
-var spawn_timer: Timer
 
 signal finished_wave
 
