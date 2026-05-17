@@ -68,7 +68,7 @@ func split() -> void:
 	if not splits:
 		return
 	
-	var rotation_delta: float = 2. * PI / split_count
+	var rotation_delta: float = TAU / split_count
 	var random_rotatation :=  RandomNumberGenerator.new().randf()
 	var unit_circle_radius := _calc_circle_radius(split_count)
 	var new_radius := radius * unit_circle_radius
@@ -83,7 +83,7 @@ func split() -> void:
 		asteroid_instance.bus = bus
 		var new_collision_shape := CircleShape2D.new()
 		var push_direction := original_direction.rotated(
-			rotation_delta * i * random_rotatation
+			rotation_delta * i + random_rotatation
 		)
 		get_parent().add_child.call_deferred(asteroid_instance)
 		await asteroid_instance.ready
@@ -103,5 +103,5 @@ func _calc_circle_radius(circle_count: int) -> float:
 		3: return 1. / (1. + (2. / sqrt(3.)))
 		4: return 1. / (1. + sqrt(2.))
 		5: return 1. / (1. + sqrt(2. * (1. + (1. / sqrt(5.)))))
-		6: return 3.
+		6: return 1 / 3.
 		_: return 1.
