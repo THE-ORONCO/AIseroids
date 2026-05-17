@@ -78,6 +78,10 @@ fire={
 2d_physics/layer_5="wrap"
 2d_physics/layer_6="wrap_ray"
 
+[network]
+
+limits/debugger/max_queued_messages=4096
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

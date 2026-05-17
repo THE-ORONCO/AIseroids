@@ -36,6 +36,9 @@ var needs_reset := false
 var _score_before := 0.
 var _health_before := 0.
 
+func _init(c: ShipController) -> void:
+	controller = c
+
 func _ready():
 	add_to_group("AGENT")
 	_score_before = controller.score
@@ -48,7 +51,7 @@ func get_obs() -> Dictionary:
 	
 	var obs := []
 	obs.append_array(ship_info)
-	print(ship_info)
+	#print(ship_info)
 	obs.append_array(sensor_info)
 	return {"obs": obs}
 
@@ -57,9 +60,6 @@ func get_reward() -> float:
 	var r = 0.
 	var score_delta := absi(_score_before - controller.score)
 	var health_delta := absi(_health_before - controller.health)
-	
-	if controller.thrust > 0.1:
-		r += .01
 	
 	if controller.current_shots == 0 && controller.shoot:
 		r -= .1

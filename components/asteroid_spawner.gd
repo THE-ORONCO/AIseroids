@@ -31,7 +31,7 @@ func spawn_wave(wave_size: int, spawn_delay: float) -> void:
 	if wave_size < 1:
 		return
 	for i in range(wave_size):
-		var wave_timer = get_tree().create_timer(spawn_delay * (i+1))
+		var wave_timer = get_tree().create_timer(spawn_delay * (i))
 		wave_timer.timeout.connect(spawn)
 		
 		if i + 1 == wave_size: # the last wave

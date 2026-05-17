@@ -6,16 +6,20 @@ const TRAINING_SPACE = preload("uid://6k24nqcbijxg")
 
 @export_range(1, 16) var x: int = 4
 @export_range(1, 9) var y: int = 3 
-@export_range(1, 500) var padding: int = 150
-@onready var camera: Camera2D = $Camera
+@export_range(1, 500) var padding: int = 500
 
+@onready var camera: Camera2D = %Camera
+@onready var label: Label = %Label
+
+var spaces: Array[Space] = []
+var _camera_tween: Tweener = null
+var _current_agent := 0
 
 func _ready() -> void:
-
-	
-	for dx in range(x):
-		for dy in range(y):
+	for dy in range(y):
+		for dx in range(x):
 			var space: Space = TRAINING_SPACE.instantiate()
+			space.ai_mode = Space.AiMode.LEARNING
 			self.add_child(space)
 			
 			var playfield_width := space.wrap.extent.x
@@ -25,18 +29,32 @@ func _ready() -> void:
 			var yi := padding + (playfield_height + padding) * dy
 			var pos: Vector2 = Vector2(xi,yi)
 			
-			space.global_position = pos + Vector2(playfield_width / 2.0, playfield_height / 2.0)
+			space.global_position = pos
 			
-			# TODO auto generate the scenes if possible
-			#var wrap: Wrap = WRAP.instantiate()
-			#wrap.global_position = pos
-			#wrap.fallback_size = Vector2(playfield_width, playfield_height)
-			#wrap.fit_to_screen = false
-			#
-			#self.add_child(wrap)
-			#
-			#
-			#var ship: Ship = SHIP.instantiate()
-			#ship.global_position = pos + Vector2(playfield_width / 2.0, playfield_height / 2.0)
-			#self.add_child.call_deferred(ship)
-			#
+			spaces.append(space)
+
+	place_camera.call_deferred(_current_agent)
+	update_label.call_deferred(_current_agent)
+
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("ui_right"):
+		_current_agent = ((_current_agent + 1) % spaces.size())
+		update_label(_current_agent)
+		place_camera(_current_agent)
+	if Input.is_action_just_pressed("ui_left"):
+		_current_agent = ((_current_agent - 1 + spaces.size()) % spaces.size())
+		update_label(_current_agent)
+		place_camera(_current_agent)
+		
+	
+func update_label(agent_no: int) -> void:
+	label.text = "Agent %02d / %02d" % [agent_no + 1, spaces.size()]
+
+func place_camera(agent_no: int) -> void:
+	var actual_agent_no := clampi(agent_no, 0, spaces.size() - 1)
+	var space := spaces[actual_agent_no]
+	var field_middle := space.global_position + space.wrap.extent / 2.
+	
+	if _camera_tween:
+		_camera_tween.cancel_free()
+	create_tween().set_trans(Tween.TRANS_CUBIC).tween_property(camera, "global_position", field_middle, .1)

@@ -95,13 +95,14 @@ func _fire() -> void:
 		muzzle.fire(self.linear_velocity)
 
 func _check_for_damage(body: Node) -> void:
-	print("check")
+	#print("check")
 	if body.is_in_group(&"DamageCollider"):
 		if invincibility_timer.is_stopped():
-			print(body.damage)
+			#print(body.damage)
 			health_manager.apply_health_change(-(body.damage))
 			invincibility_timer.start()
-			print("took damage")
+			#print("took damage")
 		else:
-			print("invincible")
+			pass 
+			#print("invincible")
 		# TODO apply force to both rigid bodies to push them appart

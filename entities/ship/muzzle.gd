@@ -32,10 +32,10 @@ func get_state_for_ai() -> Array:
 
 func fire(reference_velocity: Vector2) -> void:
 	if !shot_cooldown_timer.is_stopped():
-		print("the weapon is on cooldown")
+		#print("the weapon is on cooldown")
 		return
 	if _current_shots <= 0 :
-		print("no bullets left!")
+		#print("no bullets left!")
 		return 
 
 	var bullet: Shot = shot.instantiate()
