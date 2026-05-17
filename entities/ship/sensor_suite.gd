@@ -42,7 +42,7 @@ func get_observation() -> Array:
 	return flatten(_ray_sensor_history)
 	
 func get_near_field_objects_count() -> int:
-	return near_field_sensor.get_overlapping_bodies().size()
+	return near_field_sensor.get_overlapping_bodies().filter(func(b): return b is Asteroid).size()
 
 static func flatten(nested: Array[Array]) -> Array:
 	var flat = []
