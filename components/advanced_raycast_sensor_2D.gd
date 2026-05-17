@@ -53,6 +53,7 @@ extends ISensor2D
 var _angles = []
 var _froms: Array[Vector2]= []
 var _tos: Array[Vector2]= []
+var _view_perimeter: Array[Vector2] = []
 
 var rays :Array[RayCast2D]= []
 
@@ -75,6 +76,12 @@ func _draw() -> void:
 			var to := to_local(_tos[i])
 			var col := Color.RED.lerp(Color.BLUE, float(i) / float(debug_count))
 			draw_line(from, to, col, 2)
+		
+		var perimiter_count := _view_perimeter.size()
+		for i in range(perimiter_count):
+			var from := _view_perimeter[i]
+			var to := _view_perimeter[(i + 1) % perimiter_count]
+			draw_line(from, to, Color.GREEN, 2)
 
 func _ready() -> void:
 	_spawn_nodes()
@@ -118,6 +125,7 @@ func calculate_raycasts() -> Array:
 	if debug_draw:
 		_froms.clear()
 		_tos.clear()
+		_view_perimeter.clear()
 		queue_redraw()
 
 	var state := get_world_2d().get_direct_space_state()
@@ -129,18 +137,12 @@ func calculate_raycasts() -> Array:
 		
 		var cast_result: Dictionary = _cast_wrapping(from, to, ray.collision_mask)
 
-		var distance := 0.0
-		if cast_result:
-			var length: float = (ray.global_position - cast_result.position).length()
-			length = clamp(distance, 0.0, ray_length)
-			distance =  (ray_length - length) / ray_length
-		# _get_raycast_distance(ray)
+		var distance: float = cast_result.get("distance", 0.0) / ray_length
 		distances.append(distance)
 		
-		var shape_type: ShapeId.EntityType = ShapeId.EntityType.NOTHING
-		if cast_result:
-			var collider = cast_result.collider
-			shape_type = ShapeId.identify(collider)
+		_view_perimeter.append(ray.position + ray.target_position * (distance if distance >= 0.001 else 1.))
+		
+		var shape_type: ShapeId.EntityType = cast_result.get("type", ShapeId.EntityType.NOTHING)
 		types.append(shape_type)
 		
 		
@@ -151,6 +153,7 @@ func calculate_raycasts() -> Array:
 	
 	return result
 
+## cast a ray from a point to a point iwth a mask and recurse up to max_depth times around the wrapping zone
 func _cast_wrapping(from: Vector2, to: Vector2, mask: int, max_depth := 3, depth := 0) -> Dictionary:
 	if depth > max_depth:
 		return {}
@@ -167,15 +170,27 @@ func _cast_wrapping(from: Vector2, to: Vector2, mask: int, max_depth := 3, depth
 
 	if result:
 		_tos.append(result.position)
-
+		var distance := (result.position as Vector2 - from).length()
+		
 		if result.collider is RayWrap:
 			var wrap: RayWrap = result.collider
 			var hit_pos: Vector2 = result.position
 			var direction := (to - from).normalized()
 			var shift_delta := wrap.wrap_ray(hit_pos, to)
-			return _cast_wrapping(hit_pos + shift_delta, to + shift_delta, mask, 3, depth + 1)
+			
+			# recurse to the other side of the wrapping zone
+			var recurse_cast := _cast_wrapping(hit_pos + shift_delta, to + shift_delta, mask, 3, depth + 1)
+			
+			# if nothing was hit (empty dictionary or nothing enum) exit
+			if !recurse_cast.has("type") || recurse_cast.get("type") == ShapeId.EntityType.NOTHING:
+				return {}
+			else: # otherwise combine distance with what we already have
+				return {
+					"distance": distance + recurse_cast.get("distance", 0.0), 
+					"type": recurse_cast.get("type")
+					}
 		else:
-			return result
+			return {"distance": distance, "type": ShapeId.identify(result.collider)}
 	else:
 		_tos.append(to)
 		return {}

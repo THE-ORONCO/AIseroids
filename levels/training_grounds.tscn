@@ -5,6 +5,8 @@
 
 [node name="TrainingGrounds" type="Node2D" unique_id=1955271162]
 script = ExtResource("1_7a0de")
+x = 5
+y = 5
 
 [node name="Camera" type="Camera2D" parent="." unique_id=468554817]
 unique_name_in_owner = true
@@ -12,6 +14,7 @@ zoom = Vector2(0.4, 0.4)
 
 [node name="Sync" type="Node" parent="." unique_id=489550980]
 script = ExtResource("2_b1ftt")
+action_repeat = 16
 metadata/_custom_type_script = "uid://cecwd02nv3ery"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=670003199]
