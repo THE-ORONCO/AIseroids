@@ -124,7 +124,7 @@ func calculate_raycasts() -> Array:
 	
 	for ray: RayCast2D in rays:
 		var from := ray.global_position
-		var delta := ray.position + ray.target_position
+		var delta := (ray.position + ray.target_position).rotated(ray.global_rotation)
 		var to := from + delta
 		
 		var cast_result: Dictionary = _cast_wrapping(from, to, ray.collision_mask)
