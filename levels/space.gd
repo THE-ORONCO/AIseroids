@@ -32,6 +32,7 @@ enum AiMode {
 var middle_of_wrap: Vector2:
 	get: return wrap.global_position + wrap.extent / 2.
 
+var _ship_brain: ShipBrain2D
 
 func _ready() -> void:
 	get_tree().create_timer(wave_trigger_check_delay).timeout.connect(random_wave)
@@ -69,6 +70,8 @@ func reset_playfiled() -> void:
 	score_keeper.reset_score()
 	asteroid_spawner.clear_asteroids()
 	ship.reset_ship(middle_of_wrap)
+	if _ship_brain:
+		_ship_brain.reset()
 
 
 func _wire_up_agent() -> void:
@@ -83,18 +86,18 @@ func _wire_up_agent() -> void:
 			add_child(controller)
 			ship.controller = controller
 			
-			var ship_brain := ShipBrain2D.new(controller)
-			ship_brain.controller = controller
-			ship_brain.control_mode = ShipBrain2D.ControlModes.TRAINING
-			add_child(ship_brain)
+			_ship_brain = ShipBrain2D.new(controller)
+			_ship_brain.controller = controller
+			_ship_brain.control_mode = ShipBrain2D.ControlModes.TRAINING
+			add_child(_ship_brain)
 
 		AiMode.REPLAY:
 			var controller := AiController.new()
 			add_child(controller)
 			ship.controller = controller
 			
-			var ship_brain := ShipBrain2D.new(controller)
-			ship_brain.controller = controller
-			ship_brain.control_mode = ShipBrain2D.ControlModes.ONNX_INFERENCE
-			ship_brain.onnx_model_path = onxx_model_path
-			add_child(ship_brain)
+			_ship_brain = ShipBrain2D.new(controller)
+			_ship_brain.controller = controller
+			_ship_brain.control_mode = ShipBrain2D.ControlModes.ONNX_INFERENCE
+			_ship_brain.onnx_model_path = onxx_model_path
+			add_child(_ship_brain)
