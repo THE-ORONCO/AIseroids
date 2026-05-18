@@ -119,11 +119,11 @@ func get_reward() -> float:
 	
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
-	if n_steps % 20 == 0 && sum != 0.0:
-		print_rich("[b]%s[/b]:\t%10f\t%s" % [self, sum, _reward_string(rewards)])
+	#if sum != 0.0:
+		#print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
 	return sum
 
-var _known_rewards :Dictionary[String, float] = {}
+static var _known_rewards :Dictionary[String, float] = {}
 func _reward_string(rewards: Dictionary[String,float]) -> String:
 	_known_rewards.merge(rewards)
 	
@@ -131,8 +131,8 @@ func _reward_string(rewards: Dictionary[String,float]) -> String:
 	var keys := _known_rewards.keys()
 	keys.sort()
 	for key in keys:
-		line.append("[%2s: %+1.3f]" % [key, rewards.get(key, 0.)])
-	return line.reduce(func(a,b): return a+ " " + b, "")
+		line.append("%2s, %1.3f" % [key, rewards.get(key, 0.)])
+	return line.reduce(func(a,b): return a+ ",\t" + b, "")
 
 func get_action_space() -> Dictionary:
 	return {
@@ -170,7 +170,8 @@ func get_action() -> Array:
 # -----------------------------------------------------------------------------#
 
 func get_info() -> Dictionary:
-	if done: 
+	if done:
+		#print("done :", "success" if is_success else "failure")
 		return {"is_success": is_success}
 	return {}
 
@@ -207,8 +208,6 @@ func set_heuristic(h):
 
 
 func get_done():
-	#if done:
-		#print("done: " + "success" if is_success else "died")
 	return done
 
 

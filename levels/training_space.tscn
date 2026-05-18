@@ -21,6 +21,7 @@ target_asteroid_instances = 10
 [node name="Ship" parent="." unique_id=63985044 groups=["Muzzle"] instance=ExtResource("2_6k6yw")]
 unique_name_in_owner = true
 position = Vector2(388, 194)
+max_health = 3
 
 [node name="Wrap" parent="." unique_id=396805770 instance=ExtResource("5_fk8qs")]
 unique_name_in_owner = true

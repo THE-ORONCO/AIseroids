@@ -48,7 +48,7 @@ func _ready() -> void:
 	controller.sensor = sensor_suit
 
 	if health_manager == null:
-		health_manager = HealthManager.new(self, 10)
+		health_manager = HealthManager.new(self, max_health)
 	health_bar.set_up_progress_bar(health_manager)
 	if not self.body_entered.is_connected(_check_for_damage):
 		self.body_entered.connect(_check_for_damage)

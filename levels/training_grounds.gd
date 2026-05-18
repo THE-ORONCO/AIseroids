@@ -18,11 +18,16 @@ var _zoom_tween: Tweener = null
 var _current_agent := 0
 
 func _ready() -> void:
-	for dy in range(y):
-		for dx in range(x):
+	for dy: int in range(y):
+		for dx: int in range(x):
 			var space: Space = TRAINING_SPACE.instantiate()
 			space.ai_mode = Space.AiMode.LEARNING
 			self.add_child(space)
+			
+			# add metadata for clean logging
+			space.set_meta("agent_no", dy * x + dx)
+			for child in space.get_children():
+				child.set_meta("agent_no", dy * x + dx)
 			
 			var playfield_width := space.wrap.extent.x
 			var playfield_height := space.wrap.extent.y

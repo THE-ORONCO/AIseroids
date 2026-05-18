@@ -14,6 +14,7 @@ zoom = Vector2(0.4, 0.4)
 
 [node name="Sync" type="Node" parent="." unique_id=489550980]
 script = ExtResource("2_b1ftt")
+action_repeat = 4
 metadata/_custom_type_script = "uid://cecwd02nv3ery"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=670003199]

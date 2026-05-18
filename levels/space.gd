@@ -110,7 +110,7 @@ func reset_playfield() -> void:
 	_timeout_timer.start(time_clear_max_time)
 
 func _reset_with_success() -> void:
-	print("success")
+	#print("success")
 	if _ship_brain:
 		_ship_brain.done = true
 		_ship_brain.is_success = true
