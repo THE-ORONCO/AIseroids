@@ -38,10 +38,10 @@ func _physics_process(delta: float) -> void:
 
 	# push the current speed into the speed history
 	_speed_history.pop_back()
-	var distance_traveled := absf((_position_before - self.global_position).length())
-	_speed_history.push_front(delta * distance_traveled)
+	var distance_traveled := (_position_before - self.global_position).length()
+	_speed_history.push_front((distance_traveled / delta) / 1000.)
 	_position_before = self.global_position
-
+	
 func reset():
 	ray_sensor.reset()
 	
@@ -58,7 +58,7 @@ func reset():
 	
 	_position_before = self.global_position
 	_speed_history.resize(ray_history_size)
-	_speed_history.fill(Vector2.ZERO)
+	_speed_history.fill(0.)
 
 func activate():
 	ray_sensor.activate()
