@@ -76,6 +76,7 @@ func spawn() -> void:
 
 ## Frees all asteroids on the playfield
 func clear_asteroids() -> void:
+	_wave_finished = false
 	for asteroid : Asteroid in self.get_children().filter(func(c): return c is Asteroid):
 		asteroid.queue_free()
 

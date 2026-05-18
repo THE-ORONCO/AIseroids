@@ -35,9 +35,9 @@ var middle_of_wrap: Vector2:
 	get: return wrap.global_position + wrap.extent / 2.
 
 var _ship_brain: ShipBrain2D
-var _internal_timers: Array[SceneTreeTimer]
 var _wave_spawn_timer: Timer
 var _timeout_timer: Timer
+var _is_resetting: bool = false
 
 func _ready() -> void:
 	_wave_spawn_timer = Timer.new()
@@ -83,13 +83,7 @@ func random_wave() -> void:
 	asteroid_spawner.spawn_wave(random_wave_size, random_spawn_delay)
 
 func reset_playfield() -> void:
-	#print("reset playfield")
-	
-	# reset all timers
-	for timer in _internal_timers:
-		timer.cancel_free()
-		timer.free()
-	_internal_timers.clear()
+	print(get_meta("agent_no"),"reset playfield")
 	
 	# reset the play field
 	score_keeper.reset_score()
@@ -108,9 +102,13 @@ func reset_playfield() -> void:
 	
 	# setup the timeout
 	_timeout_timer.start(time_clear_max_time)
+	
+	_is_resetting = false
 
 func _reset_with_success() -> void:
-	#print("success")
+	if _is_resetting: return
+	_is_resetting = true
+	print(get_meta("agent_no"),"success")
 	if _ship_brain:
 		_ship_brain.done = true
 		_ship_brain.is_success = true
@@ -118,7 +116,9 @@ func _reset_with_success() -> void:
 	reset_playfield.call_deferred()
 
 func _reset_with_failure() -> void:
-	#print("failure")
+	if _is_resetting: return
+	_is_resetting = true
+	print(self.get_meta("agent_no"), "failure")
 	if _ship_brain:
 		_ship_brain.done = true
 		_ship_brain.is_success = false

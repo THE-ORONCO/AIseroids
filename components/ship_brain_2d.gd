@@ -171,7 +171,7 @@ func get_action() -> Array:
 
 func get_info() -> Dictionary:
 	if done:
-		#print("done :", "success" if is_success else "failure")
+		print(get_meta("agent_no"),"done :", "success" if is_success else "failure")
 		return {"is_success": is_success}
 	return {}
 
@@ -193,8 +193,8 @@ func get_obs_space():
 func reset():
 	n_steps = 0
 	needs_reset = false
-	_score_before = controller.score
-	_health_before = controller.health
+	_score_before = 0
+	_health_before = 0
 	
 
 func reset_if_done():

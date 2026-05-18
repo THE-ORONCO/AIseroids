@@ -44,5 +44,3 @@ just tests with different policies
 - fixed policies
 ## V005
 - continue training of V004
-
-
