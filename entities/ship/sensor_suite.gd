@@ -11,18 +11,18 @@ var number_of_ticks_to_skip_for_history := 2
 
 var _ray_sensor_history: Array[Array]
 var _rotation_history: Array[float]
+var _speed_history: Array[float]
 
+var _position_before: Vector2
 var _ticks_since_last_history := 0 
 
 func _ready() -> void:
 	reset()
 	
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	_ticks_since_last_history = (_ticks_since_last_history + 1) % number_of_ticks_to_skip_for_history
 	
-	#if _ticks_since_last_history != 0:
-		#return
-	
+	# push new observations into the history queue
 	var obs := ray_sensor.get_observation()
 	_ray_sensor_history.pop_back()
 	_ray_sensor_history.push_front(obs)
@@ -32,8 +32,15 @@ func _physics_process(_delta: float) -> void:
 		"Something went wrong! The history is either too big or too small!"
 	)
 	
+	# push new rotations into the rotation history queue
 	_rotation_history.pop_back()
 	_rotation_history.push_front(fmod(self.global_rotation, TAU) / TAU)
+
+	# push the current speed into the speed history
+	_speed_history.pop_back()
+	var distance_traveled := absf((_position_before - self.global_position).length())
+	_speed_history.push_front(delta * distance_traveled)
+	_position_before = self.global_position
 
 func reset():
 	ray_sensor.reset()
@@ -48,6 +55,10 @@ func reset():
 		
 	_rotation_history.resize(ray_history_size)
 	_rotation_history.fill(0.)
+	
+	_position_before = self.global_position
+	_speed_history.resize(ray_history_size)
+	_speed_history.fill(Vector2.ZERO)
 
 func activate():
 	ray_sensor.activate()
@@ -58,6 +69,7 @@ func deactivate():
 func get_observation() -> Array:
 	var all_obs := flatten(_ray_sensor_history)
 	all_obs.append_array(_rotation_history)
+	all_obs.append_array(_speed_history)
 	return all_obs
 	
 func get_near_field_objects_count() -> int:
@@ -66,5 +78,5 @@ func get_near_field_objects_count() -> int:
 static func flatten(nested: Array[Array]) -> Array:
 	var flat = []
 	for array in nested:
-		flat.append_array(flat)
+		flat.append_array(array)
 	return flat

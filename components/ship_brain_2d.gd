@@ -185,6 +185,7 @@ func _physics_process(_delta):
 func get_obs_space():
 	# may need overriding if the obs space is complex
 	var obs = get_obs()
+	print("starting with an observation space of size %d" % len(obs["obs"]))
 	return {
 		"obs": {"size": [len(obs["obs"])], "space": "box"},
 	}
