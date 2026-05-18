@@ -83,7 +83,7 @@ func random_wave() -> void:
 	asteroid_spawner.spawn_wave(random_wave_size, random_spawn_delay)
 
 func reset_playfield() -> void:
-	print(get_meta("agent_no"),"reset playfield")
+	#print(get_meta("agent_no"),"reset playfield")
 	
 	# reset the play field
 	score_keeper.reset_score()
@@ -108,7 +108,7 @@ func reset_playfield() -> void:
 func _reset_with_success() -> void:
 	if _is_resetting: return
 	_is_resetting = true
-	print(get_meta("agent_no"),"success")
+	#print(get_meta("agent_no"),"success")
 	if _ship_brain:
 		_ship_brain.done = true
 		_ship_brain.is_success = true
@@ -118,7 +118,7 @@ func _reset_with_success() -> void:
 func _reset_with_failure() -> void:
 	if _is_resetting: return
 	_is_resetting = true
-	print(self.get_meta("agent_no"), "failure")
+	#print(self.get_meta("agent_no"), "failure")
 	if _ship_brain:
 		_ship_brain.done = true
 		_ship_brain.is_success = false

@@ -10,12 +10,11 @@
 
 [node name="TrainingSpace" type="Node2D" unique_id=930446752]
 script = ExtResource("1_i8ydr")
-wave_trigger_check_delay = 1
-time_clear_max_time = 60
-wave_size = 1
-wave_max_size_deviation = 0
-asteroid_spawn_delay = 7.0
-asteroid_spawn_delay_max_deviation = 2.0
+time_clear_max_time = 180
+wave_size = 2
+wave_max_size_deviation = 1
+asteroid_spawn_delay = 15.0
+asteroid_spawn_delay_max_deviation = 5.0
 target_asteroid_instances = 10
 
 [node name="Ship" parent="." unique_id=63985044 groups=["Muzzle"] instance=ExtResource("2_6k6yw")]

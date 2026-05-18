@@ -74,25 +74,27 @@ func get_reward() -> float:
 	_score_before = controller.score
 	_health_before = controller.health
 	
+	# TODO reward fast clear of stage
+	
 	# small negative reward if the agent tried to shoot when no shots were available
-	#if controller.current_shots == 0 && controller.shoot:
-		#rewards["shoot_with_no_shots"] = -1.
+	if controller.current_shots == 0 && controller.shoot:
+		rewards["shoot_with_no_shots"] = -1.
 	
 	# small reward if the booster is on
 	#if controller.thrust >= .2:
 		#rewards["thrust"] = .1
 	
 	# small negative reward if the ship had bullets left but took damage
-	#if controller.current_shots > 2 && health_delta > 0:
-		#rewards["damaged_with_bullets_left"] = -.1
+	if controller.current_shots > 2 && health_delta > 0:
+		rewards["damaged_with_bullets_left"] = -.1
 	
 	# small bonus for keeping shots when not needed
-	if controller.current_shots > 2:
-		rewards["hold_shots"] = .05
+	#if controller.current_shots > 2:
+		#rewards["hold_shots"] = .05
 	
 	# small negative reward for sitting on all shots unused
 	if controller.current_shots == controller.shots_max:
-		rewards["use_shots"] = -0.01
+		rewards["use_shots"] = -0.5
 	
 	# rolling average over the last n steps that tracks a bias in the ship turning
 	# small negative reward if the ship turns largely only in one direction
@@ -119,8 +121,8 @@ func get_reward() -> float:
 	
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
-	#if sum != 0.0:
-		#print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
+	if sum != 0.0:
+		print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
 	return sum
 
 static var _known_rewards :Dictionary[String, float] = {}
@@ -171,7 +173,7 @@ func get_action() -> Array:
 
 func get_info() -> Dictionary:
 	if done:
-		print(get_meta("agent_no"),"done :", "success" if is_success else "failure")
+		#print(get_meta("agent_no"),"done :", "success" if is_success else "failure")
 		return {"is_success": is_success}
 	return {}
 
