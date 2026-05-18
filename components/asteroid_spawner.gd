@@ -13,7 +13,10 @@ var spawn_force: float = 100.0
 var spawns: bool = true
 var rng: RandomNumberGenerator
 
+var _wave_finished := false
+
 signal finished_wave
+signal wave_destroyed
 
 func _ready() -> void:
 	if wrap_instance == null:
@@ -21,6 +24,9 @@ func _ready() -> void:
 		spawns = false
 	rng = RandomNumberGenerator.new()
 	
+	finished_wave.connect(_finish_wave)
+
+		
 
 ## Spawns a wave of asteroids that enter the play field from a random position outside
 ## wave_size describes how many asteroids are spawned
@@ -35,7 +41,9 @@ func spawn_wave(wave_size: int, spawn_delay: float) -> void:
 		
 		if i + 1 == wave_size: # the last wave
 			wave_timer.timeout.connect(finished_wave.emit)
-
+	
+func _finish_wave() -> void:
+	_wave_finished = true
 
 func spawn() -> void:
 	if not spawns:
@@ -69,6 +77,14 @@ func spawn() -> void:
 func clear_asteroids() -> void:
 	for asteroid : Asteroid in self.get_children().filter(func(c): return c is Asteroid):
 		asteroid.queue_free()
+
+func _physics_process(delta: float) -> void:
+	_check_field_clear.call_deferred()
+
+func _check_field_clear() -> void:
+	if _wave_finished && self.get_children().filter(func(c): return c is Asteroid).size() == 0:
+		wave_destroyed.emit()
+		_wave_finished = false
 
 ## Picks a spawn point outside the current wrap by chosing a random place on 
 ## the edge of the wrap and adding an offset so the ASTEROID is spawned outside.

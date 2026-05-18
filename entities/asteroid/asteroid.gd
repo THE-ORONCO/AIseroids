@@ -41,6 +41,7 @@ func _ready() -> void:
 		if self.position.length() > 5000: # despawn asteroid if it is too far away
 			self.queue_free()
 		)
+	
 
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:

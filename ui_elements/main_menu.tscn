@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://byxh5am80srpe"]
+
+[ext_resource type="Script" uid="uid://bd1djwacfi835" path="res://ui_elements/main_menu.gd" id="1_vecha"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_b2u01"]
+font_size = 40
+outline_size = 10
+outline_color = Color(0.35686275, 0.8862745, 0.95686275, 1)
+shadow_size = 0
+
+[node name="MainMenu" type="Control" unique_id=251754951]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_vecha")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=783828129]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=411234587]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="Label" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=825447132]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 60
+bbcode_enabled = true
+text = "Aᶦsteroids"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1425293300]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1179499658]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=2098287212]
+layout_mode = 2
+text = "Play"
+label_settings = SubResource("LabelSettings_b2u01")
+horizontal_alignment = 1
+
+[node name="PlaySoloButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1611668476]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Highscore"
+
+[node name="PlayVsAiButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1173874627]
+unique_name_in_owner = true
+layout_mode = 2
+text = "VS AI"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=287760998]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=365279229]
+layout_mode = 2
+text = "Train"
+label_settings = SubResource("LabelSettings_b2u01")
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=1147217439]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1262162935]
+layout_mode = 2
+text = "Size of training field: "
+
+[node name="XInput" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=430998727]
+unique_name_in_owner = true
+layout_mode = 2
+text = "3"
+placeholder_text = "3"
+alignment = 1
+max_length = 2
+virtual_keyboard_type = 2
+
+[node name="X" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=188284692]
+layout_mode = 2
+text = "x"
+
+[node name="YInput" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1387314309]
+unique_name_in_owner = true
+layout_mode = 2
+text = "3"
+placeholder_text = "3"
+alignment = 1
+max_length = 2
+virtual_keyboard_type = 2
+
+[node name="NumberOfAgents" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=364932372]
+unique_name_in_owner = true
+layout_mode = 2
+text = "= 9 Agents"
+
+[node name="StartTraining" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=1860362502]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Start Training
+"

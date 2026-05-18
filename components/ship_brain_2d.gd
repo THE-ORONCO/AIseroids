@@ -29,6 +29,7 @@ var onnx_model: ONNXModel
 
 var heuristic := "human"
 var done := false
+var is_success := false
 var reward := 0.0
 var n_steps := 0
 var needs_reset := false
@@ -36,6 +37,7 @@ var needs_reset := false
 var _score_before := 0
 var _health_before := 0
 var _last_thrust_time := Time.get_ticks_msec()
+var _last_score_time := Time.get_ticks_msec()
 var _turn_average := 0.
 
 func _init(c: ShipController) -> void:
@@ -50,11 +52,12 @@ func _ready():
 func get_obs() -> Dictionary:
 	var ship_info := controller.get_ship_state()
 	var sensor_info := controller.get_sensor_info()
-	
+		
 	var obs := []
 	obs.append_array(ship_info)
 	#print(ship_info)
 	obs.append_array(sensor_info)
+	
 	return {"obs": obs}
 
 
@@ -62,10 +65,10 @@ func get_reward() -> float:
 	var rewards: Dictionary[String, float] = {}
 	
 	var score_delta := absi(_score_before - controller.score)
-	rewards["score_delta"] = score_delta * 1
+	rewards["score_delta"] = score_delta 
 
 	var health_delta := absi(_health_before - controller.health)
-	rewards["health_delta"] = -health_delta * 3
+	rewards["health_delta"] = -health_delta 
 	
 	# remember health and score for the next iteration
 	_score_before = controller.score
@@ -97,11 +100,11 @@ func get_reward() -> float:
 	var turn_bias_rolling_size := 50.
 	_turn_average = _turn_average * ((turn_bias_rolling_size - 1.)/turn_bias_rolling_size) + controller.turn / turn_bias_rolling_size
 	if abs(_turn_average) > 0.2:
-		rewards["turn_bias"] = clamp(-abs(_turn_average), -2., -0.)
+		rewards["turn_bias"] = -clamp(abs(_turn_average), 0., 1.)
 	_turn_average = move_toward(_turn_average, 0., .01) #slowly reduce the average to allow for permanent turning
 	
+	var now := Time.get_ticks_msec()	
 	# bonus reward if the thrust was not used and no damage was taken
-	#var now := Time.get_ticks_msec()
 	#if controller.thrust >= 0.001 || health_delta > 0:
 		#_last_thrust_time = now
 	#else:
@@ -166,6 +169,11 @@ func get_action() -> Array:
 
 # -----------------------------------------------------------------------------#
 
+func get_info() -> Dictionary:
+	if done: 
+		return {"is_success": is_success}
+	return {}
+
 func _physics_process(_delta):
 	n_steps += 1
 	if n_steps > reset_after:
@@ -198,6 +206,8 @@ func set_heuristic(h):
 
 
 func get_done():
+	if done:
+		print("done: " + "success" if is_success else "died")
 	return done
 
 

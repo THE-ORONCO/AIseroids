@@ -1,3 +1,4 @@
+class_name TrainingGrounds
 extends Node2D
 
 const WRAP = preload("uid://dq5kaans1s87n")
