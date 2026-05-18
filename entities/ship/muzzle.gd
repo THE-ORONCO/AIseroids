@@ -1,8 +1,8 @@
 class_name Muzzle
 extends Marker2D
 
-@export var shot: PackedScene
-@export_range(1, 100) var max_shots: int = 5
+@onready var shot: PackedScene = preload("uid://bgqdgtlshk4yf")
+@export_range(1., 100.) var max_shots: int = 5
 @export_range(0.01, 2.) var cooldown: float = .3
 @export_range(0.1, 3.) var reload_time: float = 1.
 
@@ -19,9 +19,7 @@ var time_till_reload: float:
 	get: return reload_timer.time_left
 
 func _ready() -> void:
-	_current_shots = max_shots
-	shot_cooldown_timer.wait_time = cooldown
-	reload_timer.wait_time = reload_time
+	reset_weapon()
 	reload_timer.timeout.connect(_reload)
 
 func get_state_for_ai() -> Array:
@@ -34,10 +32,10 @@ func get_state_for_ai() -> Array:
 
 func fire(reference_velocity: Vector2) -> void:
 	if !shot_cooldown_timer.is_stopped():
-		print("the weapon is on cooldown")
+		#print("the weapon is on cooldown")
 		return
 	if _current_shots <= 0 :
-		print("no bullets left!")
+		#print("no bullets left!")
 		return 
 
 	var bullet: Shot = shot.instantiate()
@@ -54,6 +52,18 @@ func fire(reference_velocity: Vector2) -> void:
 	
 	if reload_timer.is_stopped():
 		reload_timer.start()
+	
+## Resets the weapon to its default state (completelly loaded and timers on max cooldown)
+func reset_weapon() -> void:
+	_current_shots = max_shots
+	
+	shot_cooldown_timer.wait_time = cooldown
+	shot_cooldown_timer.stop()
+	reload_timer.wait_time = reload_time
+	reload_timer.stop()
+	
+	for shot: Shot in get_tree().root.get_children().filter(func(c): return c is Shot):
+		shot.queue_free()
 
 func _reload() -> void:
 	self._current_shots = move_toward(_current_shots, max_shots, 1)

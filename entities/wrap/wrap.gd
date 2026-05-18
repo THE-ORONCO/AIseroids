@@ -1,6 +1,8 @@
 class_name Wrap
 extends Area2D
 
+signal size_changed
+
 @export var fit_to_screen: bool = true
 @export var fallback_size: Vector2 = Vector2(500., 500.)
 
@@ -37,64 +39,72 @@ func _ready() -> void:
 	
 	if fit_to_screen:
 		get_viewport().size_changed.connect(move_boundaries_to_screen_border)
+		get_viewport().size_changed.connect(size_changed.emit)
 		move_boundaries_to_screen_border.call_deferred()
 	else:
 		extent = fallback_size
-		update_border_positions(extent)
+		update_border_positions()
 		
 	ray_wrap.extent = extent
 	ray_wrap.ship_size = ship_size
 	
 func move_boundaries_to_screen_border() -> void:
 	extent = self.get_viewport_rect().size
-	update_border_positions(extent)
+	update_border_positions()
 
-func update_border_positions(extent: Vector2) -> void:
+func update_border_positions() -> void:
 	_resize_area_blocks()
 	_resize_lines()
 
 func _resize_area_blocks() -> void:
+	const extra_padding := 100. # to prevent the escape of asteroids and ships that get pushed arround weirdly 
+	const extra_offset := extra_padding / 2.
+
 	var half_ship_size := ship_size / 2.
-	topr.position.x = extent.x / 2.
-	topr.position.y = 0.0 - half_ship_size
-	topr.shape.size.x = extent.x + 2 * ship_size
-	topr.shape.size.y = ship_size
+	var bar_thickness := ship_size + extra_padding
+	var bar_y_offset :=  bar_thickness / 2.
+	var bar_x_offset := bar_thickness / 2.
+	var vbar_length:= extent.y + bar_thickness
+	var hbar_length := extent.x + bar_thickness
 	
-	bottomr.position.x = extent.x / 2.
-	bottomr.position.y = extent.y + half_ship_size
-	bottomr.shape.size.x = extent.x + 2 * ship_size
-	bottomr.shape.size.y = ship_size
+	topr.position.x = (extent.x - bar_thickness) / 2.
+	topr.position.y = 0.0 - bar_y_offset
+	topr.shape.size.x = hbar_length
+	topr.shape.size.y = bar_thickness
 	
-	leftr.position.x = 0.0 - half_ship_size
-	leftr.position.y = extent.y / 2.
-	leftr.shape.size.x = ship_size
-	leftr.shape.size.y = extent.y
+	bottomr.position.x = (extent.x + bar_thickness) / 2.
+	bottomr.position.y = extent.y + bar_y_offset
+	bottomr.shape.size.x = hbar_length
+	bottomr.shape.size.y = bar_thickness
 	
-	rightr.position.x = extent.x + half_ship_size
-	rightr.position.y = extent.y / 2.
-	rightr.shape.size.x = ship_size
-	rightr.shape.size.y = extent.y
+	leftr.position.x = 0.0 - bar_x_offset
+	leftr.position.y = (extent.y + bar_thickness) / 2.
+	leftr.shape.size.x = bar_thickness 
+	leftr.shape.size.y = vbar_length
+	
+	rightr.position.x = extent.x + bar_x_offset
+	rightr.position.y = (extent.y - bar_thickness) / 2.
+	rightr.shape.size.x = bar_thickness
+	rightr.shape.size.y = vbar_length
 
 
 func _resize_lines() -> void:
-	var tl := Vector2(-ship_size, -ship_size)
-	var tr := Vector2(extent.x + ship_size, -ship_size)
-	var bl := Vector2(-ship_size, extent.y + ship_size)
-	var br := Vector2(extent.x + ship_size, extent.y + ship_size)
+	var toplft := Vector2(-ship_size, -ship_size)
+	var toprgt := Vector2(extent.x + ship_size, -ship_size)
+	var botlft := Vector2(-ship_size, extent.y + ship_size)
+	var botrgt := Vector2(extent.x + ship_size, extent.y + ship_size)
 	
-	topl.shape.a = tl
-	topl.shape.b = tr
+	topl.shape.a = toplft
+	topl.shape.b = toprgt
 	
-	bottoml.shape.a = bl
-	bottoml.shape.b = br
+	bottoml.shape.a = botlft
+	bottoml.shape.b = botrgt
 	
-	leftl.shape.a = tl
-	leftl.shape.b = bl
+	leftl.shape.a = toplft
+	leftl.shape.b = botlft
 	
-	rightl.shape.a = tr
-	rightl.shape.b = br
-
-
+	rightl.shape.a = toprgt
+	rightl.shape.b = botrgt
 
 
 func wrap_delta_aabb(pos: Vector2, direction: Vector2, aabb: Rect2) -> Vector2:
@@ -139,7 +149,7 @@ func _on_body_exited(body: Node2D) -> void:
 	if body is RigidBody2D:
 		_wrap_candidates.erase(body)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if Engine.is_editor_hint(): return 
 	
 	for body: RigidBody2D in self.get_overlapping_bodies():

@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://6k24nqcbijxg"]
+
+[ext_resource type="Script" uid="uid://bmwuyyj2ededq" path="res://levels/space.gd" id="1_i8ydr"]
+[ext_resource type="PackedScene" uid="uid://cunuddi5si8ua" path="res://entities/ship/ship.tscn" id="2_6k6yw"]
+[ext_resource type="PackedScene" uid="uid://dq5kaans1s87n" path="res://entities/wrap/wrap.tscn" id="5_fk8qs"]
+[ext_resource type="PackedScene" uid="uid://dfgoxvdismwwp" path="res://ui_elements/hud.tscn" id="7_ekpci"]
+[ext_resource type="Script" uid="uid://dd478rmnll5y" path="res://components/asteroid_spawner.gd" id="7_mkix1"]
+[ext_resource type="Script" uid="uid://c0sajahomp6o5" path="res://components/score_keeper.gd" id="8_0moc7"]
+[ext_resource type="Script" uid="uid://bfkrxk2ds5p8c" path="res://components/signal_bus.gd" id="9_cq26u"]
+
+[node name="TrainingSpace" type="Node2D" unique_id=930446752]
+script = ExtResource("1_i8ydr")
+wave_trigger_check_delay = 1
+time_clear_max_time = 60
+wave_size = 3
+wave_max_size_deviation = 2
+asteroid_spawn_delay = 7.0
+asteroid_spawn_delay_max_deviation = 2.0
+target_asteroid_instances = 10
+
+[node name="Ship" parent="." unique_id=63985044 groups=["Muzzle"] instance=ExtResource("2_6k6yw")]
+unique_name_in_owner = true
+position = Vector2(388, 194)
+max_health = 3
+
+[node name="Wrap" parent="." unique_id=396805770 instance=ExtResource("5_fk8qs")]
+unique_name_in_owner = true
+fit_to_screen = false
+fallback_size = Vector2(1000, 1000)
+
+[node name="Camera" type="Camera2D" parent="." unique_id=1711227385]
+unique_name_in_owner = true
+position = Vector2(371, 223)
+
+[node name="AsteroidSpawner" type="Node2D" parent="." unique_id=1429533558 node_paths=PackedStringArray("wrap_instance", "bus")]
+unique_name_in_owner = true
+script = ExtResource("7_mkix1")
+wrap_instance = NodePath("../Wrap")
+bus = NodePath("../SignalBus")
+
+[node name="ScoreKeeper" type="Node" parent="." unique_id=758615956 node_paths=PackedStringArray("bus")]
+unique_name_in_owner = true
+script = ExtResource("8_0moc7")
+bus = NodePath("../SignalBus")
+
+[node name="SignalBus" type="Node" parent="." unique_id=1579645287]
+unique_name_in_owner = true
+script = ExtResource("9_cq26u")
+
+[node name="Hud" parent="." unique_id=421406941 node_paths=PackedStringArray("wrap_space") instance=ExtResource("7_ekpci")]
+unique_name_in_owner = true
+wrap_space = NodePath("../Wrap")

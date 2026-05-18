@@ -1,24 +1,39 @@
 class_name SensorSuite
 extends ISensor2D
 
-@export_range(0, 15) 
+@export_range(0., 15.)
 var ray_history_size := 5
+@export_range(0, 10)
+var number_of_ticks_to_skip_for_history := 2
 
 @onready var ray_sensor: AdvancedRaycastSensor2D = %RaySensor
+@onready var near_field_sensor: Area2D = %NearFieldSensor
 
 var _ray_sensor_history: Array[Array]
+var _rotation_history: Array[float]
+
+var _ticks_since_last_history := 0 
 
 func _ready() -> void:
 	reset()
 	
 func _physics_process(_delta: float) -> void:
+	_ticks_since_last_history = (_ticks_since_last_history + 1) % number_of_ticks_to_skip_for_history
+	
+	#if _ticks_since_last_history != 0:
+		#return
+	
 	var obs := ray_sensor.get_observation()
 	_ray_sensor_history.pop_back()
 	_ray_sensor_history.push_front(obs)
+
 	assert(
 		_ray_sensor_history.size() == ray_history_size,
 		"Something went wrong! The history is either too big or too small!"
 	)
+	
+	_rotation_history.pop_back()
+	_rotation_history.push_front(fmod(self.global_rotation, TAU) / TAU)
 
 func reset():
 	ray_sensor.reset()
@@ -30,6 +45,9 @@ func reset():
 		observations.resize(ray_count)
 		observations.fill(0)
 		_ray_sensor_history.append(observations)
+		
+	_rotation_history.resize(ray_history_size)
+	_rotation_history.fill(0.)
 
 func activate():
 	ray_sensor.activate()
@@ -38,8 +56,13 @@ func deactivate():
 	ray_sensor.deactivate()
 
 func get_observation() -> Array:
-	return flatten(_ray_sensor_history)
+	var all_obs := flatten(_ray_sensor_history)
+	all_obs.append_array(_rotation_history)
+	return all_obs
 	
+func get_near_field_objects_count() -> int:
+	return near_field_sensor.get_overlapping_bodies().filter(func(b): return b is Asteroid).size()
+
 static func flatten(nested: Array[Array]) -> Array:
 	var flat = []
 	for array in nested:

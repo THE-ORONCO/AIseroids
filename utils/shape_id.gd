@@ -6,7 +6,7 @@ enum EntityType {
 	ASTEROID= 1,
 	SHIP	= 2,
 	SHOT	= 3,
-	UNKNOWN	= 99,
+	UNKNOWN	= 20,
 }
 
 # TODO add the missing things

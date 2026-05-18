@@ -5,12 +5,36 @@
 
 [node name="TrainingGrounds" type="Node2D" unique_id=1955271162]
 script = ExtResource("1_7a0de")
-padding = 300
+x = 5
+y = 5
 
 [node name="Camera" type="Camera2D" parent="." unique_id=468554817]
-anchor_mode = 0
-zoom = Vector2(0.2, 0.2)
+unique_name_in_owner = true
+zoom = Vector2(0.4, 0.4)
 
 [node name="Sync" type="Node" parent="." unique_id=489550980]
 script = ExtResource("2_b1ftt")
+action_repeat = 4
 metadata/_custom_type_script = "uid://cecwd02nv3ery"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=670003199]
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer" unique_id=1980327167]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="AgentLabel" type="Label" parent="CanvasLayer/MarginContainer" unique_id=1924367775]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 10
+text = "Agent 00 / 00"
