@@ -11,6 +11,7 @@
 [node name="TrainingSpace" type="Node2D" unique_id=930446752]
 script = ExtResource("1_i8ydr")
 wave_trigger_check_delay = 1
+time_clear_max_time = 60
 wave_size = 3
 wave_max_size_deviation = 2
 asteroid_spawn_delay = 7.0

@@ -35,8 +35,22 @@ var middle_of_wrap: Vector2:
 	get: return wrap.global_position + wrap.extent / 2.
 
 var _ship_brain: ShipBrain2D
+var _internal_timers: Array[SceneTreeTimer]
+var _wave_spawn_timer: Timer
+var _timeout_timer: Timer
 
 func _ready() -> void:
+	_wave_spawn_timer = Timer.new()
+	_wave_spawn_timer.autostart = true
+	_wave_spawn_timer.one_shot = true
+	_wave_spawn_timer.timeout.connect(random_wave)
+	add_child(_wave_spawn_timer)
+	
+	_timeout_timer = Timer.new()
+	_timeout_timer.autostart = true
+	_timeout_timer.one_shot = true
+	_timeout_timer.timeout.connect(_reset_with_timeout)
+	add_child(_timeout_timer)
 	
 	#asteroid_spawner.finished_wave.connect(spawn_or_wait)
 	# TODO replace with random_wave() for continuous play
@@ -69,33 +83,51 @@ func random_wave() -> void:
 	asteroid_spawner.spawn_wave(random_wave_size, random_spawn_delay)
 
 func reset_playfield() -> void:
-	print("reset playfield")
+	#print("reset playfield")
+	
+	# reset all timers
+	for timer in _internal_timers:
+		timer.cancel_free()
+		timer.free()
+	_internal_timers.clear()
+	
+	# reset the play field
 	score_keeper.reset_score()
 	asteroid_spawner.clear_asteroids()
 	ship.reset_ship(middle_of_wrap)
+	
+	# reset the brain
 	if _ship_brain:
 		_ship_brain.reset()
-		_ship_brain.set_done_false()
 		
-		_ship_brain.done = false
-		_ship_brain.is_success = false
+		#_ship_brain.done = false
+		#_ship_brain.is_success = false
 		
-	get_tree().create_timer(wave_trigger_check_delay).timeout.connect(random_wave)
-	get_tree().create_timer(time_clear_max_time).timeout.connect(_reset_with_failure)
+	# spawn the next wave after a delay
+	_wave_spawn_timer.start(wave_trigger_check_delay)
+	
+	# setup the timeout
+	_timeout_timer.start(time_clear_max_time)
 
 func _reset_with_success() -> void:
 	print("success")
-	reset_playfield.call_deferred()
 	if _ship_brain:
 		_ship_brain.done = true
 		_ship_brain.is_success = true
+		
+	reset_playfield.call_deferred()
 
 func _reset_with_failure() -> void:
-	print("failure")
-	reset_playfield.call_deferred()
+	#print("failure")
 	if _ship_brain:
 		_ship_brain.done = true
 		_ship_brain.is_success = false
+
+	reset_playfield.call_deferred()
+
+func _reset_with_timeout() -> void:
+	#print("timeout")
+	_reset_with_failure()
 
 func _wire_up_agent() -> void:
 	match ai_mode:

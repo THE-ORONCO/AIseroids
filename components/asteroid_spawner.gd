@@ -43,6 +43,7 @@ func spawn_wave(wave_size: int, spawn_delay: float) -> void:
 			wave_timer.timeout.connect(finished_wave.emit)
 	
 func _finish_wave() -> void:
+	print("finished spawning wave")
 	_wave_finished = true
 
 func spawn() -> void:

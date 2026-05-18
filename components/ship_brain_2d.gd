@@ -174,6 +174,7 @@ func get_info() -> Dictionary:
 		return {"is_success": is_success}
 	return {}
 
+
 func _physics_process(_delta):
 	n_steps += 1
 	if n_steps > reset_after:
@@ -193,7 +194,7 @@ func reset():
 	needs_reset = false
 	_score_before = controller.score
 	_health_before = controller.health
-
+	
 
 func reset_if_done():
 	if done:
@@ -206,13 +207,14 @@ func set_heuristic(h):
 
 
 func get_done():
-	if done:
-		print("done: " + "success" if is_success else "died")
+	#if done:
+		#print("done: " + "success" if is_success else "died")
 	return done
 
 
 func set_done_false():
 	done = false
+	is_success = false
 
 
 func zero_reward():
