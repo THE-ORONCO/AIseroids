@@ -128,8 +128,6 @@ func calculate_raycasts() -> Array:
 		_view_perimeter.clear()
 		queue_redraw()
 
-	var state := get_world_2d().get_direct_space_state()
-	
 	for ray: RayCast2D in rays:
 		var from := ray.global_position
 		var delta := (ray.position + ray.target_position).rotated(ray.global_rotation)

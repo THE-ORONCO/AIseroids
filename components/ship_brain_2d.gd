@@ -65,7 +65,7 @@ func get_reward() -> float:
 	rewards["score_delta"] = score_delta * 1
 
 	var health_delta := absi(_health_before - controller.health)
-	rewards["health_delta"] = -health_delta * 1
+	rewards["health_delta"] = -health_delta * 3
 	
 	# remember health and score for the next iteration
 	_score_before = controller.score
@@ -75,9 +75,13 @@ func get_reward() -> float:
 	#if controller.current_shots == 0 && controller.shoot:
 		#rewards["shoot_with_no_shots"] = -1.
 	
+	# small reward if the booster is on
+	#if controller.thrust >= .2:
+		#rewards["thrust"] = .1
+	
 	# small negative reward if the ship had bullets left but took damage
-	if controller.current_shots > 2 && health_delta > 0:
-		rewards["damaged_with_bullets_left"] = -.1
+	#if controller.current_shots > 2 && health_delta > 0:
+		#rewards["damaged_with_bullets_left"] = -.1
 	
 	# small bonus for keeping shots when not needed
 	if controller.current_shots > 2:
@@ -85,10 +89,11 @@ func get_reward() -> float:
 	
 	# small negative reward for sitting on all shots unused
 	if controller.current_shots == controller.shots_max:
-		rewards["use_shots"] = -0.1
+		rewards["use_shots"] = -0.01
 	
 	# rolling average over the last n steps that tracks a bias in the ship turning
 	# small negative reward if the ship turns largely only in one direction
+	# TODO make this strong in the beginning to prevent excessive spinning and remove later on to allow for better controll
 	var turn_bias_rolling_size := 50.
 	_turn_average = _turn_average * ((turn_bias_rolling_size - 1.)/turn_bias_rolling_size) + controller.turn / turn_bias_rolling_size
 	if abs(_turn_average) > 0.2:
@@ -111,7 +116,7 @@ func get_reward() -> float:
 	
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
-	if n_steps % 50 == 0:
+	if n_steps % 20 == 0 && sum != 0.0:
 		print_rich("[b]%s[/b]:\t%10f\t%s" % [self, sum, _reward_string(rewards)])
 	return sum
 

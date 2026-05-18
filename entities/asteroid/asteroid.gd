@@ -14,7 +14,7 @@ var damage := 1
 	set(value): 
 		value = clamp(value, 1, 6)
 		split_count = value
-@export var split_force: int = 300
+@export var split_force: int = 50
 @export var split_delay: float = 0.5 # seconds
 @export var impulse_threshold: float = 300.0  # impulse threshold to trigger split
 @export var min_radius: float = 10.
@@ -91,6 +91,7 @@ func split(scoring: bool = false) -> void:
 		new_collision_shape.radius = new_radius
 		asteroid_instance.collision_shape_2d.shape = new_collision_shape
 		asteroid_instance.position = position + push_direction * (radius - new_radius)
+		asteroid_instance.linear_velocity = self.linear_velocity * 0.5
 		asteroid_instance.apply_central_impulse(push_direction * split_force)
 	
 

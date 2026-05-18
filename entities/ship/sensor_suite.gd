@@ -16,6 +16,7 @@ func _physics_process(_delta: float) -> void:
 	var obs := ray_sensor.get_observation()
 	_ray_sensor_history.pop_back()
 	_ray_sensor_history.push_front(obs)
+
 	assert(
 		_ray_sensor_history.size() == ray_history_size,
 		"Something went wrong! The history is either too big or too small!"

@@ -29,3 +29,12 @@ to persist the training model / allow for re-training later use
 ```shell
 python .\scripts\stable_baselines3_example.py --onnx_export_patth=modles/spaceshipV000/model.onnx --save_checkpoint_frequency=20000 --experiment_name=spaceshipV000 --experiment_dir=models/spaceshipV000
 ```
+
+# Learning
+## V001-V003
+just tests with different policies
+
+## V004 
+- fixed policies
+## V005
+- continue training of V004
