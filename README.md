@@ -173,6 +173,7 @@ python .\scripts\stable_baselines3_example.py \
 ```
 
 - changed asteroids to be big enough to always be seen by at least one ray (but still only split 3 ways)
+- changed `action_repeat` to 2 at around timestep 500.000 
 
 ### Policies
 - score_delta
@@ -180,3 +181,13 @@ python .\scripts\stable_baselines3_example.py \
 - wave_clear_progress
 - keep_distance_to_asteroids
 - self_damage
+
+
+# Exports
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V1.onnx --timesteps=1000                                                                                                 
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V2.onnx --timesteps=1000 --resume_model_path=logs/sb3/spaceshipV020_checkpoints/spaceshipV020_500000_steps.zip                                                                                                       
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V3.onnx --timesteps=1000 --resume_model_path=logs/sb3/spaceshipV020_checkpoints/spaceshipV020_1000000_steps.zip                                                                                                       
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V4.onnx --timesteps=1000 --resume_model_path=logs/sb3/spaceshipV021_checkpoints/spaceshipV021_500000_steps.zip                                                                                                       
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V5.onnx --timesteps=1000 --resume_model_path=logs/sb3/spaceshipV021_checkpoints/spaceshipV021_1000000_steps.zip                                                                                                       
+```
