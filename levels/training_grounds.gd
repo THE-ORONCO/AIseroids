@@ -31,6 +31,10 @@ var _deaths := 0.:
 	set(val):
 		_deaths = val
 		update_ratios()
+var _self_kills := 0.:
+	set(val):
+		_self_kills = val
+		update_ratios()
 
 func _ready() -> void:
 	for dy: int in range(y):
@@ -55,6 +59,7 @@ func _ready() -> void:
 			
 			space.score_keeper.best_changed.connect(func(_h): update_label())
 			
+			space.end_through_self.connect(func(): _self_kills += 1.)
 			space.end_through_death.connect(func(): _deaths += 1.)
 			space.end_through_timeout.connect(func(): _timeouts += 1.)
 			space.end_through_win.connect(func(): _wins += 1.)
@@ -94,7 +99,12 @@ func update_label() -> void:
 					
 func update_ratios() -> void:
 	var sum := _wins + _deaths + _timeouts
-	end_ratios.text= "✅ %5.1f%%\n❌ %5.1f%%\n⏱️ %5.1f%%" % [(_wins / sum) * 100., (_deaths / sum) * 100., (_timeouts / sum) * 100. ]
+	end_ratios.text= "✅ %5.1f%%\n♻️ %5.1f%%\n☠️ %5.1f%%\n⏱️ %5.1f%%" % [
+		(_wins / sum) * 100.,
+		(_self_kills / sum) * 100., 
+		(_deaths / sum) * 100., 
+		(_timeouts / sum) * 100. 
+		]
 
 func place_camera(agent_no: int) -> void:
 	var actual_agent_no := clampi(agent_no, 0, spaces.size() - 1)

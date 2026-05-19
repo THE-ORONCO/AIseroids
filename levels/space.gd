@@ -33,6 +33,7 @@ enum AiMode {
 
 
 signal end_through_death
+signal end_through_self
 signal end_through_win
 signal end_through_timeout
 
@@ -138,8 +139,10 @@ func _reset_with_failure() -> void:
 		_ship_brain.done = true
 		_ship_brain.is_success = false
 
+	if ship.controller.last_damage_was_self_damage:	end_through_self.emit()
+	else: 											end_through_death.emit()
+
 	reset_playfield.call_deferred()
-	end_through_death.emit()
 
 func _reset_with_timeout() -> void:
 	if _is_resetting: return

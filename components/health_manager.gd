@@ -2,7 +2,7 @@ class_name HealthManager
 extends Resource
 
 
-signal health_changed(new_health: int)
+signal health_changed(new_health: int, by: Node)
 signal health_reached_zero()
 
 @export var health_current: int:
@@ -25,13 +25,13 @@ func _init(new_owner_node: CollisionObject2D, new_health_max: int) -> void:
 	health_current = new_health_max
 
 
-func apply_health_change(health_change: int) -> void:
+func apply_health_change(health_change: int, by: Node) -> void:
 	if not owner_node:
 		push_error("Health manager exists without owner")
 		return
 	health_current += health_change
 	_apply_health_change_visuals(health_change)
-	health_changed.emit(health_current)
+	health_changed.emit(health_current, by)
 	if health_current <= 0:
 		health_reached_zero.emit()
 
@@ -39,7 +39,7 @@ func apply_health_change(health_change: int) -> void:
 func reset_health(to: int = health_max) -> void:
 	health_max = to
 	health_current = to
-	health_changed.emit(health_current)
+	health_changed.emit(health_current, self)
 
 func _apply_health_change_visuals(health_change: int) -> void:
 	if not show_visual_feedback:

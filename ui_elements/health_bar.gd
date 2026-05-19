@@ -26,5 +26,5 @@ func set_up_progress_bar(health_manager_res: HealthManager):
 		if not health_manager_res.health_changed.is_connected(_update_progress):
 			health_manager_res.health_changed.connect(_update_progress)
 
-func _update_progress(new_value: int) -> void:
+func _update_progress(new_value: int, _ignore) -> void:
 	progress_bar.value = new_value

@@ -80,10 +80,10 @@ func get_reward() -> float:
 	_health_before = controller.health
 
 	# small negative reward for self damage
-#	const self_damage_reward := -.3
-#	if health_delta > 0 and controller.did_self_damage:
-#		rewards["self_damage"] = self_damage_reward
-#		controller.did_self_damage = false
+	const self_damage_reward := -.3
+	if health_delta > 0 and controller.last_damage_was_self_damage:
+		rewards["self_damage"] = self_damage_reward
+		controller.last_damage_was_self_damage = false
 	
 
 	const progress_multiplier := 0.02
@@ -246,6 +246,7 @@ func reset():
 	controller.shoot = false
 	controller.turn = 0.
 	controller.thrust = 0.
+	controller.last_damage_was_self_damage = false
 
 func reset_if_done():
 	if done:

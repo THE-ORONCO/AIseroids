@@ -12,6 +12,7 @@ var shoot: bool = false
 
 var health: int
 var health_max: int = 5
+var last_damage_was_self_damage: bool = false
 var score: int = 0
 var shots_max: int = 0
 var current_shots: int = 0

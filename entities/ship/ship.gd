@@ -54,9 +54,14 @@ func _ready() -> void:
 		self.body_entered.connect(_check_for_damage)
 	
 	health_manager.health_reached_zero.connect(health_reached_zero.emit)
-	health_manager.health_changed.connect(func(nh): 
+	health_manager.health_changed.connect(func(nh, by): 
 		controller.health = nh
+		
+		if by is Shot: 
+			controller.last_damage_was_self_damage = true
+			
 		health_changed.emit(nh)
+
 		)
 
 func _physics_process(delta: float) -> void:
@@ -105,7 +110,7 @@ func _check_for_damage(body: Node) -> void:
 	if body.is_in_group(&"DamageCollider"):
 		if invincibility_timer.is_stopped():
 			#print(body.damage)
-			health_manager.apply_health_change(-(body.damage))
+			health_manager.apply_health_change(-(body.damage), body)
 			invincibility_timer.start()
 			#print("took damage")
 		else:
