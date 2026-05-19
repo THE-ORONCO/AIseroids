@@ -204,6 +204,89 @@ python .\scripts\stable_baselines3_example.py \
 - keep_distance_to_asteroids
 - self_damage
 
+## VL00
+
+- First test
+
+```shell
+python ./scripts/stable_baselines3_example.py --save_checkpoint_frequency=50000 --experiment_name=spaceshipVL00 
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress (without fast clear bonus)
+- damaged_with_bullets_left
+- dodging_asteroid
+
+## VL01
+```shell
+python ./scripts/stable_baselines3_example.py --save_checkpoint_frequency=50000 --experiment_name=spaceshipVL01
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+
+### Result
+Better survivability and success rate 
+
+## VLO2
+```shell
+python ./scripts/stable_baselines3_example.py --save_checkpoint_frequency=50000 --experiment_name=spaceshipVL02 --n_steps=128
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+
+## VLO3
+
+- Tests the dodging asteroids policy after the fix.
+- reduced learning rate via the --linear_lr_schedule flag over the training.
+
+```shell
+python ./scripts/stable_baselines3_example.py 
+--save_checkpoint_frequency=50000
+--experiment_name=spaceshipVL03
+--n_steps=256
+--linear_lr_schedule 
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- dodging asteroids
+
+
+## VLO4
+
+- based on VLO3
+- continues with keep_distance_to_asteroids instead of dodging
+- adds self_damage policy
+
+```shell
+python ./scripts/stable_baselines3_example.py --onnx_export_path=models/V1.onnx --timesteps=50000
+--save_checkpoint_frequency=50000
+--experiment_name=spaceshipVL04
+--n_steps=256
+--linear_lr_schedule
+--resume_model_path=/home/logos/Projekte/Games/AIseroids/logs/sb3/spaceshipVL03_checkpoints/spaceshipVL03_350000_steps.zip
+```
+
+### Policies
+- score_delta
+- health_delta
+- self_damage
+- wave_clear_progress
+- keep_distance_to_asteroids
+
+
 
 # Exports
 ```shell
