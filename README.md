@@ -73,3 +73,28 @@ just tests with different policies
 - fixed policies
 ## V005
 - continue training of V004
+
+## V017
+- based on V016
+- use only the positive rewards from asteroids + the higher reward for destroying more asteroids
+- use only the punishment for taking damage
+- around timestep 420000 the `slow_and_steady(speed = 600, reward = -0.2)` (a policy that punishes fast movement was enabled)
+
+## V018
+```shell
+python .\scripts\stable_baselines3_example.py  --save_checkpoint_frequency=50000 --experiment_name=spaceshipV018 --resume_model_path=logs/sb3/spaceshipV017_checkpoints/spaceshipV017_899910_steps.zip --learning_rate=0.00025 --linear_lr_schedule --clip_range=0.08
+```
+- based on V017
+- reduced learning rate via the `--linear_lr_schedule` flag over the training
+- reduced the clip range to `0.08`
+
+## V019
+```shell
+python .\scripts\stable_baselines3_example.py  --save_checkpoint_frequency=50000 --experiment_name=spaceshipV019 --learning_rate=0.0003 --linear_lr_schedule --clip_range=0.1 --onnx_export_path=V017.onnx                                          
+```
+### Policies
+- dodging_asteroid
+- slow_and_steady
+- health_delta
+- wave_clear_progress
+- score_delta

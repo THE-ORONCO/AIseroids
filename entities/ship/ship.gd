@@ -67,8 +67,9 @@ func _physics_process(delta: float) -> void:
 	
 	_update_ship_info()
 	
+func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	self.linear_velocity = self.linear_velocity.normalized() * clamp(linear_velocity.length(), 0 , max_velocity) 
-	
+
 func _update_ship_info() -> void:
 	controller.health_max = max_health
 	controller.shots_max = muzzle.max_shots

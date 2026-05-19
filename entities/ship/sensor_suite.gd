@@ -49,7 +49,7 @@ func _physics_process(delta: float) -> void:
 	var ship := (get_parent() as RigidBody2D) # TODO solve in a nicer way as accessing the parent is a NONO
 	velocity = (ship.linear_velocity).rotated(-ship.global_rotation) # rotate the velocity into the local context
 	_speed_history.push_front(velocity / 1000.)
-	speed = velocity.length() / delta
+	speed = velocity.length()
 
 	queue_redraw()
 	

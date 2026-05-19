@@ -19,7 +19,7 @@ enum AiMode {
 	REPLAY,
 }
 @export var ai_mode: AiMode = AiMode.NONE 
-@export var onxx_model_path: String
+@export var onnx_model_path: String
 @export_subgroup("hyper params")
 @export_range(0., 10.) var damage_reward_scale := 1.
 @export_range(0., 10.) var point_reward_scale := 1.
@@ -154,5 +154,5 @@ func _wire_up_agent() -> void:
 			_ship_brain = ShipBrain2D.new(controller)
 			_ship_brain.controller = controller
 			_ship_brain.control_mode = ShipBrain2D.ControlModes.ONNX_INFERENCE
-			_ship_brain.onnx_model_path = onxx_model_path
+			_ship_brain.onnx_model_path = onnx_model_path
 			add_child(_ship_brain)

@@ -3,6 +3,7 @@ extends Control
 
 const SPACE: PackedScene = preload("uid://cujdj2kfjxl54")
 const TRAINING_GROUNDS: PackedScene = preload("uid://baw6jdbx8dn5d")
+const SPACE_VS_AI = preload("uid://d0wbaw1yq1f4t")
 
 @onready var play_solo_button: Button = %PlaySoloButton
 @onready var play_vs_ai_button: Button = %PlayVsAiButton
@@ -21,6 +22,11 @@ func _ready() -> void:
 		)
 	
 	play_solo_button.pressed.connect(func(): get_tree().change_scene_to_packed(SPACE))
+	
+	play_vs_ai_button.pressed.connect(func():
+		var space = SPACE_VS_AI.instantiate()
+		get_tree().change_scene_to_node(space)
+		)
 	
 	x_input.text_changed.connect(_update_agent_count)
 	y_input.text_changed.connect(_update_agent_count)

@@ -25,6 +25,8 @@ enum ControlModes { INHERIT_FROM_SYNC, HUMAN, TRAINING, ONNX_INFERENCE, RECORD_E
 ## Tutorial: https://github.com/edbeeching/godot_rl_agents/blob/main/docs/TRAINING_MULTIPLE_POLICIES.md
 @export var policy_name: String = "shared_policy"
 
+signal reward_updated(rewards: Dictionary[String, float])
+
 var onnx_model: ONNXModel
 
 var heuristic := "human"
@@ -67,7 +69,6 @@ func get_reward() -> float:
 	var rewards: Dictionary[String, float] = {}
 	var now := Time.get_ticks_msec()
 	
-	# remember health and score for the next iteration
 	var score_delta := absi(_score_before - controller.score)
 	rewards["score_delta"] = score_delta 
 	assert(score_delta < 10, "There is a bug as the player should not be able to score that many points in a few physics ticks")
@@ -78,33 +79,40 @@ func get_reward() -> float:
 	assert(health_delta < 5, "There is a bug as the player should not be able to loose that much health in a few physics ticks")
 	_health_before = controller.health
 
+	const progress_multiplier := 0.02
 	if score_delta > 0:
 		_number_of_asteroids_destroyed_this_episode += score_delta
-		var reward_scale = 0.02
+		var reward_scale = progress_multiplier
 		if now - _last_reset_time < 60000: # time in msec
 			reward_scale *= 2
 		rewards["wave_clear_progress"] = _number_of_asteroids_destroyed_this_episode * reward_scale
 	
-	# TODO reward fast clear of stage
-	
 	# small negative reward if the agent tried to shoot when no shots were available
+	#const empty_mag_reward := -1
 	#if controller.current_shots == 0 && controller.shoot:
 		#rewards["shoot_with_no_shots"] = -1.
 	
 	# small reward if the booster is on
-	#if controller.thrust >= .2:
-		#rewards["thrust"] = .1
+	#const thrust_reward := .1
+	#const thrust_reward_trigger := 0.2
+	#if controller.thrust >= thrust_reward_trigger:
+		#rewards["thrust"] = thrust_reward
 		
 	# small negative reward if speed is too high
-	#if controller.currents_speed >= 30000:
-		#rewards["slow_and_steady"] = -.05
-		
+	#const slow_reward := -.2
+	#const fast_speed := 600.
+	#if controller.currents_speed >= fast_speed:
+		#rewards["slow_and_steady"] = slow_reward
+	
 	# small negative reward if the ship had bullets left but took damage
-	if controller.current_shots > 2 && health_delta > 0:
-		rewards["damaged_with_bullets_left"] = -.1
+	#const max_bullets_left := 2
+	#const bullets_left_reward := -.1
+	#if controller.current_shots > max_bullets_left && health_delta > 0:
+		#rewards["damaged_with_bullets_left"] = -.1
 	
 	# small bonus for keeping shots when not needed
-	#if controller.current_shots > 2:
+	#const shots_to_keep := 2
+	#if controller.current_shots > shots_to_keep:
 		#rewards["hold_shots"] = .05
 	
 	# small negative reward for sitting on all shots unused
@@ -118,9 +126,12 @@ func get_reward() -> float:
 	# TODO make this strong in the beginning to prevent excessive spinning and remove later on to allow for better controll
 	#var turn_bias_rolling_size := 50.
 	#_turn_average = _turn_average * ((turn_bias_rolling_size - 1.)/turn_bias_rolling_size) + controller.turn / turn_bias_rolling_size
-	#if abs(_turn_average) > 0.2:
+	#const max_turn_bias := 0.2
+	#const turn_bias_reduce := 0.01
+	#const max_turn_bias_reward := 0.1
+	#if abs(_turn_average) > max_turn_bias:
 		#rewards["turn_bias"] = -clamp(abs(_turn_average), 0., 1.)
-	#_turn_average = move_toward(_turn_average, 0., .01) #slowly reduce the average to allow for permanent turning
+	#_turn_average = move_toward(_turn_average, 0., turn_bias_reduce) #slowly reduce the average to allow for permanent turning
 	
 	# bonus reward if the thrust was not used and no damage was taken
 	#if controller.thrust >= 0.001 || health_delta > 0:
@@ -135,13 +146,10 @@ func get_reward() -> float:
 	if controller.thrust >= 0.001 and health_delta <= 0:
 		if controller.sensor is SensorSuite and (controller.sensor as SensorSuite).ray_sensor.asteroid_is_close:
 			rewards["dodging_asteroid"] = .1
-		
-	# small negative reward if too close to other objects
-	#if controller.sensor is SensorSuite && (controller.sensor as SensorSuite).get_near_field_objects_count() > 0:
-		#rewards["near_other_objects"] = -(controller.sensor as SensorSuite).get_near_field_objects_count() * .2
 	
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
+	reward_updated.emit(reward)
 	#if sum != 0.0:
 		#print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
 	return sum
@@ -159,18 +167,18 @@ func _reward_string(rewards: Dictionary[String,float]) -> String:
 
 func get_action_space() -> Dictionary:
 	return {
+		"shoot": {
+			"size": 1,
+			"action_type": "continuous",
+		},
 		"thrust": {
 			"size": 1, 
 			"action_type": "continuous",
-			},
+		},
 		"turn": {
 			"size": 1,
 			"action_type": "continuous",
-			},
-		"shoot": {
-			"size": 1,
-			"action_type": "discrete",
-		}
+		},
 	}
 
 
@@ -178,7 +186,7 @@ func set_action(action) -> void:
 	controller.update_inputs(
 		clampf(action["thrust"][0], 0, 1.0),
 		clampf(action["turn"][0], -1.0, 1.0),
-		action["shoot"] >= 0.5,
+		action["shoot"][0] >= 0.5,
 	)
 
 #-----------------------------------------------------------------------------#

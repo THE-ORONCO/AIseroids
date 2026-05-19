@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://d0wbaw1yq1f4t"]
+
+[ext_resource type="PackedScene" uid="uid://cujdj2kfjxl54" path="res://levels/space.tscn" id="1_ox1yf"]
+[ext_resource type="Script" uid="uid://cecwd02nv3ery" path="res://addons/godot_rl_agents/sync.gd" id="8_pnlkb"]
+
+[node name="SpaceVsAi" type="Node2D" unique_id=930446752]
+
+[node name="Space" parent="." unique_id=1828459656 instance=ExtResource("1_ox1yf")]
+ai_mode = 2
+onnx_model_path = "models/V017.onnx"
+
+[node name="Sync" type="Node" parent="." unique_id=902274059]
+script = ExtResource("8_pnlkb")
+control_mode = 2
+onnx_model_path = "models/V017.onnx"
+metadata/_custom_type_script = "uid://cecwd02nv3ery"

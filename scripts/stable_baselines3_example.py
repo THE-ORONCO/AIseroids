@@ -5,6 +5,7 @@ from typing import Callable
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback
+from stable_baselines3.common.utils import get_schedule_fn
 from stable_baselines3.common.vec_env.vec_monitor import VecMonitor
 
 from godot_rl.core.utils import can_import
@@ -90,8 +91,8 @@ parser.add_argument(
     default=False,
     action="store_true",
     help="Use a linear LR schedule for training. If set, learning rate will decrease until it reaches 0 at "
-    "--timesteps"
-    "value. Note: On resuming training, the schedule will reset. If disabled, constant LR will be used.",
+         "--timesteps"
+         "value. Note: On resuming training, the schedule will reset. If disabled, constant LR will be used.",
 )
 parser.add_argument(
     "--viz",
@@ -109,6 +110,7 @@ parser.add_argument(
 )
 # SFr: Added parameters learning-rate and n_steps
 parser.add_argument("--learning_rate", default=0.0003, type=float, help="learning rate")
+parser.add_argument("--clip_range", default=0.2, type=float, help="clip range")
 parser.add_argument("--n_steps", default=32, type=int, help="number of steps")
 
 args, extras = parser.parse_known_args()
@@ -191,9 +193,9 @@ def linear_schedule(initial_value: float) -> Callable[[float], float]:
 
     return func
 
+learning_rate = args.learning_rate if not args.linear_lr_schedule else linear_schedule(args.learning_rate)
 
 if args.resume_model_path is None:
-    learning_rate = args.learning_rate if not args.linear_lr_schedule else linear_schedule(args.learning_rate)
     # policy_kwargs = dict(net_arch=dict(pi=[32, 32], vf=[32, 32]))
 
     model: PPO = PPO(
@@ -204,12 +206,18 @@ if args.resume_model_path is None:
         n_steps=args.n_steps,
         tensorboard_log=args.experiment_dir,
         learning_rate=learning_rate,
+        clip_range=args.clip_range,
         # policy_kwargs=policy_kwargs
     )
 else:
     path_zip = pathlib.Path(args.resume_model_path)
     print("Loading model: " + os.path.abspath(path_zip))
-    model = PPO.load(path_zip, env=env, tensorboard_log=args.experiment_dir)
+    model = PPO.load(path_zip,
+                     env=env,
+                     tensorboard_log=args.experiment_dir,
+                     learning_rate=get_schedule_fn(learning_rate),
+                     clip_range=get_schedule_fn(args.clip_range),
+                     )
 
 if args.inference:
     obs = env.reset()
