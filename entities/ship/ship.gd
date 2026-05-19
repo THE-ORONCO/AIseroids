@@ -27,6 +27,9 @@ signal health_reached_zero
 @onready var health_bar: HealthBar = %HealthBar
 @onready var invincibility_timer: Timer = %InvincibilityTimer
 
+## TODO find the actual cause as this is just a hack to stop the agent from firing immediatelly
+var _was_just_reset: bool = false
+
 const DEFAULT_MUZZLE: PackedScene = preload("uid://c2qcohstk8elv")
 
 ## resets the ship to its base state.
@@ -38,6 +41,8 @@ func reset_ship(reset_position: Vector2 = Vector2.ZERO) -> void:
 	self.set_deferred("angular_velocity", 0.)
 	self.set_deferred("rotation", 0.)
 	self.set_deferred("global_position", reset_position)
+	get_tree().create_timer(1.5).timeout.connect(func(): _was_just_reset = false)
+	_was_just_reset = true
 	
 
 func _ready() -> void:
@@ -72,7 +77,7 @@ func _physics_process(delta: float) -> void:
 	
 	_update_ship_info()
 	
-func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
+func _integrate_forces(_state: PhysicsDirectBodyState2D) -> void:
 	self.linear_velocity = self.linear_velocity.normalized() * clamp(linear_velocity.length(), 0 , max_velocity) 
 
 func _update_ship_info() -> void:
@@ -102,7 +107,7 @@ func _strafe() -> void:
 	self.apply_central_force(self.transform.x * strafe * strafe_power)
 
 func _fire() -> void:
-	if controller.shoot:
+	if controller.shoot and not _was_just_reset:
 		muzzle.fire(self.linear_velocity)
 
 func _check_for_damage(body: Node) -> void:
