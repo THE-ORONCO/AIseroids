@@ -98,7 +98,7 @@ func update_label() -> void:
 					+  "\nBest: %05d  By: %02d" % [best_score, best_agent + 1]
 					
 func update_ratios() -> void:
-	var sum := _wins + _deaths + _timeouts
+	var sum := _wins + _deaths + _timeouts + _self_kills
 	end_ratios.text= "✅ %5.1f%%\n♻️ %5.1f%%\n☠️ %5.1f%%\n⏱️ %5.1f%%" % [
 		(_wins / sum) * 100.,
 		(_self_kills / sum) * 100., 
