@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://ckxf7mkc74i7i" path="res://entities/ship/shot.gd" id="1_c3aqg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c3aqg"]
+radius = 20.0
 
 [node name="Shot" type="RigidBody2D" unique_id=1892472417]
 gravity_scale = 0.0
@@ -16,8 +17,8 @@ despawn_after = 2.035
 shape = SubResource("CircleShape2D_c3aqg")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=752289777]
-position = Vector2(2.9802322e-07, -2.3841858e-07)
-scale = Vector2(0.10937501, 0.15625)
+position = Vector2(7.1525574e-07, 9.536743e-07)
+scale = Vector2(0.23437501, 0.28125003)
 texture = ExtResource("1_ajo1l")
 
 [node name="DespawnTimer" type="Timer" parent="." unique_id=1062004174]
