@@ -9,15 +9,23 @@ var number_of_ticks_to_skip_for_history := 2
 @onready var ray_sensor: AdvancedRaycastSensor2D = %RaySensor
 @onready var near_field_sensor: Area2D = %NearFieldSensor
 
+var speed: float = 0.
+
 var _ray_sensor_history: Array[Array]
 var _rotation_history: Array[float]
-var _speed_history: Array[float]
+var _speed_history: Array[Vector2]
 
-var _position_before: Vector2
+var velocity: Vector2 = Vector2.ZERO
 var _ticks_since_last_history := 0 
+
 
 func _ready() -> void:
 	reset()
+	
+func _draw() -> void:
+	draw_line(self.position, velocity, Color.YELLOW, 2)
+	var a := to_local(self.global_position + Vector2(0,-100).rotated(_rotation_history[0] * PI))
+	draw_line(self.position, a, Color.YELLOW, 2)
 	
 func _physics_process(delta: float) -> void:
 	_ticks_since_last_history = (_ticks_since_last_history + 1) % number_of_ticks_to_skip_for_history
@@ -34,13 +42,16 @@ func _physics_process(delta: float) -> void:
 	
 	# push new rotations into the rotation history queue
 	_rotation_history.pop_back()
-	_rotation_history.push_front(fmod(self.global_rotation, TAU) / TAU)
+	_rotation_history.push_front(self.global_rotation / PI)
 
 	# push the current speed into the speed history
 	_speed_history.pop_back()
-	var distance_traveled := (_position_before - self.global_position).length()
-	_speed_history.push_front((distance_traveled / delta) / 1000.)
-	_position_before = self.global_position
+	var ship := (get_parent() as RigidBody2D) # TODO solve in a nicer way as accessing the parent is a NONO
+	velocity = (ship.linear_velocity).rotated(-ship.global_rotation) # rotate the velocity into the local context
+	_speed_history.push_front(velocity / 1000.)
+	speed = velocity.length() / delta
+
+	queue_redraw()
 	
 func reset():
 	ray_sensor.reset()
@@ -56,9 +67,9 @@ func reset():
 	_rotation_history.resize(ray_history_size)
 	_rotation_history.fill(0.)
 	
-	_position_before = self.global_position
 	_speed_history.resize(ray_history_size)
 	_speed_history.fill(0.)
+	velocity = Vector2.ZERO
 
 func activate():
 	ray_sensor.activate()
@@ -69,7 +80,10 @@ func deactivate():
 func get_observation() -> Array:
 	var all_obs := flatten(_ray_sensor_history)
 	all_obs.append_array(_rotation_history)
-	all_obs.append_array(_speed_history)
+	
+	for old_speed in _speed_history:
+		all_obs.append(old_speed.x)
+		all_obs.append(old_speed.y)
 	return all_obs
 	
 func get_near_field_objects_count() -> int:

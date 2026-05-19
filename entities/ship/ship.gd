@@ -75,6 +75,7 @@ func _update_ship_info() -> void:
 	controller.current_shots = muzzle.current_shots
 	controller.time_till_reload = muzzle.time_till_reload
 	controller.shot_cooldown = muzzle.cooldown_left
+	controller.currents_speed = sensor_suit.speed
 
 func _rotate(delta: float) -> void:
 	var rotation_input: float = controller.turn

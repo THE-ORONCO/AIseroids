@@ -20,6 +20,8 @@ func _ready() -> void:
 		get_tree().change_scene_to_node(training_grounds)
 		)
 	
+	play_solo_button.pressed.connect(func(): get_tree().change_scene_to_packed(SPACE))
+	
 	x_input.text_changed.connect(_update_agent_count)
 	y_input.text_changed.connect(_update_agent_count)
 	

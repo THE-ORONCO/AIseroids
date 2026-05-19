@@ -90,6 +90,10 @@ func get_reward() -> float:
 	# small reward if the booster is on
 	#if controller.thrust >= .2:
 		#rewards["thrust"] = .1
+		
+	# small negative reward if speed is too high
+	if controller.currents_speed >= 30000:
+		rewards["slow_and_steady"] = -.05
 	
 	# small negative reward if the ship had bullets left but took damage
 	if controller.current_shots > 2 && health_delta > 0:
@@ -102,7 +106,7 @@ func get_reward() -> float:
 	# small negative reward for sitting on all shots unused
 	#if controller.current_shots == controller.shots_max:
 		#rewards["use_shots"] = -.1
-	if controller.current_shots >= controller.shots_max / 2:
+	if controller.current_shots >= controller.shots_max / 2.:
 		rewards["use_shots"] = -.1
 	
 	# rolling average over the last n steps that tracks a bias in the ship turning
@@ -130,8 +134,8 @@ func get_reward() -> float:
 	
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
-	if sum != 0.0:
-		print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
+	#if sum != 0.0:
+		#print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
 	return sum
 
 static var _known_rewards :Dictionary[String, float] = {}
