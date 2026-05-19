@@ -12,11 +12,11 @@ extends Node2D
 @export var wave_trigger_check_delay: int = 0
 ## The amount of time that is available to clear the wave
 @export var time_clear_max_time: int = 120
-@export var wave_size: int = 5
-@export var wave_max_size_deviation: int = 3
+@export var wave_size: int = 3
+@export var wave_max_size_deviation: int = 1
 @export var asteroid_spawn_delay: float = 3.
 @export var asteroid_spawn_delay_max_deviation: float = 2.5
-@export var target_asteroid_instances: int = 20
+@export var target_asteroid_instances: int = 3
 
 
 @export_group("AI")
@@ -58,17 +58,16 @@ func _ready() -> void:
 	_wave_spawn_timer.one_shot = true
 	_wave_spawn_timer.timeout.connect(random_wave)
 	add_child(_wave_spawn_timer)
-	
-	_timeout_timer = Timer.new()
-	_timeout_timer.autostart = true
-	_timeout_timer.one_shot = true
-	_timeout_timer.timeout.connect(_reset_with_timeout)
-	add_child(_timeout_timer)
-	
+		
 	if play_mode:
-		asteroid_spawner.finished_wave.connect(spawn_or_wait)
+		spawn_or_wait()
 	else:
 		asteroid_spawner.wave_destroyed.connect(_reset_with_success)
+		_timeout_timer = Timer.new()
+		_timeout_timer.autostart = true
+		_timeout_timer.one_shot = true
+		_timeout_timer.timeout.connect(_reset_with_timeout)
+		add_child(_timeout_timer)
 	
 	ship.health_reached_zero.connect(_reset_with_failure)
 	
@@ -88,8 +87,8 @@ func _ready() -> void:
 func spawn_or_wait():
 	if asteroid_spawner.get_child_count() < target_asteroid_instances:
 			random_wave()
-	else:
-		get_tree().create_timer(10).timeout.connect(spawn_or_wait, CONNECT_ONE_SHOT)
+			await asteroid_spawner.finished_wave
+	get_tree().create_timer(10).timeout.connect(spawn_or_wait, CONNECT_ONE_SHOT)
 
 func random_wave() -> void:
 	var random_wave_size := wave_size + randi_range(-wave_max_size_deviation, wave_max_size_deviation)

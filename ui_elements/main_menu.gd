@@ -32,7 +32,7 @@ func _ready() -> void:
 	
 	play_solo_button.pressed.connect(func(): get_tree().change_scene_to_packed(SPACE))
 	
-	_set_up_button(ai_v_1, "models/V017.onnx")
+	_set_up_button(ai_v_1, "models/V1.onnx")
 	_set_up_button(ai_v_2, "models/V2.onnx")
 	_set_up_button(ai_v_3, "models/V3.onnx")
 	_set_up_button(ai_v_4, "models/V4.onnx")
