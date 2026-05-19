@@ -14,9 +14,9 @@ const TRAINING_GROUNDS: PackedScene = preload("uid://baw6jdbx8dn5d")
 func _ready() -> void:
 	start_training.pressed.connect(func():
 		var training_grounds: TrainingGrounds = TRAINING_GROUNDS.instantiate()
-		var size := _get_field_size()
-		training_grounds.x = size.x
-		training_grounds.y = size.y
+		var field_size := _get_field_size()
+		training_grounds.x = field_size.x
+		training_grounds.y = field_size.y
 		get_tree().change_scene_to_node(training_grounds)
 		)
 	
@@ -30,5 +30,5 @@ func _get_field_size() -> Vector2i:
 	)
 
 func _update_agent_count(_input) -> void:
-	var size := _get_field_size()
-	number_of_agents.text = "=  %d Agents" % (size.x * size.y)
+	var field_size := _get_field_size()
+	number_of_agents.text = "=  %d Agents" % (field_size.x * field_size.y)

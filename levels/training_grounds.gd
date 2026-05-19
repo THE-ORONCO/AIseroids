@@ -43,9 +43,9 @@ func _ready() -> void:
 			spaces.append(space)
 
 	place_camera.call_deferred(_current_agent)
-	update_label.call_deferred(_current_agent)
+	update_label.call_deferred()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_right"):
 		_current_agent = ((_current_agent + 1) % spaces.size())
 		update_label()

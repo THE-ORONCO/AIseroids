@@ -39,6 +39,7 @@ var _health_before := 0
 var _last_thrust_time := Time.get_ticks_msec()
 var _last_score_time := Time.get_ticks_msec()
 var _turn_average := 0.
+var _number_of_asteroids_destroyed_this_episode := 0.
 
 func _init(c: ShipController) -> void:
 	controller = c
@@ -63,22 +64,28 @@ func get_obs() -> Dictionary:
 
 func get_reward() -> float:
 	var rewards: Dictionary[String, float] = {}
-	
+
+	# remember health and score for the next iteration
+
 	var score_delta := absi(_score_before - controller.score)
 	rewards["score_delta"] = score_delta 
+	assert(score_delta < 10, "There is a bug as the player should not be able to score that many points in a few physics ticks")
+	_score_before = controller.score
 
 	var health_delta := absi(_health_before - controller.health)
 	rewards["health_delta"] = -health_delta 
-	
-	# remember health and score for the next iteration
-	_score_before = controller.score
+	assert(health_delta < 5, "There is a bug as the player should not be able to loose that much health in a few physics ticks")
 	_health_before = controller.health
+
+	if score_delta > 0:
+		_number_of_asteroids_destroyed_this_episode += score_delta
+		rewards["wave_clear_progress"] = _number_of_asteroids_destroyed_this_episode * 0.03
 	
 	# TODO reward fast clear of stage
 	
 	# small negative reward if the agent tried to shoot when no shots were available
-	if controller.current_shots == 0 && controller.shoot:
-		rewards["shoot_with_no_shots"] = -1.
+	#if controller.current_shots == 0 && controller.shoot:
+		#rewards["shoot_with_no_shots"] = -1.
 	
 	# small reward if the booster is on
 	#if controller.thrust >= .2:
@@ -93,8 +100,10 @@ func get_reward() -> float:
 		#rewards["hold_shots"] = .05
 	
 	# small negative reward for sitting on all shots unused
-	if controller.current_shots == controller.shots_max:
-		rewards["use_shots"] = -0.5
+	#if controller.current_shots == controller.shots_max:
+		#rewards["use_shots"] = -.1
+	if controller.current_shots >= controller.shots_max / 2:
+		rewards["use_shots"] = -.1
 	
 	# rolling average over the last n steps that tracks a bias in the ship turning
 	# small negative reward if the ship turns largely only in one direction
@@ -197,8 +206,9 @@ func reset():
 	n_steps = 0
 	needs_reset = false
 	_score_before = 0
-	_health_before = 0
-	
+	_health_before = controller.health_max
+	_turn_average = 0
+	_number_of_asteroids_destroyed_this_episode = 0
 
 func reset_if_done():
 	if done:
