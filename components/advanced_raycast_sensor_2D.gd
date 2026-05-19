@@ -148,7 +148,7 @@ func calculate_raycasts() -> Array:
 		_view_perimeter.append(ray.position + ray.target_position * (distance_normalized if distance_normalized >= 0.001 else 1.))
 		
 		var shape_type: ShapeId.EntityType = cast_result.get("type", ShapeId.EntityType.NOTHING)
-		if shape_type == ShapeId.EntityType.ASTEROID and distance <= close_distance:
+		if shape_type == ShapeId.EntityType.ASTEROID and distance <= close_distance and distance >= 1.:
 			close_asteroid_found = true
 		# normalize the type as described in https://github.com/edbeeching/godot_rl_agents/blob/main/docs/GENERAL_TIPS.md#normalize-observations
 		types.append(float(shape_type) / float(ShapeId.EntityType.UNKNOWN))
