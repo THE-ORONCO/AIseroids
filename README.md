@@ -182,6 +182,28 @@ python .\scripts\stable_baselines3_example.py \
 - keep_distance_to_asteroids
 - self_damage
 
+## V022
+
+based on V021
+```shell
+python .\scripts\stable_baselines3_example.py \
+        --onnx_export_path=models/V22.onnx \
+        --save_checkpoint_frequency=50000 \
+        --experiment_name=spaceshipV022 \
+        --learning_rate=0.0001 \
+        --linear_lr_schedule \
+        --clip_range=0.13 \
+        --n_steps=512 \
+        --resume_model_path=logs/sb3/spaceshipV021_checkpoints/spaceshipV021_1000000_steps.zip    
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+
 
 # Exports
 ```shell
