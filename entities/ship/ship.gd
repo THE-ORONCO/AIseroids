@@ -5,7 +5,7 @@ signal health_changed(new_health: int)
 signal health_reached_zero
 
 
-@export_range(0, 20) var max_health: int = 10
+@export_range(0, 20) var max_health: int = 5
 
 @export_group("internals")
 @export var controller: ShipController:

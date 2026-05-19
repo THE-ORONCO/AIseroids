@@ -79,7 +79,7 @@ func get_reward() -> float:
 
 	if score_delta > 0:
 		_number_of_asteroids_destroyed_this_episode += score_delta
-		rewards["wave_clear_progress"] = _number_of_asteroids_destroyed_this_episode * 0.03
+		rewards["wave_clear_progress"] = _number_of_asteroids_destroyed_this_episode * 0.02
 	
 	# TODO reward fast clear of stage
 	

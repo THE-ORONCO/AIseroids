@@ -11,7 +11,7 @@ var turn: float = 0.0:
 var shoot: bool = false
 
 var health: int = 0
-var health_max: int = 10
+var health_max: int = 5
 var score: int = 0
 var shots_max: int = 0
 var current_shots: int = 0
