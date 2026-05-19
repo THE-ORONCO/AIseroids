@@ -299,7 +299,6 @@ python ./scripts/stable_baselines3_example.py --onnx_export_path=models/V1.onnx 
 - keep_distance_to_asteroids
 
 
-
 # Exports
 ```shell
 python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V1.onnx --timesteps=1000                                                                                                 
