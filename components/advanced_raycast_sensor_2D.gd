@@ -56,6 +56,9 @@ var _tos: Array[Vector2]= []
 var _view_perimeter: Array[Vector2] = []
 
 var rays :Array[RayCast2D]= []
+# For checking asteroid proximity
+var asteroid_is_close: bool = false
+var close_distance: float = 100. # in pixels
 
 
 func _update():
@@ -82,6 +85,8 @@ func _draw() -> void:
 			var from := _view_perimeter[i]
 			var to := _view_perimeter[(i + 1) % perimiter_count]
 			draw_line(from, to, Color.GREEN, 2)
+		
+		draw_circle(self.position, close_distance, Color.PURPLE, false, 2)
 
 func _ready() -> void:
 	_spawn_nodes()
@@ -121,6 +126,7 @@ func calculate_raycasts() -> Array:
 	var result = []
 	var distances: Array[float] = []
 	var types: Array[ShapeId.EntityType] = []
+	var close_asteroid_found: bool = false
 	
 	if debug_draw:
 		_froms.clear()
@@ -135,16 +141,21 @@ func calculate_raycasts() -> Array:
 		
 		var cast_result: Dictionary = _cast_wrapping(from, to, ray.collision_mask)
 
-		var distance: float = cast_result.get("distance", 0.0) / ray_length
-		distances.append(distance)
+		var distance: float = cast_result.get("distance", 0.0)
+		var distance_normalized = distance / ray_length
+		distances.append(distance_normalized)
 		
-		_view_perimeter.append(ray.position + ray.target_position * (distance if distance >= 0.001 else 1.))
+		_view_perimeter.append(ray.position + ray.target_position * (distance_normalized if distance_normalized >= 0.001 else 1.))
 		
 		var shape_type: ShapeId.EntityType = cast_result.get("type", ShapeId.EntityType.NOTHING)
+		if shape_type == ShapeId.EntityType.ASTEROID and distance <= close_distance:
+			close_asteroid_found = true
 		# normalize the type as described in https://github.com/edbeeching/godot_rl_agents/blob/main/docs/GENERAL_TIPS.md#normalize-observations
 		types.append(float(shape_type) / float(ShapeId.EntityType.UNKNOWN))
 		
 		ray.enabled = false
+	
+	asteroid_is_close = close_asteroid_found
 	
 	result.append_array(distances)
 	result.append_array(types)

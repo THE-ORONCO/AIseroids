@@ -99,6 +99,7 @@ metadata/_custom_type_script = "uid://cngsnhnnpaxnx"
 
 [node name="NearFieldSensor" type="Area2D" parent="SensorSuite" unique_id=898996425]
 unique_name_in_owner = true
+visible = false
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SensorSuite/NearFieldSensor" unique_id=1510114050]

@@ -64,9 +64,8 @@ func get_obs() -> Dictionary:
 
 func get_reward() -> float:
 	var rewards: Dictionary[String, float] = {}
-
+	
 	# remember health and score for the next iteration
-
 	var score_delta := absi(_score_before - controller.score)
 	rewards["score_delta"] = score_delta 
 	assert(score_delta < 10, "There is a bug as the player should not be able to score that many points in a few physics ticks")
@@ -112,11 +111,11 @@ func get_reward() -> float:
 	# rolling average over the last n steps that tracks a bias in the ship turning
 	# small negative reward if the ship turns largely only in one direction
 	# TODO make this strong in the beginning to prevent excessive spinning and remove later on to allow for better controll
-	var turn_bias_rolling_size := 50.
-	_turn_average = _turn_average * ((turn_bias_rolling_size - 1.)/turn_bias_rolling_size) + controller.turn / turn_bias_rolling_size
-	if abs(_turn_average) > 0.2:
-		rewards["turn_bias"] = -clamp(abs(_turn_average), 0., 1.)
-	_turn_average = move_toward(_turn_average, 0., .01) #slowly reduce the average to allow for permanent turning
+	#var turn_bias_rolling_size := 50.
+	#_turn_average = _turn_average * ((turn_bias_rolling_size - 1.)/turn_bias_rolling_size) + controller.turn / turn_bias_rolling_size
+	#if abs(_turn_average) > 0.2:
+		#rewards["turn_bias"] = -clamp(abs(_turn_average), 0., 1.)
+	#_turn_average = move_toward(_turn_average, 0., .01) #slowly reduce the average to allow for permanent turning
 	
 	var now := Time.get_ticks_msec()	
 	# bonus reward if the thrust was not used and no damage was taken
@@ -127,6 +126,11 @@ func get_reward() -> float:
 		#var no_thrust_scale := clampf(thrust_pause, 0., 1000.) / 1000. #up to 1s
 		#var tactical_thrusting := 0.01 * no_thrust_scale
 		#rewards["tactical_thrusting"] = tactical_thrusting
+		
+	# bonus reward if the thrust was used and no damage was taken while beeing close to an asteriod
+	if controller.thrust >= 0.001 and health_delta <= 0:
+		if controller.sensor is SensorSuite and (controller.sensor as SensorSuite).ray_sensor.asteroid_is_close:
+			rewards["dodging_asteroid"] = .1
 		
 	# small negative reward if too close to other objects
 	#if controller.sensor is SensorSuite && (controller.sensor as SensorSuite).get_near_field_objects_count() > 0:
