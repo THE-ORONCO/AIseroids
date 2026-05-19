@@ -90,7 +90,7 @@ func get_reward() -> float:
 	if score_delta > 0:
 		_number_of_asteroids_destroyed_this_episode += score_delta
 		var reward_scale = progress_multiplier
-		if now - _last_reset_time < 60000: # time in msec
+		if abs(now - _last_reset_time) < 60000: # time in msec
 			reward_scale *= 2
 		rewards["wave_clear_progress"] = _number_of_asteroids_destroyed_this_episode * reward_scale
 	
@@ -161,8 +161,8 @@ func get_reward() -> float:
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
 	reward_updated.emit(reward)
-	#if sum < 0.0:
-		#print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
+	if sum != 0.0:
+		print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
 	return sum
 
 static var _known_rewards :Dictionary[String, float] = {}
