@@ -109,9 +109,9 @@ parser.add_argument(
     help="How many instances of the environment executable to " "launch - requires --env_path to be set if > 1.",
 )
 # SFr: Added parameters learning-rate and n_steps
-parser.add_argument("--learning_rate", default=0.0003, type=float, help="learning rate")
-parser.add_argument("--clip_range", default=0.2, type=float, help="clip range")
-parser.add_argument("--n_steps", default=32, type=int, help="number of steps")
+parser.add_argument("--learning_rate", default=0.0003, type=float, help="Optimizer learning rate for policy updates (typical: 1e-5–3e-4). Lower = smaller parameter steps and more stable but slower training; raise cautiously with smaller clip-range or larger batch size.")
+parser.add_argument("--clip_range", default=0.2, type=float, help="PPO clip range ε for the probability-ratio (r in [1-ε,1+ε]). Smaller values (0.05–0.1) make updates more conservative; larger values (0.15–0.3) allow bigger policy changes. Monitor approx_kl and clip_fraction when tuning.")
+parser.add_argument("--n_steps", default=32, type=int, help="Number of environment steps collected per environment between updates. Total rollout size = n_steps * n_envs. Larger n_steps → bigger on-policy batch, lower gradient variance, higher memory/latency; smaller n_steps → more frequent updates and higher variance. Common defaults: 128 or 256 for vectorized envs.")
 
 args, extras = parser.parse_known_args()
 
