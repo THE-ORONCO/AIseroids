@@ -68,7 +68,7 @@ func reset():
 	_rotation_history.fill(0.)
 	
 	_speed_history.resize(ray_history_size)
-	_speed_history.fill(0.)
+	_speed_history.fill(Vector2.ZERO)
 	velocity = Vector2.ZERO
 
 func activate():
