@@ -1,11 +1,14 @@
 [gd_scene format=3 uid="uid://d0wbaw1yq1f4t"]
 
+[ext_resource type="Script" uid="uid://bqojpqhxaheoy" path="res://levels/ai_showcase.gd" id="1_530lm"]
 [ext_resource type="PackedScene" uid="uid://cujdj2kfjxl54" path="res://levels/space.tscn" id="1_ox1yf"]
 [ext_resource type="Script" uid="uid://cecwd02nv3ery" path="res://addons/godot_rl_agents/sync.gd" id="8_pnlkb"]
 
-[node name="SpaceVsAi" type="Node2D" unique_id=930446752]
+[node name="AiShowcase" type="Node2D" unique_id=930446752]
+script = ExtResource("1_530lm")
 
 [node name="Space" parent="." unique_id=1828459656 instance=ExtResource("1_ox1yf")]
+unique_name_in_owner = true
 ai_mode = 2
 onnx_model_path = "models/V017.onnx"
 

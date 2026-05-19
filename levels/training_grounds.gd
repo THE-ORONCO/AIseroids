@@ -11,11 +11,26 @@ const TRAINING_SPACE = preload("uid://6k24nqcbijxg")
 
 @onready var camera: Camera2D = %Camera
 @onready var agent_label: Label = %AgentLabel
+@onready var end_ratios: Label = %EndRatios
 
 var spaces: Array[Space] = []
 var _camera_tween: Tweener = null
 var _zoom_tween: Tweener = null
 var _current_agent := 0
+
+# TODO make dynamic with a dict of arbitrary end states
+var _wins := 0.:
+	set(val):
+		_wins = val
+		update_ratios()
+var _timeouts := 0.:
+	set(val):
+		_timeouts = val
+		update_ratios()
+var _deaths := 0.:
+	set(val):
+		_deaths = val
+		update_ratios()
 
 func _ready() -> void:
 	for dy: int in range(y):
@@ -39,6 +54,10 @@ func _ready() -> void:
 			space.global_position = pos
 			
 			space.score_keeper.best_changed.connect(func(_h): update_label())
+			
+			space.end_through_death.connect(func(): _deaths += 1.)
+			space.end_through_timeout.connect(func(): _timeouts += 1.)
+			space.end_through_win.connect(func(): _wins += 1.)
 			
 			spaces.append(space)
 
@@ -72,6 +91,10 @@ func update_label() -> void:
 		
 	agent_label.text = "Agent %02d / %02d" % [_current_agent + 1, spaces.size()] \
 					+  "\nBest: %05d  By: %02d" % [best_score, best_agent + 1]
+					
+func update_ratios() -> void:
+	var sum := _wins + _deaths + _timeouts
+	end_ratios.text= "✅ %5.1f%%\n❌ %5.1f%%\n⏱️ %5.1f%%" % [(_wins / sum) * 100., (_deaths / sum) * 100., (_timeouts / sum) * 100. ]
 
 func place_camera(agent_no: int) -> void:
 	var actual_agent_no := clampi(agent_no, 0, spaces.size() - 1)

@@ -79,6 +79,13 @@ func get_reward() -> float:
 	assert(health_delta < 5, "There is a bug as the player should not be able to loose that much health in a few physics ticks")
 	_health_before = controller.health
 
+	# small negative reward for self damage
+#	const self_damage_reward := -.3
+#	if health_delta > 0 and controller.did_self_damage:
+#		rewards["self_damage"] = self_damage_reward
+#		controller.did_self_damage = false
+	
+
 	const progress_multiplier := 0.02
 	if score_delta > 0:
 		_number_of_asteroids_destroyed_this_episode += score_delta
@@ -154,7 +161,7 @@ func get_reward() -> float:
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
 	reward_updated.emit(reward)
-	#if sum != 0.0:
+	#if sum < 0.0:
 		#print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
 	return sum
 
@@ -234,6 +241,11 @@ func reset():
 	_turn_average = 0
 	_number_of_asteroids_destroyed_this_episode = 0
 	_last_reset_time = Time.get_ticks_msec()
+	
+	# TODO delegate resetting to the controller as it should know best how to
+	controller.shoot = false
+	controller.turn = 0.
+	controller.thrust = 0.
 
 func reset_if_done():
 	if done:

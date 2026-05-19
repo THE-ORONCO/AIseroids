@@ -1,6 +1,12 @@
 class_name Space
 extends Node2D
 
+
+
+## this decides if this is a highscore game or if all progress is reset after the time is up.
+@export var play_mode: bool = false
+
+
 @export_group("asteroid spawning")
 ## The delay in seconds after which the space checks if new asteroids should spawn.
 @export var wave_trigger_check_delay: int = 0
@@ -11,6 +17,7 @@ extends Node2D
 @export var asteroid_spawn_delay: float = 3.
 @export var asteroid_spawn_delay_max_deviation: float = 2.5
 @export var target_asteroid_instances: int = 20
+
 
 @export_group("AI")
 enum AiMode {
@@ -23,6 +30,11 @@ enum AiMode {
 @export_subgroup("hyper params")
 @export_range(0., 10.) var damage_reward_scale := 1.
 @export_range(0., 10.) var point_reward_scale := 1.
+
+
+signal end_through_death
+signal end_through_win
+signal end_through_timeout
 
 @onready var ship: Ship = %Ship
 @onready var score_keeper: ScoreKeeper = %ScoreKeeper
@@ -52,9 +64,10 @@ func _ready() -> void:
 	_timeout_timer.timeout.connect(_reset_with_timeout)
 	add_child(_timeout_timer)
 	
-	#asteroid_spawner.finished_wave.connect(spawn_or_wait)
-	# TODO replace with random_wave() for continuous play
-	asteroid_spawner.wave_destroyed.connect(_reset_with_success)
+	if play_mode:
+		asteroid_spawner.finished_wave.connect(spawn_or_wait)
+	else:
+		asteroid_spawner.wave_destroyed.connect(_reset_with_success)
 	
 	ship.health_reached_zero.connect(_reset_with_failure)
 	
@@ -101,7 +114,8 @@ func reset_playfield() -> void:
 	_wave_spawn_timer.start(wave_trigger_check_delay)
 	
 	# setup the timeout
-	_timeout_timer.start(time_clear_max_time)
+	if not play_mode:
+		_timeout_timer.start(time_clear_max_time)
 	
 	_is_resetting = false
 
@@ -114,6 +128,7 @@ func _reset_with_success() -> void:
 		_ship_brain.is_success = true
 		
 	reset_playfield.call_deferred()
+	end_through_win.emit()
 
 func _reset_with_failure() -> void:
 	if _is_resetting: return
@@ -124,10 +139,18 @@ func _reset_with_failure() -> void:
 		_ship_brain.is_success = false
 
 	reset_playfield.call_deferred()
+	end_through_death.emit()
 
 func _reset_with_timeout() -> void:
-	#print("timeout")
-	_reset_with_failure()
+	if _is_resetting: return
+	_is_resetting = true
+	#print(self.get_meta("agent_no"), "failure")
+	if _ship_brain:
+		_ship_brain.done = true
+		_ship_brain.is_success = false
+
+	reset_playfield.call_deferred()
+	end_through_timeout.emit()
 
 func _wire_up_agent() -> void:
 	match ai_mode:
