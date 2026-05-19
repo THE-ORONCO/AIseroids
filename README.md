@@ -8,9 +8,16 @@ uv sync
 ```
 
 ### 2. Activate the VENV
+windows
 ```shell
 .venv/Scripts/activate
 ```
+
+linux
+```shell
+source .venv/bin/activate
+```
+
 
 ### 3. Train
 
