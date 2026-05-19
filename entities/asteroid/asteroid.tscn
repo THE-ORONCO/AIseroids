@@ -16,8 +16,7 @@ min_radius = 25.0
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=1701408506]
 modulate = Color(0, 1, 0, 1)
-position = Vector2(0, -3)
-scale = Vector2(1.1875, 1.1875)
+position = Vector2(0, -2.3841858e-07)
 texture = ExtResource("2_4qh0a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1671072178]
