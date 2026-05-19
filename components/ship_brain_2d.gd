@@ -38,6 +38,7 @@ var _score_before := 0
 var _health_before := 0
 var _last_thrust_time := Time.get_ticks_msec()
 var _last_score_time := Time.get_ticks_msec()
+var _last_reset_time := Time.get_ticks_msec()
 var _turn_average := 0.
 var _number_of_asteroids_destroyed_this_episode := 0.
 
@@ -64,6 +65,7 @@ func get_obs() -> Dictionary:
 
 func get_reward() -> float:
 	var rewards: Dictionary[String, float] = {}
+	var now := Time.get_ticks_msec()
 	
 	# remember health and score for the next iteration
 	var score_delta := absi(_score_before - controller.score)
@@ -78,7 +80,10 @@ func get_reward() -> float:
 
 	if score_delta > 0:
 		_number_of_asteroids_destroyed_this_episode += score_delta
-		rewards["wave_clear_progress"] = _number_of_asteroids_destroyed_this_episode * 0.02
+		var reward_scale = 0.02
+		if now - _last_reset_time < 60000: # time in msec
+			reward_scale *= 2
+		rewards["wave_clear_progress"] = _number_of_asteroids_destroyed_this_episode * reward_scale
 	
 	# TODO reward fast clear of stage
 	
@@ -91,9 +96,9 @@ func get_reward() -> float:
 		#rewards["thrust"] = .1
 		
 	# small negative reward if speed is too high
-	if controller.currents_speed >= 30000:
-		rewards["slow_and_steady"] = -.05
-	
+	#if controller.currents_speed >= 30000:
+		#rewards["slow_and_steady"] = -.05
+		
 	# small negative reward if the ship had bullets left but took damage
 	if controller.current_shots > 2 && health_delta > 0:
 		rewards["damaged_with_bullets_left"] = -.1
@@ -105,8 +110,8 @@ func get_reward() -> float:
 	# small negative reward for sitting on all shots unused
 	#if controller.current_shots == controller.shots_max:
 		#rewards["use_shots"] = -.1
-	if controller.current_shots >= controller.shots_max / 2.:
-		rewards["use_shots"] = -.1
+	#if controller.current_shots >= controller.shots_max / 2.:
+		#rewards["use_shots"] = -.1
 	
 	# rolling average over the last n steps that tracks a bias in the ship turning
 	# small negative reward if the ship turns largely only in one direction
@@ -117,7 +122,6 @@ func get_reward() -> float:
 		#rewards["turn_bias"] = -clamp(abs(_turn_average), 0., 1.)
 	#_turn_average = move_toward(_turn_average, 0., .01) #slowly reduce the average to allow for permanent turning
 	
-	var now := Time.get_ticks_msec()	
 	# bonus reward if the thrust was not used and no damage was taken
 	#if controller.thrust >= 0.001 || health_delta > 0:
 		#_last_thrust_time = now
@@ -127,7 +131,7 @@ func get_reward() -> float:
 		#var tactical_thrusting := 0.01 * no_thrust_scale
 		#rewards["tactical_thrusting"] = tactical_thrusting
 		
-	# bonus reward if the thrust was used and no damage was taken while beeing close to an asteriod
+	# bonus reward if the thrust was used and no damage was taken while being close to an asteroid
 	if controller.thrust >= 0.001 and health_delta <= 0:
 		if controller.sensor is SensorSuite and (controller.sensor as SensorSuite).ray_sensor.asteroid_is_close:
 			rewards["dodging_asteroid"] = .1
@@ -217,6 +221,7 @@ func reset():
 	_health_before = controller.health_max
 	_turn_average = 0
 	_number_of_asteroids_destroyed_this_episode = 0
+	_last_reset_time = Time.get_ticks_msec()
 
 func reset_if_done():
 	if done:
