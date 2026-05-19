@@ -1,4 +1,6 @@
-inspiration for physics: https://novadrift.io/
+# [AI]steroids
+
+A simple asteroid like game that contains AI adversaries.
 
 ## Getting Started
 ### 1. Setup the VENV
@@ -103,6 +105,16 @@ options:
 						higher variance. Common defaults: 128 or 256 for vectorized envs.
 ```
 
+# Results
+The results were recorded in video recordings in [./recordings](recordings):
+- [recordings/recording_V1.mp4](recordings/recording_V1.mp4)
+- [recordings/recording_V2.mp4](recordings/recording_V2.mp4)
+- [recordings/recording_V3.mp4](recordings/recording_V3.mp4)
+- [recordings/recording_V4.mp4](recordings/recording_V4.mp4)
+- [recordings/recording_V5.mp4](recordings/recording_V5.mp4)
+
+Each version of the agent can also be found in the [./models](models) directory and also directly experienced through 
+clicking on the specific entry in the main menu.
 
 # Learning
 ## V001-V003
