@@ -143,9 +143,13 @@ func get_reward() -> float:
 		#rewards["tactical_thrusting"] = tactical_thrusting
 		
 	# bonus reward if the thrust was used and no damage was taken while being close to an asteroid
-	if controller.thrust >= 0.001 and health_delta <= 0:
-		if controller.sensor is SensorSuite and (controller.sensor as SensorSuite).ray_sensor.asteroid_is_close:
-			rewards["dodging_asteroid"] = .1
+	#if controller.thrust >= 0.001 and health_delta <= 0:
+		#if controller.sensor is SensorSuite and (controller.sensor as SensorSuite).ray_sensor.asteroid_is_close:
+			#rewards["dodging_asteroid"] = .1
+	
+	# small negative reward if too close to asteroids
+	if controller.sensor is SensorSuite && (controller.sensor as SensorSuite).ray_sensor.asteroid_is_close:
+		rewards["keep_distance_to_asteroids"] = -.1
 	
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
