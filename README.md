@@ -245,7 +245,7 @@ python ./scripts/stable_baselines3_example.py --save_checkpoint_frequency=50000 
 ### Result
 Better survivability and success rate 
 
-## VLO2
+## VL02
 ```shell
 python ./scripts/stable_baselines3_example.py --save_checkpoint_frequency=50000 --experiment_name=spaceshipVL02 --n_steps=128
 ```
@@ -256,7 +256,7 @@ python ./scripts/stable_baselines3_example.py --save_checkpoint_frequency=50000 
 - wave_clear_progress
 - keep_distance_to_asteroids
 
-## VLO3
+## VL03
 
 - Tests the dodging asteroids policy after the fix.
 - reduced learning rate via the --linear_lr_schedule flag over the training.
@@ -276,9 +276,9 @@ python ./scripts/stable_baselines3_example.py
 - dodging asteroids
 
 
-## VLO4
+## VL04
 
-- based on VLO3
+- based on VL03
 - continues with keep_distance_to_asteroids instead of dodging
 - adds self_damage policy
 
