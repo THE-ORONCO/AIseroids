@@ -172,8 +172,11 @@ python .\scripts\stable_baselines3_example.py \
 		 --resume_model_path=logs/sb3/spaceshipV020_checkpoints/spaceshipV020_1000000_steps.zip
 ```
 
+- changed asteroids to be big enough to always be seen by at least one ray (but still only split 3 ways)
+
 ### Policies
 - score_delta
 - health_delta
 - wave_clear_progress
 - keep_distance_to_asteroids
+- self_damage
