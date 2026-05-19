@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://qghdlpidbh84" path="res://icon.svg" id="2_4qh0a"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cnywj"]
-radius = 75.0
+radius = 97.04638
 
 [node name="Asteroid" type="RigidBody2D" unique_id=1246036190 groups=["DamageCollider"]]
 contact_monitor = true
@@ -12,9 +12,12 @@ max_contacts_reported = 1
 linear_damp_mode = 1
 angular_damp_mode = 1
 script = ExtResource("1_20vrb")
+min_radius = 25.0
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=1701408506]
-modulate = Color(1, 1, 0, 1)
+modulate = Color(0, 1, 0, 1)
+position = Vector2(0, -3)
+scale = Vector2(1.1875, 1.1875)
 texture = ExtResource("2_4qh0a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1671072178]
