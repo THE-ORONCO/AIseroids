@@ -94,6 +94,13 @@ func get_reward() -> float:
 			reward_scale *= 2
 		rewards["wave_clear_progress"] = _number_of_asteroids_destroyed_this_episode * reward_scale
 	
+	# small negative reward for going too fast
+	const speed_reward := -1.
+	const speed_bump := 300.
+	if controller.currents_speed > speed_bump:
+		var speed_reward_scale = remap(controller.currents_speed, speed_bump, 1000., 0.1, 1.)
+		rewards["too_fast"] = speed_reward * speed_reward_scale
+	
 	# small negative reward if the agent tried to shoot when no shots were available
 	#const empty_mag_reward := -1
 	#if controller.current_shots == 0 && controller.shoot:
@@ -161,8 +168,8 @@ func get_reward() -> float:
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
 	reward_updated.emit(reward)
-	if sum != 0.0:
-		print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
+	#if sum != 0.0:
+		#print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
 	return sum
 
 static var _known_rewards :Dictionary[String, float] = {}

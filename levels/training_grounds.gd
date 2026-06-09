@@ -39,9 +39,18 @@ var _self_kills := 0.:
 func _ready() -> void:
 	for dy: int in range(y):
 		for dx: int in range(x):
+			var viewportContainer := SubViewportContainer.new()
+			self.add_child(viewportContainer)
+			
+			var viewport := SubViewport.new()
+			viewport.size = Vector2(1000,1000)
+			viewport.disable_3d = true
+			viewportContainer.add_child(viewport)
+			
+			
 			var space: Space = TRAINING_SPACE.instantiate()
 			space.ai_mode = Space.AiMode.LEARNING
-			self.add_child(space)
+			viewport.add_child(space)
 			
 			# add metadata for clean logging
 			space.set_meta("agent_no", dy * x + dx)
@@ -54,6 +63,7 @@ func _ready() -> void:
 			var xi := padding + (playfield_width + padding) * dx
 			var yi := padding + (playfield_height + padding) * dy
 			var pos: Vector2 = Vector2(xi,yi)
+			viewportContainer.position = pos
 			
 			space.global_position = pos
 			

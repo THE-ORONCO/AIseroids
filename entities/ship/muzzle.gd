@@ -46,7 +46,7 @@ func fire(reference_velocity: Vector2) -> void:
 	bullet.linear_velocity = reference_velocity  
 	bullet.set_meta("origin", self.get_path())
 	
-	get_tree().root.add_child(bullet)
+	get_viewport().add_child(bullet)
 	
 	_current_shots -= 1
 	shot_cooldown_timer.start()
@@ -64,7 +64,7 @@ func reset_weapon() -> void:
 	reload_timer.stop()
 	
 	var self_path := self.get_path()
-	for shot: Shot in get_tree().root.get_children().filter(func(c: Node): return c is Shot and c.get_meta("origin") == self_path):
+	for shot: Shot in get_viewport().get_children().filter(func(c: Node): return c is Shot and c.get_meta("origin") == self_path):
 		shot.queue_free()
 
 func _reload() -> void:

@@ -16,5 +16,5 @@ ai_mode = 2
 unique_name_in_owner = true
 script = ExtResource("8_pnlkb")
 control_mode = 2
-action_repeat = 2
+action_repeat = 1
 metadata/_custom_type_script = "uid://cecwd02nv3ery"
