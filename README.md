@@ -258,6 +258,39 @@ python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V25.onnx
 - self_damage
 - too_fast
 
+> Note: failure, stopped lineage here
+
+## V026
+- based on V024
+
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V26.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV026 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=1024 -- --resume_model_path=logs/sb3/spaceshipV024_checkpoints/spaceshipV024_1000000_steps.zip --timesteps=10000000 
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+
+
+## V027
+- based on V023
+
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V27.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV027 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=512 -- --resume_model_path=logs/sb3/spaceshipV023_checkpoints/spaceshipV023_1000000_steps.zip --timesteps=1000000
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+
 
 ## VL00
 
