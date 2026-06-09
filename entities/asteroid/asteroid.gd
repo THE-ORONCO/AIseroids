@@ -69,6 +69,8 @@ func split(scoring: bool = false) -> void:
 	if not splits:
 		return
 	
+	Audio.explode()
+
 	var rotation_delta: float = TAU / split_count
 	var random_rotatation :=  RandomNumberGenerator.new().randf()
 	var unit_circle_radius := _calc_circle_radius(split_count)
@@ -96,7 +98,6 @@ func split(scoring: bool = false) -> void:
 		asteroid_instance.linear_velocity = self.linear_velocity * 0.5
 		asteroid_instance.apply_central_impulse(push_direction * split_force)
 	
-
 	self.queue_free()
 
 # see https://en.wikipedia.org/wiki/Circle_packing_in_a_circle

@@ -111,9 +111,9 @@ func get_reward() -> float:
 
 	
 	# small negative reward if the agent tried to shoot when no shots were available
-	#const empty_mag_reward := -1
-	#if controller.current_shots == 0 && controller.shoot:
-		#rewards["shoot_with_no_shots"] = -1.
+	const empty_mag_reward := -.3
+	if controller.current_shots == 0 && controller.shoot:
+		rewards["shoot_with_no_shots"] = empty_mag_reward
 	
 	# small reward if the booster is on
 	#const thrust_reward := .1

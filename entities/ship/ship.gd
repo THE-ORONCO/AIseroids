@@ -123,6 +123,7 @@ func _check_for_damage(body: Node) -> void:
 			#print(body.damage)
 			health_manager.apply_health_change(-(body.damage), body)
 			invincibility_timer.start()
+			Audio.hit()
 			#print("took damage")
 		else:
 			pass 

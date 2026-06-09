@@ -116,9 +116,7 @@ one_shot = true
 [node name="Muzzle" parent="." unique_id=571023481 instance=ExtResource("4_53e7a")]
 unique_name_in_owner = true
 position = Vector2(0, -68)
-max_shots = null
 cooldown = 0.1
-reload_time = null
 
 [node name="HealthBar" parent="." unique_id=1407290129 instance=ExtResource("7_53e7a")]
 unique_name_in_owner = true

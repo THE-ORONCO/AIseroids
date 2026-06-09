@@ -8,6 +8,8 @@ extends Marker2D
 
 @onready var shot_cooldown_timer: Timer = %ShotCooldown
 @onready var reload_timer: Timer = %ReloadTimer
+@onready var pew: AudioStreamPlayer = %Pew
+@onready var out_of_ammo: AudioStreamPlayer = $OutOfAmmo
 
 var _current_shots: int = 0
 
@@ -36,6 +38,8 @@ func fire(reference_velocity: Vector2, team: Fight.Team) -> void:
 		return
 	if _current_shots <= 0 :
 		#print("no bullets left!")
+		out_of_ammo.pitch_scale = randf_range(0.97, 1.03)
+		out_of_ammo.play()
 		return 
 
 	var bullet: Shot = shot.instantiate()
@@ -54,6 +58,9 @@ func fire(reference_velocity: Vector2, team: Fight.Team) -> void:
 	
 	if reload_timer.is_stopped():
 		reload_timer.start()
+	
+	pew.pitch_scale = randf_range(0.97, 1.03)
+	pew.play()
 	
 ## Resets the weapon to its default state (completelly loaded and timers on max cooldown)
 func reset_weapon() -> void:
