@@ -42,6 +42,7 @@ var _last_thrust_time := Time.get_ticks_msec()
 var _last_score_time := Time.get_ticks_msec()
 var _last_reset_time := Time.get_ticks_msec()
 var _turn_average := 0.
+var _speed_average := 0.
 var _number_of_asteroids_destroyed_this_episode := 0.
 
 func _init(c: ShipController) -> void:
@@ -97,9 +98,16 @@ func get_reward() -> float:
 	# small negative reward for going too fast
 	const speed_reward := -1.
 	const speed_bump := 300.
-	if controller.currents_speed > speed_bump:
-		var speed_reward_scale = remap(controller.currents_speed, speed_bump, 1000., 0.1, 1.)
+	const speed_rolling_size := 30. # 30 ticks = .5s
+	const speed_reduce := 20.
+	_speed_average = _speed_average * ((speed_rolling_size - 1.)/speed_rolling_size) + controller.currents_speed / speed_rolling_size
+
+	if _speed_average > speed_bump:
+		var speed_reward_scale = remap(controller.currents_speed, speed_bump, 1000., 0.2, 1.)
 		rewards["too_fast"] = speed_reward * speed_reward_scale
+		print("too fast")
+	_speed_average = move_toward(_speed_average, 0., speed_reduce) #slowly reduce the average to allow for some speed variations
+
 	
 	# small negative reward if the agent tried to shoot when no shots were available
 	#const empty_mag_reward := -1

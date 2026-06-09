@@ -128,26 +128,28 @@ offset_bottom = 5.0
 size_flags_horizontal = 3
 
 [node name="Speedometer" type="Control" parent="." unique_id=196597760 node_paths=PackedStringArray("watched")]
+custom_minimum_size = Vector2(30, 20)
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -15.0
+offset_right = 15.0
+offset_bottom = 20.0
+grow_horizontal = 2
 script = ExtResource("7_3ywi2")
 watched = NodePath("..")
 
 [node name="SpeedLabel" type="Label" parent="Speedometer" unique_id=1958891833]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.025
-anchor_top = 1.1125
-anchor_right = 0.025
-anchor_bottom = 1.1125
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -21.0
+offset_right = 21.0
+offset_bottom = 23.0
 grow_horizontal = 2
-grow_vertical = 2
 text = "000.0"
-metadata/_edit_use_anchors_ = true
+horizontal_alignment = 1
+vertical_alignment = 2

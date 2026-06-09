@@ -278,7 +278,7 @@ python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V26.onnx
 
 ## V027
 - based on V023
-
+- updated speed reward with rolling average
 ```shell
 python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V27.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV027 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=512 -- --resume_model_path=logs/sb3/spaceshipV023_checkpoints/spaceshipV023_1000000_steps.zip --timesteps=1000000
 ```
