@@ -1,10 +1,11 @@
 [gd_scene format=3 uid="uid://bgqdgtlshk4yf"]
 
-[ext_resource type="Texture2D" uid="uid://qghdlpidbh84" path="res://icon.svg" id="1_ajo1l"]
 [ext_resource type="Script" uid="uid://ckxf7mkc74i7i" path="res://entities/ship/shot.gd" id="1_c3aqg"]
+[ext_resource type="Texture2D" uid="uid://02nbc51c4hb8" path="res://assets/ship-sprites.png" id="2_c3aqg"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_c3aqg"]
-radius = 20.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_iwm1g"]
+radius = 12.0
+height = 44.0
 
 [node name="Shot" type="RigidBody2D" unique_id=1892472417]
 gravity_scale = 0.0
@@ -14,12 +15,18 @@ script = ExtResource("1_c3aqg")
 despawn_after = 2.035
 
 [node name="Hitbox" type="CollisionShape2D" parent="." unique_id=2006140537]
-shape = SubResource("CircleShape2D_c3aqg")
+position = Vector2(0, -9)
+shape = SubResource("CapsuleShape2D_iwm1g")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=752289777]
+unique_name_in_owner = true
+texture_filter = 1
 position = Vector2(7.1525574e-07, 9.536743e-07)
-scale = Vector2(0.23437501, 0.28125003)
-texture = ExtResource("1_ajo1l")
+scale = Vector2(2, 2.402)
+texture = ExtResource("2_c3aqg")
+vframes = 3
+region_enabled = true
+region_rect = Rect2(32, 0, 32, 96)
 
 [node name="DespawnTimer" type="Timer" parent="." unique_id=1062004174]
 unique_name_in_owner = true

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://tm3wubyfx7r"]
 
 [ext_resource type="Script" uid="uid://cyhjai4d3vqj0" path="res://entities/asteroid/asteroid.gd" id="1_20vrb"]
-[ext_resource type="Texture2D" uid="uid://qghdlpidbh84" path="res://icon.svg" id="2_4qh0a"]
+[ext_resource type="Texture2D" uid="uid://cbl20ob4smovb" path="res://assets/asteroid.png" id="2_4qh0a"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_cnywj"]
 radius = 120.0
@@ -17,9 +17,11 @@ min_radius = 25.0
 [node name="Icon" type="Sprite2D" parent="." unique_id=1701408506]
 modulate = Color(0, 1, 0, 1)
 position = Vector2(0, -2.3841858e-07)
+scale = Vector2(2, 2)
 texture = ExtResource("2_4qh0a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1671072178]
+unique_name_in_owner = true
 shape = SubResource("CircleShape2D_cnywj")
 
 [node name="DespawnCheckTimer" type="Timer" parent="." unique_id=57877268]

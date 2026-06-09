@@ -293,10 +293,26 @@ python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V27.onnx
 
 
 ## V028
-- fresh start
+- based on V027
 - changed distance checks to return -1 if nothing is hit and use float division
 ```shell
 python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V28.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV028 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=512 -- --resume_model_path=logs/sb3/spaceshipV027_checkpoints/spaceshipV027_1000000_steps.zip --timesteps=1000000
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+
+
+
+## V029
+- based on V028
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V29.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV029 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=512 -- --resume_model_path=logs/sb3/spaceshipV028_checkpoints/spaceshipV028_1000000_steps.zip --timesteps=1000000
 ```
 
 ### Policies

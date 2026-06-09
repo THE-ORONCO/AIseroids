@@ -30,7 +30,7 @@ func get_state_for_ai() -> Array:
 		reload_timer.time_left,
 	]
 
-func fire(reference_velocity: Vector2) -> void:
+func fire(reference_velocity: Vector2, team: Fight.Team) -> void:
 	if !shot_cooldown_timer.is_stopped():
 		#print("the weapon is on cooldown")
 		return
@@ -43,7 +43,8 @@ func fire(reference_velocity: Vector2) -> void:
 	if bullet.damage > 0:
 		bullet.add_to_group("DamageCollider")
 	bullet.transform = self.global_transform
-	bullet.linear_velocity = reference_velocity  
+	bullet.linear_velocity = reference_velocity
+	bullet.team = team  
 	bullet.set_meta("origin", self.get_path())
 	
 	get_viewport().add_child(bullet)

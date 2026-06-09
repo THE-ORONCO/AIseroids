@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cunuddi5si8ua"]
 
 [ext_resource type="Script" uid="uid://c5gxdwhsxj7mf" path="res://entities/ship/ship.gd" id="1_tivcy"]
+[ext_resource type="Texture2D" uid="uid://02nbc51c4hb8" path="res://assets/ship-sprites.png" id="2_53e7a"]
 [ext_resource type="PackedScene" uid="uid://c2qcohstk8elv" path="res://entities/ship/muzzle.tscn" id="4_53e7a"]
 [ext_resource type="Script" uid="uid://clls47afawh5h" path="res://entities/ship/sensor_suite.gd" id="4_tua1r"]
 [ext_resource type="Script" uid="uid://cngsnhnnpaxnx" path="res://components/advanced_raycast_sensor_2D.gd" id="5_3if2u"]
@@ -51,14 +52,6 @@ turbulence_noise_speed_random = 4.0
 turbulence_influence_min = 0.0
 turbulence_influence_max = 0.08800001
 
-[sub_resource type="Gradient" id="Gradient_tua1r"]
-colors = PackedColorArray(0.89139795, 0.9999997, 0.9971519, 1, 0, 1, 1, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_53e7a"]
-gradient = SubResource("Gradient_tua1r")
-fill_from = Vector2(0.4871795, 1)
-fill_to = Vector2(0.4871795, 0)
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
 radius = 30.0
 
@@ -81,13 +74,14 @@ trail_sections = 2
 trail_section_subdivisions = 1
 process_material = SubResource("ParticleProcessMaterial_hpxva")
 
-[node name="Icon" type="Polygon2D" parent="." unique_id=676736838]
-position = Vector2(0, 2.9802322e-08)
-scale = Vector2(0.5, 0.5)
-offset = Vector2(-64, -67)
-texture = SubResource("GradientTexture2D_53e7a")
-polygon = PackedVector2Array(8, 120, 64.000015, 0, 120.000015, 120, 64.000015, 112)
-uv = PackedVector2Array(8, 120, 64.000015, 0, 120.000015, 120, 64.000015, 112)
+[node name="ShipSprite" type="Sprite2D" parent="." unique_id=726114191]
+unique_name_in_owner = true
+texture_filter = 1
+scale = Vector2(2, 2)
+texture = ExtResource("2_53e7a")
+vframes = 3
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 96)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1623896605]
 shape = SubResource("CircleShape2D_xikw6")
@@ -102,7 +96,8 @@ script = ExtResource("5_3if2u")
 collision_mask = 33
 collide_with_areas = true
 n_rays = 60.0
-ray_length = 500
+ray_length = 500.0
+debug_draw = false
 metadata/_custom_type_script = "uid://cngsnhnnpaxnx"
 
 [node name="NearFieldSensor" type="Area2D" parent="SensorSuite" unique_id=898996425]
@@ -121,7 +116,9 @@ one_shot = true
 [node name="Muzzle" parent="." unique_id=571023481 instance=ExtResource("4_53e7a")]
 unique_name_in_owner = true
 position = Vector2(0, -68)
+max_shots = null
 cooldown = 0.1
+reload_time = null
 
 [node name="HealthBar" parent="." unique_id=1407290129 instance=ExtResource("7_53e7a")]
 unique_name_in_owner = true
