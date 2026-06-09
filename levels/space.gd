@@ -83,6 +83,8 @@ func _ready() -> void:
 	
 	reset_playfield.call_deferred()
 
+func _physics_process(delta: float) -> void:
+	hud.show_speed(ship.controller.currents_speed)
 
 func spawn_or_wait():
 	if asteroid_spawner.get_child_count() < target_asteroid_instances:
