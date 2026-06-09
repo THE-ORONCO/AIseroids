@@ -37,6 +37,9 @@ var _self_kills := 0.:
 		update_ratios()
 
 func _ready() -> void:
+	for bus_i in range(AudioServer.bus_count):
+		AudioServer.set_bus_mute(bus_i, true)
+	
 	for dy: int in range(y):
 		for dx: int in range(x):
 			var viewportContainer := SubViewportContainer.new()
