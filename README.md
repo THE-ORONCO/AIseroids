@@ -199,14 +199,14 @@ python .\scripts\stable_baselines3_example.py \
 based on V021
 ```shell
 python .\scripts\stable_baselines3_example.py \
-        --onnx_export_path=models/V22.onnx \
-        --save_checkpoint_frequency=50000 \
-        --experiment_name=spaceshipV022 \
-        --learning_rate=0.0001 \
-        --linear_lr_schedule \
-        --clip_range=0.13 \
-        --n_steps=512 \
-        --resume_model_path=logs/sb3/spaceshipV021_checkpoints/spaceshipV021_1000000_steps.zip    
+		--onnx_export_path=models/V22.onnx \
+		--save_checkpoint_frequency=50000 \
+		--experiment_name=spaceshipV022 \
+		--learning_rate=0.0001 \
+		--linear_lr_schedule \
+		--clip_range=0.13 \
+		--n_steps=512 \
+		--resume_model_path=logs/sb3/spaceshipV021_checkpoints/spaceshipV021_1000000_steps.zip    
 ```
 
 ### Policies
@@ -215,6 +215,49 @@ python .\scripts\stable_baselines3_example.py \
 - wave_clear_progress
 - keep_distance_to_asteroids
 - self_damage
+
+## V023
+based on V022
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V23.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV023 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=512 --resume_model_path=logs/sb3/spaceshipV022_checkpoints/spaceshipV022_1000000_steps.zip --timesteps=7000000 
+```
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- 
+## V024
+- based on V022
+- decrease action repeat to 1
+- split up training physics worlds into separate viewports to remove any possible interference between the training grounds
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V24.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV024 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=512 --resume_model_path=logs/sb3/spaceshipV023_checkpoints/spaceshipV023_1000000_steps.zip --timesteps=10000000 
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+
+
+## V025
+- based on V024
+
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V25.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV025 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=1024 -- --resume_model_path=logs/sb3/spaceshipV024_checkpoints/spaceshipV024_1000000_steps.zip --timesteps=10000000 
+```
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+
 
 ## VL00
 
