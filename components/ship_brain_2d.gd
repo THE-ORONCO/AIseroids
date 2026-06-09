@@ -99,13 +99,14 @@ func get_reward() -> float:
 	const speed_reward := -1.
 	const speed_bump := 300.
 	const speed_rolling_size := 30. # 30 ticks = .5s
-	const speed_reduce := 20.
+	const speed_reduce := 5.
 	_speed_average = _speed_average * ((speed_rolling_size - 1.)/speed_rolling_size) + controller.currents_speed / speed_rolling_size
+
 
 	if _speed_average > speed_bump:
 		var speed_reward_scale = remap(controller.currents_speed, speed_bump, 1000., 0.2, 1.)
 		rewards["too_fast"] = speed_reward * speed_reward_scale
-		print("too fast")
+		_speed_average = 0.
 	_speed_average = move_toward(_speed_average, 0., speed_reduce) #slowly reduce the average to allow for some speed variations
 
 	

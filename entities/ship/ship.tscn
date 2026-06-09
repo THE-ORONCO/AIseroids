@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://cunuddi5si8ua"]
 
 [ext_resource type="Script" uid="uid://c5gxdwhsxj7mf" path="res://entities/ship/ship.gd" id="1_tivcy"]
-[ext_resource type="Texture2D" uid="uid://qghdlpidbh84" path="res://icon.svg" id="2_alltn"]
 [ext_resource type="PackedScene" uid="uid://c2qcohstk8elv" path="res://entities/ship/muzzle.tscn" id="4_53e7a"]
 [ext_resource type="Script" uid="uid://clls47afawh5h" path="res://entities/ship/sensor_suite.gd" id="4_tua1r"]
 [ext_resource type="Script" uid="uid://cngsnhnnpaxnx" path="res://components/advanced_raycast_sensor_2D.gd" id="5_3if2u"]
@@ -52,6 +51,14 @@ turbulence_noise_speed_random = 4.0
 turbulence_influence_min = 0.0
 turbulence_influence_max = 0.08800001
 
+[sub_resource type="Gradient" id="Gradient_tua1r"]
+colors = PackedColorArray(0.89139795, 0.9999997, 0.9971519, 1, 0, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_53e7a"]
+gradient = SubResource("Gradient_tua1r")
+fill_from = Vector2(0.4871795, 1)
+fill_to = Vector2(0.4871795, 0)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
 radius = 30.0
 
@@ -78,7 +85,7 @@ process_material = SubResource("ParticleProcessMaterial_hpxva")
 position = Vector2(0, 2.9802322e-08)
 scale = Vector2(0.5, 0.5)
 offset = Vector2(-64, -67)
-texture = ExtResource("2_alltn")
+texture = SubResource("GradientTexture2D_53e7a")
 polygon = PackedVector2Array(8, 120, 64.000015, 0, 120.000015, 120, 64.000015, 112)
 uv = PackedVector2Array(8, 120, 64.000015, 0, 120.000015, 120, 64.000015, 112)
 
