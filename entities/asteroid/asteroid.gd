@@ -21,7 +21,7 @@ var damage := 1
 @export var bus: SignalBus
 @export var mass_size_ratio: float = 0.1
 
-@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
+@onready var collision_shape_2d: CollisionShape2D = %CollisionShape2D
 @onready var icon: Sprite2D = $Icon
 @onready var despawn_check_timer: Timer = %DespawnCheckTimer
 
@@ -69,6 +69,8 @@ func split(scoring: bool = false) -> void:
 	if not splits:
 		return
 	
+	Audio.explode()
+
 	var rotation_delta: float = TAU / split_count
 	var random_rotatation :=  RandomNumberGenerator.new().randf()
 	var unit_circle_radius := _calc_circle_radius(split_count)
@@ -88,14 +90,14 @@ func split(scoring: bool = false) -> void:
 		)
 		get_parent().add_child.call_deferred(asteroid_instance)
 		await asteroid_instance.ready
-		asteroid_instance.icon.apply_scale(self.icon.scale * unit_circle_radius)
+		var new_scale := self.icon.scale * unit_circle_radius
+		asteroid_instance.icon.scale = new_scale
 		new_collision_shape.radius = new_radius
 		asteroid_instance.collision_shape_2d.shape = new_collision_shape
 		asteroid_instance.position = position + push_direction * (radius - new_radius)
 		asteroid_instance.linear_velocity = self.linear_velocity * 0.5
 		asteroid_instance.apply_central_impulse(push_direction * split_force)
 	
-
 	self.queue_free()
 
 # see https://en.wikipedia.org/wiki/Circle_packing_in_a_circle

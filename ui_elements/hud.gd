@@ -5,17 +5,22 @@ extends MarginContainer
 
 @onready var score_label: Label = %ScoreLabel
 @onready var best_label: Label = %BestLabel
+@onready var speed_label: Label = %SpeedLabel
 
 func _ready() -> void:
 	resize_to_wrap()
 	wrap_space.size_changed.connect(resize_to_wrap)
 	show_score(0)
+	show_speed(0.)
 
 func show_score(score: int) -> void:
 	score_label.text = "Score: %05d" % score
 	
 func show_best(best: int) -> void:
 	best_label.text = "Best:   %05d" % best
+
+func show_speed(speed: float) -> void:
+	speed_label.text = "%03.1f fasts/s" % speed
 
 func resize_to_wrap() -> void:
 	self.custom_minimum_size = wrap_space.extent

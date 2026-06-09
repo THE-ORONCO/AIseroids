@@ -4,8 +4,11 @@ extends RigidBody2D
 signal health_changed(new_health: int)
 signal health_reached_zero
 
-
 @export_range(0, 20) var max_health: int = 5
+@export var team :Fight.Team = Fight.Team.BLUE:
+	set(val):
+		if ship_sprite: ship_sprite.frame = val
+		team = val
 
 @export_group("internals")
 @export var controller: ShipController:
@@ -26,11 +29,13 @@ signal health_reached_zero
 @onready var sensor_suit: SensorSuite = %SensorSuite
 @onready var health_bar: HealthBar = %HealthBar
 @onready var invincibility_timer: Timer = %InvincibilityTimer
+@onready var ship_sprite: Sprite2D = %ShipSprite
 
 ## TODO find the actual cause as this is just a hack to stop the agent from firing immediatelly
 var _was_just_reset: bool = false
 
 const DEFAULT_MUZZLE: PackedScene = preload("uid://c2qcohstk8elv")
+
 
 ## resets the ship to its base state.
 ## the reset_position is in global coordinates
@@ -68,6 +73,7 @@ func _ready() -> void:
 		health_changed.emit(nh)
 
 		)
+	ship_sprite.frame = team
 
 func _physics_process(delta: float) -> void:
 	_rotate(delta)
@@ -108,7 +114,7 @@ func _strafe() -> void:
 
 func _fire() -> void:
 	if controller.shoot and not _was_just_reset:
-		muzzle.fire(self.linear_velocity)
+		muzzle.fire(self.linear_velocity, team)
 
 func _check_for_damage(body: Node) -> void:
 	#print("check")
@@ -117,6 +123,7 @@ func _check_for_damage(body: Node) -> void:
 			#print(body.damage)
 			health_manager.apply_health_change(-(body.damage), body)
 			invincibility_timer.start()
+			Audio.hit()
 			#print("took damage")
 		else:
 			pass 

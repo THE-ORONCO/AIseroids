@@ -8,6 +8,8 @@ extends Marker2D
 
 @onready var shot_cooldown_timer: Timer = %ShotCooldown
 @onready var reload_timer: Timer = %ReloadTimer
+@onready var pew: AudioStreamPlayer = %Pew
+@onready var out_of_ammo: AudioStreamPlayer = $OutOfAmmo
 
 var _current_shots: int = 0
 
@@ -30,12 +32,14 @@ func get_state_for_ai() -> Array:
 		reload_timer.time_left,
 	]
 
-func fire(reference_velocity: Vector2) -> void:
+func fire(reference_velocity: Vector2, team: Fight.Team) -> void:
 	if !shot_cooldown_timer.is_stopped():
 		#print("the weapon is on cooldown")
 		return
 	if _current_shots <= 0 :
 		#print("no bullets left!")
+		out_of_ammo.pitch_scale = randf_range(0.97, 1.03)
+		out_of_ammo.play()
 		return 
 
 	var bullet: Shot = shot.instantiate()
@@ -43,16 +47,20 @@ func fire(reference_velocity: Vector2) -> void:
 	if bullet.damage > 0:
 		bullet.add_to_group("DamageCollider")
 	bullet.transform = self.global_transform
-	bullet.linear_velocity = reference_velocity  
+	bullet.linear_velocity = reference_velocity
+	bullet.team = team  
 	bullet.set_meta("origin", self.get_path())
 	
-	get_tree().root.add_child(bullet)
+	get_viewport().add_child(bullet)
 	
 	_current_shots -= 1
 	shot_cooldown_timer.start()
 	
 	if reload_timer.is_stopped():
 		reload_timer.start()
+	
+	pew.pitch_scale = randf_range(0.97, 1.03)
+	pew.play()
 	
 ## Resets the weapon to its default state (completelly loaded and timers on max cooldown)
 func reset_weapon() -> void:
@@ -64,7 +72,7 @@ func reset_weapon() -> void:
 	reload_timer.stop()
 	
 	var self_path := self.get_path()
-	for shot: Shot in get_tree().root.get_children().filter(func(c: Node): return c is Shot and c.get_meta("origin") == self_path):
+	for shot: Shot in get_viewport().get_children().filter(func(c: Node): return c is Shot and c.get_meta("origin") == self_path):
 		shot.queue_free()
 
 func _reload() -> void:

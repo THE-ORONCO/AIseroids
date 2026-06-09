@@ -12,7 +12,6 @@
 script = ExtResource("1_i8ydr")
 time_clear_max_time = 180
 wave_size = 2
-wave_max_size_deviation = 1
 asteroid_spawn_delay = 15.0
 asteroid_spawn_delay_max_deviation = 5.0
 target_asteroid_instances = 10

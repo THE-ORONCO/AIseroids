@@ -199,14 +199,14 @@ python .\scripts\stable_baselines3_example.py \
 based on V021
 ```shell
 python .\scripts\stable_baselines3_example.py \
-        --onnx_export_path=models/V22.onnx \
-        --save_checkpoint_frequency=50000 \
-        --experiment_name=spaceshipV022 \
-        --learning_rate=0.0001 \
-        --linear_lr_schedule \
-        --clip_range=0.13 \
-        --n_steps=512 \
-        --resume_model_path=logs/sb3/spaceshipV021_checkpoints/spaceshipV021_1000000_steps.zip    
+		--onnx_export_path=models/V22.onnx \
+		--save_checkpoint_frequency=50000 \
+		--experiment_name=spaceshipV022 \
+		--learning_rate=0.0001 \
+		--linear_lr_schedule \
+		--clip_range=0.13 \
+		--n_steps=512 \
+		--resume_model_path=logs/sb3/spaceshipV021_checkpoints/spaceshipV021_1000000_steps.zip    
 ```
 
 ### Policies
@@ -215,6 +215,145 @@ python .\scripts\stable_baselines3_example.py \
 - wave_clear_progress
 - keep_distance_to_asteroids
 - self_damage
+
+## V023
+based on V022
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V23.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV023 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=512 --resume_model_path=logs/sb3/spaceshipV022_checkpoints/spaceshipV022_1000000_steps.zip --timesteps=7000000 
+```
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- 
+## V024
+- based on V022
+- decrease action repeat to 1
+- split up training physics worlds into separate viewports to remove any possible interference between the training grounds
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V24.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV024 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=512 --resume_model_path=logs/sb3/spaceshipV023_checkpoints/spaceshipV023_1000000_steps.zip --timesteps=10000000 
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+
+
+## V025
+- based on V024
+
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V25.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV025 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=1024 -- --resume_model_path=logs/sb3/spaceshipV024_checkpoints/spaceshipV024_1000000_steps.zip --timesteps=10000000 
+```
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+
+> Note: failure, stopped lineage here
+
+## V026
+- based on V024
+
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V26.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV026 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=1024 -- --resume_model_path=logs/sb3/spaceshipV024_checkpoints/spaceshipV024_1000000_steps.zip --timesteps=10000000 
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+
+
+## V027
+- based on V023
+- updated speed reward with rolling average
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V27.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV027 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=512 -- --resume_model_path=logs/sb3/spaceshipV023_checkpoints/spaceshipV023_1000000_steps.zip --timesteps=1000000
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+
+
+## V028
+- based on V027
+- changed distance checks to return -1 if nothing is hit and use float division
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V28.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV028 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=512 -- --resume_model_path=logs/sb3/spaceshipV027_checkpoints/spaceshipV027_1000000_steps.zip --timesteps=1000000
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+
+
+
+## V029
+- based on V028
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V29.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV029 --learning_rate=0.00001 --linear_lr_schedule --clip_range=0.1 --n_steps=512 -- --resume_model_path=logs/sb3/spaceshipV028_checkpoints/spaceshipV028_1000000_steps.zip --timesteps=1000000
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+
+
+## V030
+- based on V029
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V30.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV030 --learning_rate=0.000005 --linear_lr_schedule --clip_range=0.1 --n_steps=512 --resume_model_path=logs/sb3/spaceshipV029_checkpoints/spaceshipV029_999900_steps.zip --timesteps=1000000
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+- shoot_with_no_shots
+
+## V031
+- based on V030
+- increased punishment for loosing health drastically as it was drowned out by the other rewards
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V31.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV031 --learning_rate=0.000005 --linear_lr_schedule --clip_range=0.1 --n_steps=1024 --resume_model_path=logs/sb3/spaceshipV030_checkpoints/spaceshipV030_999900_steps.zip --timesteps=1000000
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+- shoot_with_no_shots
 
 ## VL00
 

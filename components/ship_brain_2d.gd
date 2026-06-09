@@ -42,7 +42,10 @@ var _last_thrust_time := Time.get_ticks_msec()
 var _last_score_time := Time.get_ticks_msec()
 var _last_reset_time := Time.get_ticks_msec()
 var _turn_average := 0.
+var _speed_average := 0.
 var _number_of_asteroids_destroyed_this_episode := 0.
+
+var _aggregator: Dictionary[String, float] = {}
 
 func _init(c: ShipController) -> void:
 	controller = c
@@ -74,19 +77,20 @@ func get_reward() -> float:
 	assert(score_delta < 10, "There is a bug as the player should not be able to score that many points in a few physics ticks")
 	_score_before = controller.score
 
+	const health_delta_reward := -5.
 	var health_delta := absi(_health_before - controller.health)
-	rewards["health_delta"] = -health_delta 
+	rewards["health_delta"] = health_delta_reward * health_delta
 	assert(health_delta < 5, "There is a bug as the player should not be able to loose that much health in a few physics ticks")
 	_health_before = controller.health
 
 	# small negative reward for self damage
-	const self_damage_reward := -.3
+	const self_damage_reward_factor := .3
 	if health_delta > 0 and controller.last_damage_was_self_damage:
-		rewards["self_damage"] = self_damage_reward
+		rewards["self_damage"] = self_damage_reward_factor * health_delta_reward
 		controller.last_damage_was_self_damage = false
 	
 
-	const progress_multiplier := 0.02
+	const progress_multiplier := 0.05
 	if score_delta > 0:
 		_number_of_asteroids_destroyed_this_episode += score_delta
 		var reward_scale = progress_multiplier
@@ -94,10 +98,25 @@ func get_reward() -> float:
 			reward_scale *= 2
 		rewards["wave_clear_progress"] = _number_of_asteroids_destroyed_this_episode * reward_scale
 	
+	# small negative reward for going too fast
+	const speed_reward := -1.
+	const speed_bump := 300.
+	const speed_rolling_size := 30. # 30 ticks = .5s
+	const speed_reduce := 5.
+	_speed_average = _speed_average * ((speed_rolling_size - 1.)/speed_rolling_size) + controller.currents_speed / speed_rolling_size
+
+
+	if _speed_average > speed_bump:
+		var speed_reward_scale = remap(controller.currents_speed, speed_bump, 1000., 0.2, 1.)
+		rewards["too_fast"] = speed_reward * speed_reward_scale
+		_speed_average = 0.
+	_speed_average = move_toward(_speed_average, 0., speed_reduce) #slowly reduce the average to allow for some speed variations
+
+	
 	# small negative reward if the agent tried to shoot when no shots were available
-	#const empty_mag_reward := -1
-	#if controller.current_shots == 0 && controller.shoot:
-		#rewards["shoot_with_no_shots"] = -1.
+	const empty_mag_reward := -.3
+	if controller.current_shots == 0 && controller.shoot:
+		rewards["shoot_with_no_shots"] = empty_mag_reward
 	
 	# small reward if the booster is on
 	#const thrust_reward := .1
@@ -161,8 +180,11 @@ func get_reward() -> float:
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
 	reward_updated.emit(reward)
-	if sum != 0.0:
-		print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
+	for k in rewards.keys():
+		if _aggregator.has(k):	_aggregator[k] = _aggregator[k] + rewards[k]
+		else: 					_aggregator[k] = rewards[k]
+	#if sum != 0.0:
+		#print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
 	return sum
 
 static var _known_rewards :Dictionary[String, float] = {}
@@ -173,7 +195,7 @@ func _reward_string(rewards: Dictionary[String,float]) -> String:
 	var keys := _known_rewards.keys()
 	keys.sort()
 	for key in keys:
-		line.append("%2s, %1.3f" % [key, rewards.get(key, 0.)])
+		line.append("%2s, %03.3f" % [key, rewards.get(key, 0.)])
 	return line.reduce(func(a,b): return a+ ",\t" + b, "")
 
 func get_action_space() -> Dictionary:
@@ -247,6 +269,13 @@ func reset():
 	controller.turn = 0.
 	controller.thrust = 0.
 	controller.last_damage_was_self_damage = false
+	
+	# print aggregate reward over training run
+	var now := Time.get_ticks_msec()
+	var sum: float = _aggregator.values().reduce(func(a,b): return a+b, 0.)
+	print_rich("[b]%s[/b], %8d,\t%4.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(_aggregator)])
+	for k in _aggregator.keys():
+		_aggregator.set(k, 0.)
 
 func reset_if_done():
 	if done:

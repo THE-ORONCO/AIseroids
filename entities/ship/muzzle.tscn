@@ -1,8 +1,11 @@
 [gd_scene format=3 uid="uid://c2qcohstk8elv"]
 
 [ext_resource type="Script" uid="uid://dqhsuij8ucipf" path="res://entities/ship/muzzle.gd" id="1_b073n"]
+[ext_resource type="AudioStream" uid="uid://brtb1gmij71vu" path="res://assets/459145__lilmati__retro-pew-shot.wav" id="2_g0tpw"]
+[ext_resource type="AudioStream" uid="uid://dolj6x83l65oq" path="res://assets/sfx_wpn_noammo1.wav" id="3_vvo54"]
 
 [node name="Muzzle" type="Marker2D" unique_id=571023481]
+visible = false
 script = ExtResource("1_b073n")
 
 [node name="ShotCooldown" type="Timer" parent="." unique_id=443521892]
@@ -12,3 +15,14 @@ one_shot = true
 [node name="ReloadTimer" type="Timer" parent="." unique_id=908491114]
 unique_name_in_owner = true
 autostart = true
+
+[node name="Pew" type="AudioStreamPlayer" parent="." unique_id=415026596]
+unique_name_in_owner = true
+stream = ExtResource("2_g0tpw")
+volume_db = -8.195
+bus = &"SFX"
+
+[node name="OutOfAmmo" type="AudioStreamPlayer" parent="." unique_id=145655357]
+stream = ExtResource("3_vvo54")
+volume_db = -2.053
+bus = &"SFX"
