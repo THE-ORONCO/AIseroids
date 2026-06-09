@@ -45,6 +45,8 @@ var _turn_average := 0.
 var _speed_average := 0.
 var _number_of_asteroids_destroyed_this_episode := 0.
 
+var _aggregator: Dictionary[String, float] = {}
+
 func _init(c: ShipController) -> void:
 	controller = c
 
@@ -75,8 +77,9 @@ func get_reward() -> float:
 	assert(score_delta < 10, "There is a bug as the player should not be able to score that many points in a few physics ticks")
 	_score_before = controller.score
 
+	const health_delta_reward := -5.
 	var health_delta := absi(_health_before - controller.health)
-	rewards["health_delta"] = -health_delta 
+	rewards["health_delta"] = health_delta_reward * health_delta
 	assert(health_delta < 5, "There is a bug as the player should not be able to loose that much health in a few physics ticks")
 	_health_before = controller.health
 
@@ -87,7 +90,7 @@ func get_reward() -> float:
 		controller.last_damage_was_self_damage = false
 	
 
-	const progress_multiplier := 0.02
+	const progress_multiplier := 0.05
 	if score_delta > 0:
 		_number_of_asteroids_destroyed_this_episode += score_delta
 		var reward_scale = progress_multiplier
@@ -177,6 +180,9 @@ func get_reward() -> float:
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
 	reward_updated.emit(reward)
+	for k in rewards.keys():
+		if _aggregator.has(k):	_aggregator[k] = _aggregator[k] + rewards[k]
+		else: 					_aggregator[k] = rewards[k]
 	#if sum != 0.0:
 		#print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
 	return sum
@@ -189,7 +195,7 @@ func _reward_string(rewards: Dictionary[String,float]) -> String:
 	var keys := _known_rewards.keys()
 	keys.sort()
 	for key in keys:
-		line.append("%2s, %1.3f" % [key, rewards.get(key, 0.)])
+		line.append("%2s, %03.3f" % [key, rewards.get(key, 0.)])
 	return line.reduce(func(a,b): return a+ ",\t" + b, "")
 
 func get_action_space() -> Dictionary:
@@ -263,6 +269,13 @@ func reset():
 	controller.turn = 0.
 	controller.thrust = 0.
 	controller.last_damage_was_self_damage = false
+	
+	# print aggregate reward over training run
+	var now := Time.get_ticks_msec()
+	var sum: float = _aggregator.values().reduce(func(a,b): return a+b, 0.)
+	print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(_aggregator)])
+	for k in _aggregator.keys():
+		_aggregator.set(k, 0.)
 
 func reset_if_done():
 	if done:
