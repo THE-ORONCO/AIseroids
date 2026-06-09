@@ -84,9 +84,9 @@ func get_reward() -> float:
 	_health_before = controller.health
 
 	# small negative reward for self damage
-	const self_damage_reward := -.3
+	const self_damage_reward_factor := .3
 	if health_delta > 0 and controller.last_damage_was_self_damage:
-		rewards["self_damage"] = self_damage_reward
+		rewards["self_damage"] = self_damage_reward_factor * health_delta_reward
 		controller.last_damage_was_self_damage = false
 	
 
@@ -273,7 +273,7 @@ func reset():
 	# print aggregate reward over training run
 	var now := Time.get_ticks_msec()
 	var sum: float = _aggregator.values().reduce(func(a,b): return a+b, 0.)
-	print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(_aggregator)])
+	print_rich("[b]%s[/b], %8d,\t%4.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(_aggregator)])
 	for k in _aggregator.keys():
 		_aggregator.set(k, 0.)
 

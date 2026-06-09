@@ -324,6 +324,37 @@ python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V29.onnx
 - too_fast
 
 
+## V030
+- based on V029
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V30.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV030 --learning_rate=0.000005 --linear_lr_schedule --clip_range=0.1 --n_steps=512 --resume_model_path=logs/sb3/spaceshipV029_checkpoints/spaceshipV029_999900_steps.zip --timesteps=1000000
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+- shoot_with_no_shots
+
+## V031
+- based on V030
+- increased punishment for loosing health drastically as it was drowned out by the other rewards
+```shell
+python .\scripts\stable_baselines3_example.py --onnx_export_path=models/V31.onnx --save_checkpoint_frequency=50000 --experiment_name=spaceshipV031 --learning_rate=0.000005 --linear_lr_schedule --clip_range=0.1 --n_steps=1024 --resume_model_path=logs/sb3/spaceshipV030_checkpoints/spaceshipV030_999900_steps.zip --timesteps=1000000
+```
+
+### Policies
+- score_delta
+- health_delta
+- wave_clear_progress
+- keep_distance_to_asteroids
+- self_damage
+- too_fast
+- shoot_with_no_shots
+
 ## VL00
 
 - First test
