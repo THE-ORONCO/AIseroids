@@ -86,7 +86,10 @@ func _draw() -> void:
 			var to := _view_perimeter[(i + 1) % perimiter_count]
 			draw_line(from, to, Color.GREEN, 2)
 		
-		draw_circle(self.position, close_distance, Color.PURPLE, false, 2)
+		if asteroid_is_close:	draw_circle(self.position, close_distance, Color.PURPLE, true)
+		else:					draw_circle(self.position, close_distance, Color.PURPLE, false, 2)
+
+			
 
 func _ready() -> void:
 	_spawn_nodes()
@@ -145,7 +148,8 @@ func calculate_raycasts() -> Array:
 		var distance_normalized = distance / ray_length
 		distances.append(distance_normalized)
 		
-		_view_perimeter.append(ray.position + ray.target_position * (distance_normalized if distance_normalized >= 0.001 else 1.))
+		var hit :Vector2 = ray.position + ray.target_position * (distance_normalized if distance_normalized >= 0.001 else 1.)
+		_view_perimeter.append(hit)
 		
 		var shape_type: ShapeId.EntityType = cast_result.get("type", ShapeId.EntityType.NOTHING)
 		if shape_type == ShapeId.EntityType.ASTEROID and distance <= close_distance and distance >= 1.:
@@ -154,7 +158,7 @@ func calculate_raycasts() -> Array:
 		types.append(float(shape_type) / float(ShapeId.EntityType.UNKNOWN))
 		
 		ray.enabled = false
-	
+		
 	asteroid_is_close = close_asteroid_found
 	
 	result.append_array(distances)
