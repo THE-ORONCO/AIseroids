@@ -2,13 +2,32 @@
 
 [ext_resource type="Script" uid="uid://bd1djwacfi835" path="res://ui_elements/main_menu.gd" id="1_vecha"]
 [ext_resource type="Script" uid="uid://dmqh1ocwln0r5" path="res://components/onnx_file_db.gd" id="2_ovtgx"]
+[ext_resource type="Script" uid="uid://f7wxq248cbgx" path="res://ui_elements/ai_demo/solo_ai_demo_pannel.gd" id="3_3c7g6"]
 [ext_resource type="PackedScene" uid="uid://cbcjt4hg011py" path="res://ui_elements/ai_selector.tscn" id="3_ovtgx"]
+[ext_resource type="Script" uid="uid://mns1wrjgs0vl" path="res://ui_elements/ai_demo/ai_vs_ai_demo_panel.gd" id="5_v0w7t"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_b2u01"]
 font_size = 40
 outline_size = 10
 outline_color = Color(0.35686275, 0.8862745, 0.95686275, 1)
 shadow_size = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oj1pa"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 5
 
 [node name="MainMenu" type="Control" unique_id=251754951]
 layout_mode = 3
@@ -127,59 +146,103 @@ size_flags_horizontal = 4
 text = "Start Training
 "
 
-[node name="AiDemoPannel" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1116792224]
+[node name="SoloAiDemoPannel" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1116792224]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 20
+script = ExtResource("3_3c7g6")
 
-[node name="AI" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel" unique_id=1746480024]
+[node name="AI" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel" unique_id=1746480024]
 layout_mode = 2
 text = "AI showcase"
 label_settings = SubResource("LabelSettings_b2u01")
 horizontal_alignment = 1
 
-[node name="SoloPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel" unique_id=2018128507]
+[node name="SoloPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel" unique_id=2018128507]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
+
+[node name="Marge" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/SoloPanel" unique_id=549047548]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/SoloPanel/Marge" unique_id=649231152]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/SoloPanel" unique_id=1820977133]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/SoloPanel/Marge/HBoxContainer" unique_id=1820977133]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="Solo AI" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/SoloPanel/VBoxContainer" unique_id=52678261]
+[node name="Solo AI" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/SoloPanel/Marge/HBoxContainer/VBoxContainer" unique_id=52678261]
 layout_mode = 2
 text = "solo"
 horizontal_alignment = 1
 
-[node name="AiSelector" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/SoloPanel/VBoxContainer" unique_id=184672023 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
+[node name="AiSelector" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/SoloPanel/Marge/HBoxContainer/VBoxContainer" unique_id=184672023 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
 layout_mode = 2
-db = NodePath("../../../../../../../OnnxFileDB")
+db = NodePath("../../../../../../../../../OnnxFileDB")
 
-[node name="AiVsPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel" unique_id=1823894110]
+[node name="AiDemoBtn" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/SoloPanel/Marge/HBoxContainer" unique_id=738145307]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Go"
+
+[node name="AiVsAiPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel" unique_id=1607922368]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
+script = ExtResource("5_v0w7t")
+
+[node name="Marge" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel" unique_id=1349214459]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel/Marge" unique_id=761198909]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/AiVsPanel" unique_id=601642717]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel/Marge/HBoxContainer" unique_id=601642717]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="AI vs AI" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/AiVsPanel/VBoxContainer" unique_id=1375772267]
+[node name="AI vs AI" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer" unique_id=1375772267]
 layout_mode = 2
+size_flags_vertical = 6
 text = "AI vs AI"
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/AiVsPanel/VBoxContainer" unique_id=1383426768]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer" unique_id=1383426768]
 layout_mode = 2
+alignment = 1
 
-[node name="AI1" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/AiVsPanel/VBoxContainer/HBoxContainer" unique_id=992225921 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
+[node name="AI1" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=992225921 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
 layout_mode = 2
-db = NodePath("../../../../../../../../OnnxFileDB")
+size_flags_horizontal = 3
+db = NodePath("../../../../../../../../../../OnnxFileDB")
 
-[node name="Vs" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/AiVsPanel/VBoxContainer/HBoxContainer" unique_id=2037346993]
+[node name="Vs" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=2037346993]
 layout_mode = 2
 text = "vs"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="AI2" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/AiVsPanel/VBoxContainer/HBoxContainer" unique_id=1755844893 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
+[node name="AI2" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1755844893 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
 layout_mode = 2
-db = NodePath("../../../../../../../../OnnxFileDB")
+size_flags_horizontal = 3
+db = NodePath("../../../../../../../../../../OnnxFileDB")
 
-[node name="PanelContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel" unique_id=1080409981]
+[node name="AiVsAiBtn" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel/Marge/HBoxContainer" unique_id=584552040]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Go"
+
+[node name="PanelContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel" unique_id=1080409981]
 layout_mode = 2
 size_flags_horizontal = 3
 

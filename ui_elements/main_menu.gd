@@ -1,6 +1,6 @@
 extends Control
 
-
+const SPACE_MULTI = preload("uid://d07sfwm8fs1hr")
 const SPACE: PackedScene = preload("uid://cujdj2kfjxl54")
 const TRAINING_GROUNDS: PackedScene = preload("uid://baw6jdbx8dn5d")
 const AI_SHOWCASE: PackedScene = preload("uid://d0wbaw1yq1f4t")
@@ -33,15 +33,8 @@ func _ready() -> void:
 	var models_dir := DirAccess.open("models")
 	
 	onnx_file_db.scan_dir(default_model_dir)
-	
-	#file_dialogue_button.file_selected.connect(func(file):
-		#var space = SPACE.instantiate()
-		#space.onnx_model_path = file
-		#get_tree().change_scene_to_node(space)
-		#)
-	
 
-	
+
 func _get_field_size() -> Vector2i:
 	return Vector2i(\
 		int(x_input.text) if x_input.text else 0,\

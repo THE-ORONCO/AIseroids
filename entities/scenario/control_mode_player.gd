@@ -1,0 +1,2 @@
+class_name CM_Player
+extends ControlMode
