@@ -18,7 +18,6 @@ target_asteroid_instances = 15
 
 [node name="Wrap" parent="." unique_id=396805770 instance=ExtResource("3_0c28y")]
 unique_name_in_owner = true
-fit_to_screen = false
 fallback_size = Vector2(1000, 1000)
 
 [node name="Camera" type="Camera2D" parent="." unique_id=1711227385]

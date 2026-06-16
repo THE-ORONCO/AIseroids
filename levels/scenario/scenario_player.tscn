@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cr1vj24mhqcbm"]
+
+[ext_resource type="Script" uid="uid://cg1i3w4y5kcep" path="res://levels/scenario/scenario_player.gd" id="1_4xl0e"]
+
+[node name="ScenarioPlayer" type="Node2D" unique_id=216443327]
+script = ExtResource("1_4xl0e")

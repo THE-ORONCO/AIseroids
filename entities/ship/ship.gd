@@ -4,7 +4,12 @@ extends RigidBody2D
 signal health_changed(new_health: int)
 signal health_reached_zero
 
-@export_range(0, 20) var max_health: int = 5
+@export_range(0, 20) var max_health: int = 5:
+	set(val):
+		max_health = val
+		if health_manager:
+			health_manager.health_max = max_health
+
 @export var team :Fight.Team = Fight.Team.BLUE:
 	set(val):
 		_apply_team_color(val)
@@ -22,7 +27,6 @@ signal health_reached_zero
 @export_range(1., 3000.) var strafe_power: float = 500.
 @export_range(.1, 10.) var rotation_speed: float = 6.
 @export_range(1., 5000.) var max_velocity: float = 1000.
-@export_range(1., 5000.) var max_force: float = 1000.
 
 @onready var thruster_particles: GPUParticles2D = $ThrusterParticles
 @onready var muzzle: Muzzle = %Muzzle
@@ -36,6 +40,16 @@ var _was_just_reset: bool = false
 
 const DEFAULT_MUZZLE: PackedScene = preload("uid://c2qcohstk8elv")
 
+## configure the ship using the ship scenario resource
+func configure(ship: S_Ship, ctrlr: ShipController) -> void:
+	self.max_health = ship.max_health
+	self.thruster_power = ship.thruster_power
+	self.strafe_power = ship.strafe_power
+	self.rotation_speed = ship.rotation_speed
+	self.max_velocity = ship.max_velocity
+	self.sensor_suit.debug = ship.show_debug
+	self.controller = ctrlr
+	## TODO team stuff self.team = ship.team
 
 ## resets the ship to its base state.
 ## the reset_position is in global coordinates

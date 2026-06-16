@@ -5,6 +5,10 @@ extends ISensor2D
 var ray_history_size := 5
 @export_range(0, 10)
 var number_of_ticks_to_skip_for_history := 2
+@export var debug := false:
+	set(val):
+		debug = val
+		if ray_sensor:	ray_sensor.debug_draw = debug
 
 @onready var ray_sensor: AdvancedRaycastSensor2D = %RaySensor
 @onready var near_field_sensor: Area2D = %NearFieldSensor

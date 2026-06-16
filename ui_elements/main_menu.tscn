@@ -4,13 +4,39 @@
 [ext_resource type="Script" uid="uid://dmqh1ocwln0r5" path="res://components/onnx_file_db.gd" id="2_ovtgx"]
 [ext_resource type="Script" uid="uid://f7wxq248cbgx" path="res://ui_elements/ai_demo/solo_ai_demo_pannel.gd" id="3_3c7g6"]
 [ext_resource type="PackedScene" uid="uid://cbcjt4hg011py" path="res://ui_elements/ai_selector.tscn" id="3_ovtgx"]
+[ext_resource type="Script" uid="uid://bvw4yradmltby" path="res://entities/scenario/scenario.gd" id="4_y6ahl"]
+[ext_resource type="Script" uid="uid://by2mdqrrhfsa3" path="res://entities/scenario/scenario_ship.gd" id="5_iavgl"]
 [ext_resource type="Script" uid="uid://mns1wrjgs0vl" path="res://ui_elements/ai_demo/ai_vs_ai_demo_panel.gd" id="5_v0w7t"]
+[ext_resource type="Script" uid="uid://k2y5frwnrrwx" path="res://entities/scenario/scenario_team.gd" id="7_iteyy"]
+[ext_resource type="Script" uid="uid://whenjsnth0xi" path="res://entities/scenario/control_mode_inference.gd" id="8_iavgl"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_b2u01"]
 font_size = 40
 outline_size = 10
 outline_color = Color(0.35686275, 0.8862745, 0.95686275, 1)
 shadow_size = 0
+
+[sub_resource type="Resource" id="Resource_hkaby"]
+script = ExtResource("8_iavgl")
+metadata/_custom_type_script = "uid://whenjsnth0xi"
+
+[sub_resource type="Resource" id="Resource_pp7ww"]
+script = ExtResource("7_iteyy")
+name = "team"
+color = Color(0, 0.7983431, 3.85046e-07, 1)
+metadata/_custom_type_script = "uid://k2y5frwnrrwx"
+
+[sub_resource type="Resource" id="Resource_1kwqo"]
+script = ExtResource("5_iavgl")
+name = "flimbo"
+mode = SubResource("Resource_hkaby")
+team = SubResource("Resource_pp7ww")
+metadata/_custom_type_script = "uid://by2mdqrrhfsa3"
+
+[sub_resource type="Resource" id="Resource_ap04m"]
+script = ExtResource("4_y6ahl")
+ships = Array[ExtResource("5_iavgl")]([SubResource("Resource_1kwqo")])
+metadata/_custom_type_script = "uid://bvw4yradmltby"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oj1pa"]
 content_margin_left = 0.0
@@ -28,6 +54,45 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 corner_detail = 5
+
+[sub_resource type="Resource" id="Resource_5e5tm"]
+script = ExtResource("8_iavgl")
+metadata/_custom_type_script = "uid://whenjsnth0xi"
+
+[sub_resource type="Resource" id="Resource_4h2b7"]
+script = ExtResource("7_iteyy")
+name = "A"
+color = Color(0, 0.8180512, 0, 1)
+metadata/_custom_type_script = "uid://k2y5frwnrrwx"
+
+[sub_resource type="Resource" id="Resource_iteyy"]
+script = ExtResource("5_iavgl")
+name = "daniel"
+mode = SubResource("Resource_5e5tm")
+team = SubResource("Resource_4h2b7")
+metadata/_custom_type_script = "uid://by2mdqrrhfsa3"
+
+[sub_resource type="Resource" id="Resource_244nw"]
+script = ExtResource("8_iavgl")
+metadata/_custom_type_script = "uid://whenjsnth0xi"
+
+[sub_resource type="Resource" id="Resource_m8gtt"]
+script = ExtResource("7_iteyy")
+name = "B"
+color = Color(0, 0.8393373, 0.96437925, 1)
+metadata/_custom_type_script = "uid://k2y5frwnrrwx"
+
+[sub_resource type="Resource" id="Resource_13ucg"]
+script = ExtResource("5_iavgl")
+name = "cooler daniel"
+mode = SubResource("Resource_244nw")
+team = SubResource("Resource_m8gtt")
+metadata/_custom_type_script = "uid://by2mdqrrhfsa3"
+
+[sub_resource type="Resource" id="Resource_c58ti"]
+script = ExtResource("4_y6ahl")
+ships = Array[ExtResource("5_iavgl")]([SubResource("Resource_iteyy"), SubResource("Resource_13ucg")])
+metadata/_custom_type_script = "uid://bvw4yradmltby"
 
 [node name="MainMenu" type="Control" unique_id=251754951]
 layout_mode = 3
@@ -151,6 +216,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 20
 script = ExtResource("3_3c7g6")
+scenario = SubResource("Resource_ap04m")
 
 [node name="AI" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel" unique_id=1746480024]
 layout_mode = 2
@@ -182,6 +248,7 @@ text = "solo"
 horizontal_alignment = 1
 
 [node name="AiSelector" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/SoloPanel/Marge/HBoxContainer/VBoxContainer" unique_id=184672023 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
+unique_name_in_owner = true
 layout_mode = 2
 db = NodePath("../../../../../../../../../OnnxFileDB")
 
@@ -192,9 +259,9 @@ text = "Go"
 
 [node name="AiVsAiPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel" unique_id=1607922368]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
 script = ExtResource("5_v0w7t")
+scenario = SubResource("Resource_c58ti")
 
 [node name="Marge" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel" unique_id=1349214459]
 layout_mode = 2
@@ -213,7 +280,6 @@ theme_override_constants/separation = 4
 
 [node name="AI vs AI" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer" unique_id=1375772267]
 layout_mode = 2
-size_flags_vertical = 6
 text = "AI vs AI"
 horizontal_alignment = 1
 
@@ -222,6 +288,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="AI1" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=992225921 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 db = NodePath("../../../../../../../../../../OnnxFileDB")
@@ -233,6 +300,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="AI2" parent="MarginContainer/VBoxContainer/HBoxContainer/SoloAiDemoPannel/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1755844893 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 db = NodePath("../../../../../../../../../../OnnxFileDB")

@@ -56,14 +56,14 @@ func _ready() -> void:
 	_wave_spawn_timer.timeout.connect(random_wave)
 	add_child(_wave_spawn_timer)
 
-	for c in self.get_children():
-		if c is Ship:
-			_add_ship(c)
-	self.child_entered_tree.connect(func(c):
-			if c is Ship:	
-				_add_ship(c))
-	self.child_exiting_tree.connect(func(c):	
-		if c is Ship:	_remove_ship(c))	
+	#for c in self.get_children():
+		#if c is Ship:
+			#_add_ship(c)
+	#self.child_entered_tree.connect(func(c):
+			#if c is Ship:	
+				#_add_ship(c))
+	#self.child_exiting_tree.connect(func(c):	
+		#if c is Ship:	_remove_ship(c))	
 	
 	wrap.do_fit_to_screen(fit_to_screen)
 		
@@ -93,6 +93,7 @@ func _ready() -> void:
 
 
 	self.ready.connect(reset_playfield, CONNECT_ONE_SHOT)
+
 
 
 func spawn_or_wait():
@@ -173,35 +174,35 @@ func _reset_with_timeout(ship: Ship, brain: ShipBrain2D) -> void:
 	end_through_timeout.emit()
 	
 
-func _add_ship(ship: Ship) -> void:
-	var i := ships.find(ship)
-	if i >= 0: return # unknown ship
-	
-	ships.append(ship)
-	print("added ship")
-	if ship.controller is AiController:
-		var brain := ShipBrain2D.new(ship.controller)
-		brains[ship.get_path()] = brain
-		add_child(brain)
-
-		match ai_mode:
-			AiMode.NONE: 		pass
-			AiMode.LEARNING:	
-				brain.control_mode = ShipBrain2D.ControlModes.TRAINING
-				print("added learnign brain for ship ", ship.get_path())
-
-			AiMode.REPLAY:
-				brain.control_mode = ShipBrain2D.ControlModes.ONNX_INFERENCE
-				brain.onnx_model_path = onnx_model_path
-				print("added brain for ship ", ship.get_path(), " using model: ", onnx_model_path)
-				
-
-func _remove_ship(ship: Ship) -> void:
-	var i := ships.find(ship)
-	if i < 0: return # unknown ship
-	
-	
-	if brains.erase(ship.get_path()):
-		print("removed brain of ship ", ship.get_path())
-	ships.remove_at(i)
-	print("remove ship")
+#func _add_ship(ship: Ship) -> void:
+	#var i := ships.find(ship)
+	#if i >= 0: return # unknown ship
+	#
+	#ships.append(ship)
+	#print("added ship")
+	#if ship.controller is AiController:
+		#var brain := ShipBrain2D.new(ship.controller)
+		#brains[ship.get_path()] = brain
+		#add_child(brain)
+#
+		#match ai_mode:
+			#AiMode.NONE: 		pass
+			#AiMode.LEARNING:	
+				#brain.control_mode = ShipBrain2D.ControlModes.TRAINING
+				#print("added learnign brain for ship ", ship.get_path())
+#
+			#AiMode.REPLAY:
+				#brain.control_mode = ShipBrain2D.ControlModes.ONNX_INFERENCE
+				#brain.onnx_model_path = onnx_model_path
+				#print("added brain for ship ", ship.get_path(), " using model: ", onnx_model_path)
+				#
+#
+#func _remove_ship(ship: Ship) -> void:
+	#var i := ships.find(ship)
+	#if i < 0: return # unknown ship
+	#
+	#
+	#if brains.erase(ship.get_path()):
+		#print("removed brain of ship ", ship.get_path())
+	#ships.remove_at(i)
+	#print("remove ship")
