@@ -3,24 +3,40 @@ extends MarginContainer
 
 @export var wrap_space: Wrap
 
-@onready var score_label: Label = %ScoreLabel
-@onready var best_label: Label = %BestLabel
-@onready var speed_label: Label = %SpeedLabel
+@onready var teams: HBoxContainer = %Teams
+
+var shown_teams: Dictionary[Fight.Team, TeamScore]
+
+const TEAM_SCORE = preload("uid://bcjpw6eddpiff")
+
+
+func show_score(score: int, team: Fight.Team) -> void:
+	if !shown_teams.has(team):
+		add_team(team)
+
+	shown_teams[team].show_score(score)
+
+	
+func show_best(best: int, team: Fight.Team) -> void:
+	if !shown_teams.has(team):
+		add_team(team)
+	
+	shown_teams[team].show_best(best)
+
 
 func _ready() -> void:
 	resize_to_wrap()
 	wrap_space.size_changed.connect(resize_to_wrap)
-	show_score(0)
-	show_speed(0.)
-
-func show_score(score: int) -> void:
-	score_label.text = "Score: %05d" % score
 	
-func show_best(best: int) -> void:
-	best_label.text = "Best:   %05d" % best
-
-func show_speed(speed: float) -> void:
-	speed_label.text = "%03.1f fasts/s" % speed
 
 func resize_to_wrap() -> void:
 	self.custom_minimum_size = wrap_space.extent
+
+func add_team(team: Fight.Team) -> void:
+	if shown_teams.has(team):
+		return
+	
+	var team_score: TeamScore = TEAM_SCORE.instantiate()
+	team_score.team = team
+	teams.add_child(team_score)
+	shown_teams.set(team, team_score)

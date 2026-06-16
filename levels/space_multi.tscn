@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://d07sfwm8fs1hr"]
+
+[ext_resource type="Script" uid="uid://43mmtutgw08d" path="res://levels/space_multi.gd" id="1_khl3c"]
+[ext_resource type="PackedScene" uid="uid://dq5kaans1s87n" path="res://entities/wrap/wrap.tscn" id="3_0c28y"]
+[ext_resource type="Script" uid="uid://dd478rmnll5y" path="res://components/asteroid_spawner.gd" id="4_isswm"]
+[ext_resource type="Script" uid="uid://c0sajahomp6o5" path="res://components/score_keeper.gd" id="5_p1x55"]
+[ext_resource type="Script" uid="uid://bfkrxk2ds5p8c" path="res://components/signal_bus.gd" id="6_xc71q"]
+[ext_resource type="PackedScene" uid="uid://dfgoxvdismwwp" path="res://ui_elements/hud.tscn" id="7_4l8q4"]
+
+[node name="SpaceMulti" type="Node2D" unique_id=930446752]
+script = ExtResource("1_khl3c")
+play_mode = true
+wave_size = 1
+wave_max_size_deviation = 0
+asteroid_spawn_delay = 5.0
+asteroid_spawn_delay_max_deviation = 3.0
+target_asteroid_instances = 15
+
+[node name="Wrap" parent="." unique_id=396805770 instance=ExtResource("3_0c28y")]
+unique_name_in_owner = true
+fit_to_screen = false
+fallback_size = Vector2(1000, 1000)
+
+[node name="Camera" type="Camera2D" parent="." unique_id=1711227385]
+unique_name_in_owner = true
+position = Vector2(371, 223)
+
+[node name="AsteroidSpawner" type="Node2D" parent="." unique_id=1429533558 node_paths=PackedStringArray("wrap_instance", "bus")]
+unique_name_in_owner = true
+script = ExtResource("4_isswm")
+wrap_instance = NodePath("../Wrap")
+bus = NodePath("../SignalBus")
+
+[node name="ScoreKeeper" type="Node" parent="." unique_id=758615956 node_paths=PackedStringArray("bus")]
+unique_name_in_owner = true
+script = ExtResource("5_p1x55")
+bus = NodePath("../SignalBus")
+
+[node name="SignalBus" type="Node" parent="." unique_id=1579645287]
+unique_name_in_owner = true
+script = ExtResource("6_xc71q")
+
+[node name="Hud" parent="." unique_id=421406941 node_paths=PackedStringArray("wrap_space") instance=ExtResource("7_4l8q4")]
+unique_name_in_owner = true
+wrap_space = NodePath("../Wrap")

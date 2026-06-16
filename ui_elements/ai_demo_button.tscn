@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://d0sqciovesnee"]
+
+[ext_resource type="Script" uid="uid://bkeo1c1ujqxdi" path="res://ui_elements/ai_demo_button.gd" id="1_aj6y3"]
+
+[node name="AiDemoButton" type="Button" unique_id=18881027]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -15.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+action_mode = 0
+text = "test.onnx"
+flat = true
+alignment = 0
+script = ExtResource("1_aj6y3")
+metadata/_custom_type_script = "uid://bkeo1c1ujqxdi"

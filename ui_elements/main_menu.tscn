@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://byxh5am80srpe"]
 
 [ext_resource type="Script" uid="uid://bd1djwacfi835" path="res://ui_elements/main_menu.gd" id="1_vecha"]
+[ext_resource type="PackedScene" uid="uid://423mxui0rf6u" path="res://ui_elements/file_dialogue_button.tscn" id="2_hcm7m"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_b2u01"]
 font_size = 40
@@ -47,6 +48,7 @@ horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1425293300]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 30
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1179499658]
@@ -65,24 +67,24 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Highscore"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=287760998]
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=287760998]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=365279229]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=365279229]
 layout_mode = 2
 text = "Train"
 label_settings = SubResource("LabelSettings_b2u01")
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=1147217439]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=1147217439]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1262162935]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1262162935]
 layout_mode = 2
 text = "Size of training field: "
 
-[node name="XInput" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=430998727]
+[node name="XInput" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/VBoxContainer2/HBoxContainer" unique_id=430998727]
 unique_name_in_owner = true
 layout_mode = 2
 text = "3"
@@ -91,11 +93,11 @@ alignment = 1
 max_length = 2
 virtual_keyboard_type = 2
 
-[node name="X" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=188284692]
+[node name="X" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/VBoxContainer2/HBoxContainer" unique_id=188284692]
 layout_mode = 2
 text = "x"
 
-[node name="YInput" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1387314309]
+[node name="YInput" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1387314309]
 unique_name_in_owner = true
 layout_mode = 2
 text = "3"
@@ -104,58 +106,44 @@ alignment = 1
 max_length = 2
 virtual_keyboard_type = 2
 
-[node name="NumberOfAgents" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=364932372]
+[node name="NumberOfAgents" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/VBoxContainer2/HBoxContainer" unique_id=364932372]
 unique_name_in_owner = true
 layout_mode = 2
 text = "= 9 Agents"
 
-[node name="StartTraining" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=1860362502]
+[node name="StartTraining" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=1860362502]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Start Training
 "
 
-[node name="AI" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1746480024]
+[node name="AiDemoPannel" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1116792224]
+layout_mode = 2
+
+[node name="AI" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel" unique_id=1746480024]
 layout_mode = 2
 text = "AI showcase"
 label_settings = SubResource("LabelSettings_b2u01")
 horizontal_alignment = 1
 
-[node name="AiBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1612905592]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel" unique_id=960891943]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 40
-alignment = 1
 
-[node name="AI V1" type="Button" parent="MarginContainer/VBoxContainer/AiBox" unique_id=1173874627]
+[node name="PanelContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/ScrollContainer" unique_id=512735760]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AiList" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/ScrollContainer/PanelContainer" unique_id=136704170]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "V1"
+size_flags_vertical = 3
+theme_override_constants/separation = 4
 
-[node name="AI V2" type="Button" parent="MarginContainer/VBoxContainer/AiBox" unique_id=2136671568]
+[node name="FileDialogueButton" parent="MarginContainer/VBoxContainer/HBoxContainer/AiDemoPannel/ScrollContainer/PanelContainer" unique_id=1120022744 instance=ExtResource("2_hcm7m")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-text = "V2"
-
-[node name="AI V3" type="Button" parent="MarginContainer/VBoxContainer/AiBox" unique_id=763631212]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "V3"
-
-[node name="AI V4" type="Button" parent="MarginContainer/VBoxContainer/AiBox" unique_id=1334064644]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "V4"
-
-[node name="AI V5" type="Button" parent="MarginContainer/VBoxContainer/AiBox" unique_id=289689212]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-text = "V5"
 
 [node name="Footer" type="MarginContainer" parent="." unique_id=407630944]
 layout_mode = 1

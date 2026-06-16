@@ -3,7 +3,6 @@ extends Area2D
 
 signal size_changed
 
-@export var fit_to_screen: bool = true
 @export var fallback_size: Vector2 = Vector2(500., 500.)
 
 @export_range(1., 50.) var ship_size := 30.:
@@ -30,26 +29,41 @@ var extent: Vector2:
 
 var _wrap_candidates: Dictionary[RigidBody2D,RigidBody2D] = {}
 
+
 # TODO maybe just use these to move all objects automagically 
 # - a Wrapping group could then be used to mark all objects that could wrap
 # - each object would get a buffer the size of its collision
 # - the velocity direction of the object would be the deciding factor on if the shape teleports or not 
 func _ready() -> void:
 	if Engine.is_editor_hint(): return
-	
-	if fit_to_screen:
-		get_viewport().size_changed.connect(move_boundaries_to_screen_border)
-		get_viewport().size_changed.connect(size_changed.emit)
-		move_boundaries_to_screen_border.call_deferred()
-	else:
-		extent = fallback_size
-		update_border_positions()
 		
 	ray_wrap.extent = extent
 	ray_wrap.ship_size = ship_size
-	
+
+func do_fit_to_screen(fit_to_screen: bool = true) -> void:
+	if fit_to_screen:	_do_fit_to_screen()
+	else:				_fixed_size()
+
+func _do_fit_to_screen() -> void:
+	get_viewport().size_changed.connect(move_boundaries_to_screen_border)
+	get_viewport().size_changed.connect(size_changed.emit)
+	move_boundaries_to_screen_border.call_deferred()
+
+func _fixed_size() -> void:
+	var viewport := get_viewport()
+	if viewport:
+		if viewport.size_changed.is_connected(move_boundaries_to_screen_border):
+			viewport.size_changed.disconnect(move_boundaries_to_screen_border)
+		if viewport.size_changed.is_connected(size_changed.emit):
+			viewport.size_changed.connect(size_changed.emit)
+	extent = fallback_size
+	update_border_positions()
+
 func move_boundaries_to_screen_border() -> void:
-	extent = self.get_viewport_rect().size
+	var view_rect := self.get_viewport_rect()
+	var cam := self.get_viewport().get_camera_2d()
+	extent = view_rect.size
+	self.global_position = cam.global_position -  view_rect.size / 2
 	update_border_positions()
 
 func update_border_positions() -> void:

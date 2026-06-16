@@ -183,8 +183,7 @@ func get_reward() -> float:
 	for k in rewards.keys():
 		if _aggregator.has(k):	_aggregator[k] = _aggregator[k] + rewards[k]
 		else: 					_aggregator[k] = rewards[k]
-	#if sum != 0.0:
-		#print_rich("[b]%s[/b], %8d,\t%2.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(rewards)])
+	
 	return sum
 
 static var _known_rewards :Dictionary[String, float] = {}
@@ -195,7 +194,7 @@ func _reward_string(rewards: Dictionary[String,float]) -> String:
 	var keys := _known_rewards.keys()
 	keys.sort()
 	for key in keys:
-		line.append("%2s, %03.3f" % [key, rewards.get(key, 0.)])
+		line.append("%2s, %03.1f" % [key, rewards.get(key, 0.)])
 	return line.reduce(func(a,b): return a+ ",\t" + b, "")
 
 func get_action_space() -> Dictionary:
@@ -217,7 +216,7 @@ func get_action_space() -> Dictionary:
 
 func set_action(action) -> void:
 	controller.update_inputs(
-		clampf(action["thrust"][0], 0, 1.0),
+		clampf(action["thrust"][0], 0., 1.0),
 		clampf(action["turn"][0], -1.0, 1.0),
 		action["shoot"][0] >= 0.5,
 	)

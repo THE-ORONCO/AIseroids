@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bcjpw6eddpiff"]
+
+[ext_resource type="Script" uid="uid://d27or7c6qc6hb" path="res://ui_elements/team_score.gd" id="1_i6044"]
+
+[node name="TeamScore" type="VBoxContainer" unique_id=171861336]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+script = ExtResource("1_i6044")
+
+[node name="ScoreLabel" type="Label" parent="." unique_id=132312376]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Score: 00000"
+
+[node name="BestLabel" type="Label" parent="." unique_id=643302715]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Best:   00000"

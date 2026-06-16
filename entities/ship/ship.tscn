@@ -58,12 +58,13 @@ radius = 30.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_tua1r"]
 radius = 70.0
 
-[node name="Ship" type="RigidBody2D" unique_id=63985044]
+[node name="Ship" type="RigidBody2D" unique_id=1181218062]
 gravity_scale = 0.0
 contact_monitor = true
 max_contacts_reported = 1
 angular_damp = 100.0
 script = ExtResource("1_tivcy")
+metadata/_custom_type_script = "uid://c5gxdwhsxj7mf"
 
 [node name="ThrusterParticles" type="GPUParticles2D" parent="." unique_id=2098380072]
 position = Vector2(0, 12)
@@ -97,7 +98,6 @@ collision_mask = 33
 collide_with_areas = true
 n_rays = 60.0
 ray_length = 500.0
-debug_draw = false
 metadata/_custom_type_script = "uid://cngsnhnnpaxnx"
 
 [node name="NearFieldSensor" type="Area2D" parent="SensorSuite" unique_id=898996425]
@@ -140,7 +140,7 @@ offset_right = 15.0
 offset_bottom = 20.0
 grow_horizontal = 2
 script = ExtResource("7_3ywi2")
-watched = NodePath("..")
+watched = NodePath("")
 
 [node name="SpeedLabel" type="Label" parent="Speedometer" unique_id=1958891833]
 unique_name_in_owner = true

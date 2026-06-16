@@ -15,6 +15,7 @@ wave_size = 2
 asteroid_spawn_delay = 15.0
 asteroid_spawn_delay_max_deviation = 5.0
 target_asteroid_instances = 10
+fit_to_screen = false
 
 [node name="Ship" parent="." unique_id=63985044 groups=["Muzzle"] instance=ExtResource("2_6k6yw")]
 unique_name_in_owner = true

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bsqjsh3ouhnls"]
+
+[ext_resource type="PackedScene" uid="uid://cujdj2kfjxl54" path="res://levels/space.tscn" id="1_ri51r"]
+
+[node name="SoloHighscore" type="Node2D" unique_id=465843018]
+
+[node name="Space" parent="." unique_id=930446752 instance=ExtResource("1_ri51r")]
