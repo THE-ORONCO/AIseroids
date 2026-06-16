@@ -1,6 +1,9 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+game dev diciplines & technology.csproj
+game dev diciplines & technology.csproj.old
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
