@@ -18,7 +18,7 @@ var shots_max: int = 0
 var current_shots: int = 0
 var time_till_reload: float = 0.
 var shot_cooldown: float = 0.
-var currents_speed: float = 0.
+var current_speed: float = 0.
 
 func _init() -> void:
 	health = health_max
