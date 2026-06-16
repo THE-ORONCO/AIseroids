@@ -7,7 +7,7 @@ signal health_reached_zero
 @export_range(0, 20) var max_health: int = 5
 @export var team :Fight.Team = Fight.Team.BLUE:
 	set(val):
-		if ship_sprite: ship_sprite.frame = val
+		_apply_team_color(val)
 		team = val
 
 @export_group("internals")
@@ -56,7 +56,7 @@ func _ready() -> void:
 		self.add_child(controller)
 	
 	controller.sensor = sensor_suit
-
+	
 	if health_manager == null:
 		health_manager = HealthManager.new(self, max_health)
 	health_bar.set_up_progress_bar(health_manager)
@@ -66,14 +66,11 @@ func _ready() -> void:
 	health_manager.health_reached_zero.connect(health_reached_zero.emit)
 	health_manager.health_changed.connect(func(nh, by): 
 		controller.health = nh
-		
 		if by is Shot: 
 			controller.last_damage_was_self_damage = true
-			
 		health_changed.emit(nh)
-
-		)
-	ship_sprite.frame = team
+	)
+	_apply_team_color(team)
 
 func _physics_process(delta: float) -> void:
 	_rotate(delta)
@@ -93,6 +90,19 @@ func _update_ship_info() -> void:
 	controller.time_till_reload = muzzle.time_till_reload
 	controller.shot_cooldown = muzzle.cooldown_left
 	controller.currents_speed = sensor_suit.speed
+
+func _apply_team_color(team: Fight.Team) -> void:
+	if !ship_sprite:
+		return
+	match team:
+			Fight.Team.BLUE:
+				ship_sprite.modulate = Color.BLUE
+			Fight.Team.RED:
+				ship_sprite.modulate = Color.RED
+			Fight.Team.GREEN:
+				ship_sprite.modulate = Color.GREEN
+			_:
+				ship_sprite.modulate = Color.WHITE
 
 func _rotate(delta: float) -> void:
 	var rotation_input: float = controller.turn

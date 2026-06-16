@@ -15,7 +15,7 @@ script = ExtResource("1_20vrb")
 min_radius = 25.0
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=1701408506]
-modulate = Color(0, 1, 0, 1)
+modulate = Color(0.82542396, 0.7875464, 0.4689995, 1)
 position = Vector2(0, -2.3841858e-07)
 scale = Vector2(2, 2)
 texture = ExtResource("2_4qh0a")

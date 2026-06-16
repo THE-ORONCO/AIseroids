@@ -45,7 +45,7 @@ func _ready() -> void:
 
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
-	var contact_count := state.get_contact_count()
+	var contact_count := state.get_contact_count() 
 	for i in range(contact_count):
 		var collider_obj := state.get_contact_collider_object(i)
 		if not collider_obj:
