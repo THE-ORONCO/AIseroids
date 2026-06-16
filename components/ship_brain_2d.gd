@@ -52,6 +52,7 @@ func _init(c: ShipController) -> void:
 
 func _ready():
 	add_to_group("AGENT")
+	PolicyManager.reset_all_policies()
 	_score_before = controller.score
 	_health_before = controller.health
 
@@ -70,53 +71,26 @@ func get_obs() -> Dictionary:
 
 func get_reward() -> float:
 	var rewards: Dictionary[String, float] = {}
-	var now := Time.get_ticks_msec()
+	var context: Dictionary= _build_reward_context()
+	var unnamed_policy_count: int = 0 # Needed as a fallback so unnamed policies dont get lost.
 	
-	var score_delta := absi(_score_before - controller.score)
-	rewards["score_delta"] = score_delta 
-	assert(score_delta < 10, "There is a bug as the player should not be able to score that many points in a few physics ticks")
-	_score_before = controller.score
-
-	const health_delta_reward := -5.
-	var health_delta := absi(_health_before - controller.health)
-	rewards["health_delta"] = health_delta_reward * health_delta
-	assert(health_delta < 5, "There is a bug as the player should not be able to loose that much health in a few physics ticks")
-	_health_before = controller.health
-
-	# small negative reward for self damage
-	const self_damage_reward_factor := .3
-	if health_delta > 0 and controller.last_damage_was_self_damage:
-		rewards["self_damage"] = self_damage_reward_factor * health_delta_reward
-		controller.last_damage_was_self_damage = false
+	for policy in PolicyManager.policy_instances:
+		if policy == null or not policy.enabled: continue
+		var p_name = policy.policy_name
+		if p_name == "" or p_name == null:
+			unnamed_policy_count += 1
+			p_name = "unnamed policy %d" % unnamed_policy_count
+		var val := policy.evaluate(context)
+		rewards[p_name] = val
 	
-
-	const progress_multiplier := 0.05
-	if score_delta > 0:
-		_number_of_asteroids_destroyed_this_episode += score_delta
-		var reward_scale = progress_multiplier
-		if abs(now - _last_reset_time) < 60000: # time in msec
-			reward_scale *= 2
-		rewards["wave_clear_progress"] = _number_of_asteroids_destroyed_this_episode * reward_scale
+	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
-	# small negative reward for going too fast
-	const speed_reward := -1.
-	const speed_bump := 300.
-	const speed_rolling_size := 30. # 30 ticks = .5s
-	const speed_reduce := 5.
-	_speed_average = _speed_average * ((speed_rolling_size - 1.)/speed_rolling_size) + controller.currents_speed / speed_rolling_size
-
-
-	if _speed_average > speed_bump:
-		var speed_reward_scale = remap(controller.currents_speed, speed_bump, 1000., 0.2, 1.)
-		rewards["too_fast"] = speed_reward * speed_reward_scale
-		_speed_average = 0.
-	_speed_average = move_toward(_speed_average, 0., speed_reduce) #slowly reduce the average to allow for some speed variations
-
+	reward_updated.emit(reward)
+	for k in rewards.keys():
+		if _aggregator.has(k):	_aggregator[k] = _aggregator[k] + rewards[k]
+		else: 					_aggregator[k] = rewards[k]
 	
-	# small negative reward if the agent tried to shoot when no shots were available
-	const empty_mag_reward := -.3
-	if controller.current_shots == 0 && controller.shoot:
-		rewards["shoot_with_no_shots"] = empty_mag_reward
+	return sum
 	
 	# small reward if the booster is on
 	#const thrust_reward := .1
@@ -127,7 +101,7 @@ func get_reward() -> float:
 	# small negative reward if speed is too high
 	#const slow_reward := -.2
 	#const fast_speed := 600.
-	#if controller.currents_speed >= fast_speed:
+	#if controller.current_speed >= fast_speed:
 		#rewards["slow_and_steady"] = slow_reward
 	
 	# small negative reward if the ship had bullets left but took damage
@@ -147,18 +121,6 @@ func get_reward() -> float:
 	#if controller.current_shots >= controller.shots_max / 2.:
 		#rewards["use_shots"] = -.1
 	
-	# rolling average over the last n steps that tracks a bias in the ship turning
-	# small negative reward if the ship turns largely only in one direction
-	# TODO make this strong in the beginning to prevent excessive spinning and remove later on to allow for better controll
-	#var turn_bias_rolling_size := 50.
-	#_turn_average = _turn_average * ((turn_bias_rolling_size - 1.)/turn_bias_rolling_size) + controller.turn / turn_bias_rolling_size
-	#const max_turn_bias := 0.2
-	#const turn_bias_reduce := 0.01
-	#const max_turn_bias_reward := 0.1
-	#if abs(_turn_average) > max_turn_bias:
-		#rewards["turn_bias"] = -clamp(abs(_turn_average), 0., 1.)
-	#_turn_average = move_toward(_turn_average, 0., turn_bias_reduce) #slowly reduce the average to allow for permanent turning
-	
 	# bonus reward if the thrust was not used and no damage was taken
 	#if controller.thrust >= 0.001 || health_delta > 0:
 		#_last_thrust_time = now
@@ -172,19 +134,7 @@ func get_reward() -> float:
 	#if controller.thrust >= 0.001 and health_delta <= 0:
 		#if controller.sensor is SensorSuite and (controller.sensor as SensorSuite).ray_sensor.asteroid_is_close:
 			#rewards["dodging_asteroid"] = .1
-	
-	# small negative reward if too close to asteroids
-	if controller.sensor is SensorSuite && (controller.sensor as SensorSuite).ray_sensor.asteroid_is_close:
-		rewards["keep_distance_to_asteroids"] = -.1
-	
-	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
-	
-	reward_updated.emit(reward)
-	for k in rewards.keys():
-		if _aggregator.has(k):	_aggregator[k] = _aggregator[k] + rewards[k]
-		else: 					_aggregator[k] = rewards[k]
-	
-	return sum
+
 
 static var _known_rewards :Dictionary[String, float] = {}
 func _reward_string(rewards: Dictionary[String,float]) -> String:
@@ -297,3 +247,20 @@ func set_done_false():
 
 func zero_reward():
 	reward = 0.0
+
+func _build_reward_context() -> Dictionary:
+	var now := Time.get_ticks_msec()
+	var sensor := controller.sensor if controller.sensor is SensorSuite else null
+	var score_delta = controller.score - _score_before
+	var health_delta = controller.health - _health_before
+	  
+	var context := {
+		"now": now,
+		"controller": controller,
+		"sensor": sensor,
+		"score_delta": score_delta,
+		"health_delta": health_delta,
+		"last_reset_time": _last_reset_time,
+		"number_of_asteroids_destroyed_this_episode": _number_of_asteroids_destroyed_this_episode,
+	}
+	return context

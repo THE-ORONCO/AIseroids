@@ -22,6 +22,7 @@ buses/default_bus_layout="uid://dnsm760l76r6q"
 [autoload]
 
 Audio="*uid://duokd6sayynua"
+PolicyManager="*uid://b8xsb4d4ucuut"
 
 [dotnet]
 
