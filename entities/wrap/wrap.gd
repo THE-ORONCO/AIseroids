@@ -4,7 +4,6 @@ extends Area2D
 signal size_changed
 
 @export var fallback_size: Vector2 = Vector2(500., 500.)
-
 @export_range(1., 50.) var ship_size := 30.:
 	set(val):
 		ray_wrap.ship_size = val
@@ -40,13 +39,16 @@ func _ready() -> void:
 	ray_wrap.extent = extent
 	ray_wrap.ship_size = ship_size
 
-func do_fit_to_screen(fit_to_screen: bool = true) -> void:
+func do_fit_to_screen(fit_to_screen: bool = false) -> void:
 	if fit_to_screen:	_do_fit_to_screen()
 	else:				_fixed_size()
 
 func _do_fit_to_screen() -> void:
-	get_viewport().size_changed.connect(move_boundaries_to_screen_border)
-	get_viewport().size_changed.connect(size_changed.emit)
+	var size_changed_sig := get_viewport().size_changed
+	if !size_changed_sig.is_connected(move_boundaries_to_screen_border):
+		get_viewport().size_changed.connect(move_boundaries_to_screen_border)
+	if !size_changed_sig.is_connected(size_changed.emit):
+		get_viewport().size_changed.connect(size_changed.emit)
 	move_boundaries_to_screen_border.call_deferred()
 
 func _fixed_size() -> void:
@@ -72,9 +74,7 @@ func update_border_positions() -> void:
 
 func _resize_area_blocks() -> void:
 	const extra_padding := 100. # to prevent the escape of asteroids and ships that get pushed arround weirdly 
-	const extra_offset := extra_padding / 2.
 
-	var half_ship_size := ship_size / 2.
 	var bar_thickness := ship_size + extra_padding
 	var bar_y_offset :=  bar_thickness / 2.
 	var bar_x_offset := bar_thickness / 2.

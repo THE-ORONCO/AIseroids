@@ -19,8 +19,8 @@ var best: int = 0:
 			best_changed.emit(val)
 		best = val
 
-signal score_changed_for(new_score: int, team: Fight.Team)
-signal best_changed_for(new_best: int, team: Fight.Team)
+signal score_changed_for(new_score: int, team: S_Team)
+signal best_changed_for(new_best: int, team: S_Team)
 signal score_changed(new_score: int)
 signal best_changed(new_best: int)
 
@@ -44,4 +44,8 @@ func set_score(team: Fight.Team, value: int) -> void:
 		value = max(0, value)
 		score_changed_for.emit(value, team)
 		scores[team] = value
-		bests[team] = maxi(bests.get(team, 0), score)
+		var best_before: int = bests.get(team, 0)
+		if value > best_before:
+			bests[team] = value
+			best_changed_for.emit(value, team)
+		

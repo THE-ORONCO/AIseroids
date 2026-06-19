@@ -189,10 +189,10 @@ func _cast_wrapping(from: Vector2, to: Vector2, mask: int, max_depth := 3, depth
 		var distance := (result.position as Vector2 - from).length()
 		
 		if result.collider is RayWrap:
-			var wrap: RayWrap = result.collider
+			var wrap_border: RayWrap = result.collider
 			var hit_pos: Vector2 = result.position
 			var direction := (to - from).normalized()
-			var shift_delta := wrap.wrap_ray(hit_pos, to)
+			var shift_delta := wrap_border.wrap_ray(hit_pos, to)
 			
 			# recurse to the other side of the wrapping zone
 			var recurse_cast := _cast_wrapping(hit_pos + shift_delta, to + shift_delta, mask, 3, depth + 1)

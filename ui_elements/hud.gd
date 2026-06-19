@@ -5,19 +5,19 @@ extends MarginContainer
 
 @onready var teams: HBoxContainer = %Teams
 
-var shown_teams: Dictionary[Fight.Team, TeamScore]
+var shown_teams: Dictionary[S_Team, TeamScore]
 
 const TEAM_SCORE = preload("uid://bcjpw6eddpiff")
 
 
-func show_score(score: int, team: Fight.Team) -> void:
+func show_score(score: int, team: S_Team) -> void:
 	if !shown_teams.has(team):
 		add_team(team)
 
 	shown_teams[team].show_score(score)
 
 	
-func show_best(best: int, team: Fight.Team) -> void:
+func show_best(best: int, team: S_Team) -> void:
 	if !shown_teams.has(team):
 		add_team(team)
 	
@@ -32,7 +32,7 @@ func _ready() -> void:
 func resize_to_wrap() -> void:
 	self.custom_minimum_size = wrap_space.extent
 
-func add_team(team: Fight.Team) -> void:
+func add_team(team: S_Team) -> void:
 	if shown_teams.has(team):
 		return
 	

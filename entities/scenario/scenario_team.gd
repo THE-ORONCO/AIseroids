@@ -3,4 +3,4 @@ extends Resource
 
 
 @export var name: String
-@export_color_no_alpha var color: Color = Color(randf(), randf(), randf())
+@export_color_no_alpha var color: Color = Color.WHITE

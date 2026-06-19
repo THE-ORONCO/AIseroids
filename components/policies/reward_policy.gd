@@ -2,15 +2,10 @@
 class_name RewardPolicy
 extends Resource
 
-
-@export var enabled: bool = true
-@export var weight: float = 1.0:
-	set(value):
-		weight = max(0., value)
-@export var scale: float = 1.0:
-	set(value):
-		scale = max(0., value)
 @export var policy_name: String = ""
+@export var enabled: bool = true
+@export_range(0., 1., .1, "or_greater") var weight: float = 1.0
+@export_range(0., 1., .1, "or_greater") var scale: float = 1.0
 
 
 func evaluate(context: Dictionary) -> float:

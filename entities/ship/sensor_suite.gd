@@ -31,7 +31,7 @@ func _draw() -> void:
 	var a := to_local(self.global_position + Vector2(0,-100).rotated(_rotation_history[0] * PI))
 	draw_line(self.position, a, Color.YELLOW, 2)
 	
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	_ticks_since_last_history = (_ticks_since_last_history + 1) % number_of_ticks_to_skip_for_history
 	
 	# push new observations into the history queue

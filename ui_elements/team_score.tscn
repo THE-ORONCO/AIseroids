@@ -1,27 +1,47 @@
 [gd_scene format=3 uid="uid://bcjpw6eddpiff"]
 
+[ext_resource type="Theme" uid="uid://w4jagflgjplm" path="res://theme.tres" id="1_4fmvf"]
 [ext_resource type="Script" uid="uid://d27or7c6qc6hb" path="res://ui_elements/team_score.gd" id="1_i6044"]
 
-[node name="TeamScore" type="VBoxContainer" unique_id=171861336]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 2
-size_flags_vertical = 2
+[node name="PanelContainer" type="PanelContainer" unique_id=1144978298]
+offset_right = 4.0
+offset_bottom = 4.0
+theme = ExtResource("1_4fmvf")
 script = ExtResource("1_i6044")
 
-[node name="ScoreLabel" type="Label" parent="." unique_id=132312376]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=203303516]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="Valign" type="VBoxContainer" parent="MarginContainer" unique_id=171861336]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+alignment = 1
+
+[node name="TeamName" type="Label" parent="MarginContainer/Valign" unique_id=1196842021]
+unique_name_in_owner = true
+layout_mode = 2
+text = "teamnamefasdfasdfsdfs"
+vertical_alignment = 1
+clip_text = true
+uppercase = true
+
+[node name="ScoreLabel" type="Label" parent="MarginContainer/Valign" unique_id=132312376]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Score: 00000"
+vertical_alignment = 1
 
-[node name="BestLabel" type="Label" parent="." unique_id=643302715]
+[node name="BestLabel" type="Label" parent="MarginContainer/Valign" unique_id=643302715]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Best:   00000"
+vertical_alignment = 1

@@ -1,20 +1,17 @@
 extends PanelContainer
 
-const SPACE_MULTI = preload("uid://d07sfwm8fs1hr")
-
 @export var scenario: Scenario
 
-@onready var ai_demo_btn: Button = %AiDemoBtn
+@onready var ai_demo_btn: Button = %AiVsAiBtn
 @onready var ai_1: AiSelector = %AI1
 @onready var ai_2: AiSelector = %AI2
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	ai_demo_btn.pressed.connect(func(): 
-		var space: SpaceMulti = SPACE_MULTI.instantiate()
+	ai_demo_btn.pressed.connect(func(): 		
 		var sno := prepare_scenario(scenario)
-		space.play_scenario(sno)
-		get_tree().change_scene_to_node(space)
+		var sp := ScenarioPlayer.new(sno)
+		get_tree().change_scene_to_node(sp)
 		)
 
 

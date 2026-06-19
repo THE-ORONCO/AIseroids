@@ -5,8 +5,10 @@
 [ext_resource type="AudioStream" uid="uid://dolj6x83l65oq" path="res://assets/sfx_wpn_noammo1.wav" id="3_vvo54"]
 
 [node name="Muzzle" type="Marker2D" unique_id=571023481]
-visible = false
 script = ExtResource("1_b073n")
+max_shots = null
+cooldown = null
+reload_time = null
 
 [node name="ShotCooldown" type="Timer" parent="." unique_id=443521892]
 unique_name_in_owner = true

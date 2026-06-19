@@ -1,10 +1,7 @@
 extends Control
 
-const SPACE_MULTI = preload("uid://d07sfwm8fs1hr")
 const SPACE: PackedScene = preload("uid://cujdj2kfjxl54")
 const TRAINING_GROUNDS: PackedScene = preload("uid://baw6jdbx8dn5d")
-const AI_SHOWCASE: PackedScene = preload("uid://d0wbaw1yq1f4t")
-const AI_DEMO_BUTTON = preload("uid://d0sqciovesnee")
 
 @onready var play_solo_button: Button = %PlaySoloButton
 @onready var start_training: Button = %StartTraining
@@ -28,10 +25,7 @@ func _ready() -> void:
 		)
 	
 	play_solo_button.pressed.connect(func(): get_tree().change_scene_to_packed(SPACE))
-	
-	
-	var models_dir := DirAccess.open("models")
-	
+		
 	onnx_file_db.scan_dir(default_model_dir)
 
 
@@ -41,12 +35,6 @@ func _get_field_size() -> Vector2i:
 		int(y_input.text) if y_input.text else 0,\
 	)
 
-func _create_button_for(onnx_model_path: String) -> Button:
-	var button_label := onnx_model_path.replace(default_model_dir.get_current_dir() + "/", "")
-	var button: AiDemoButton = AI_DEMO_BUTTON.instantiate()
-	button.text = button_label
-	button.when_pressed_change_to(AI_SHOWCASE, onnx_model_path)
-	return button
 
 func _update_agent_count(_input) -> void:
 	var field_size := _get_field_size()

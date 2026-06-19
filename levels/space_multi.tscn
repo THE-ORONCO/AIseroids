@@ -9,7 +9,6 @@
 
 [node name="SpaceMulti" type="Node2D" unique_id=930446752]
 script = ExtResource("1_khl3c")
-play_mode = true
 wave_size = 1
 wave_max_size_deviation = 0
 asteroid_spawn_delay = 5.0

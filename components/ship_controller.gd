@@ -24,6 +24,7 @@ func _init() -> void:
 	health = health_max
 
 func get_sensor_info() -> Array:
-	if sensor != null:
-		return sensor.get_observation()
+	if sensor:	return sensor.get_observation()
+	
+	assert(false, "should not happen")
 	return []

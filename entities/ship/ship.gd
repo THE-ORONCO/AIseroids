@@ -10,7 +10,7 @@ signal health_reached_zero
 		if health_manager:
 			health_manager.health_max = max_health
 
-@export var team :Fight.Team = Fight.Team.BLUE:
+@export var team: S_Team:
 	set(val):
 		_apply_team_color(val)
 		team = val
@@ -40,22 +40,12 @@ var _was_just_reset: bool = false
 
 const DEFAULT_MUZZLE: PackedScene = preload("uid://c2qcohstk8elv")
 
-## configure the ship using the ship scenario resource
-func configure(ship: S_Ship, ctrlr: ShipController) -> void:
-	self.max_health = ship.max_health
-	self.thruster_power = ship.thruster_power
-	self.strafe_power = ship.strafe_power
-	self.rotation_speed = ship.rotation_speed
-	self.max_velocity = ship.max_velocity
-	self.sensor_suit.debug = ship.show_debug
-	self.controller = ctrlr
-	## TODO team stuff self.team = ship.team
-
 ## resets the ship to its base state.
 ## the reset_position is in global coordinates
 func reset_ship(reset_position: Vector2 = Vector2.ZERO) -> void:
 	health_manager.reset_health()
 	muzzle.reset_weapon()
+	
 	self.set_deferred("linear_velocity", Vector2.ZERO)
 	self.set_deferred("angular_velocity", 0.)
 	self.set_deferred("rotation", 0.)
@@ -86,6 +76,25 @@ func _ready() -> void:
 	)
 	_apply_team_color(team)
 
+## configure the ship using the ship scenario resource
+func configure(blueprint: S_Ship, ctrlr: ShipController) -> void:
+	if blueprint:
+		self.max_health = blueprint.max_health
+		self.thruster_power = blueprint.thruster_power
+		self.strafe_power = blueprint.strafe_power
+		self.rotation_speed = blueprint.rotation_speed
+		self.max_velocity = blueprint.max_velocity
+		self.sensor_suit.debug = blueprint.show_debug
+		self.mass = blueprint.mass
+		self.team = blueprint.team
+		
+		self.muzzle.configure(blueprint.muzzle)
+	
+	if ctrlr:
+		self.controller = ctrlr
+		self.controller.sensor = sensor_suit
+	
+
 func _physics_process(delta: float) -> void:
 	_rotate(delta)
 	_thrust()
@@ -105,18 +114,10 @@ func _update_ship_info() -> void:
 	controller.shot_cooldown = muzzle.cooldown_left
 	controller.current_speed = sensor_suit.speed
 
-func _apply_team_color(team: Fight.Team) -> void:
-	if !ship_sprite:
+func _apply_team_color(new_team: S_Team) -> void:
+	if !ship_sprite || !new_team:
 		return
-	match team:
-			Fight.Team.BLUE:
-				ship_sprite.modulate = Color.BLUE
-			Fight.Team.RED:
-				ship_sprite.modulate = Color.RED
-			Fight.Team.GREEN:
-				ship_sprite.modulate = Color.GREEN
-			_:
-				ship_sprite.modulate = Color.WHITE
+	ship_sprite.modulate = new_team.color
 
 func _rotate(delta: float) -> void:
 	var rotation_input: float = controller.turn

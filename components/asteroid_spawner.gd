@@ -80,7 +80,7 @@ func clear_asteroids() -> void:
 	for asteroid : Asteroid in self.get_children().filter(func(c): return c is Asteroid):
 		asteroid.queue_free()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	_check_field_clear.call_deferred()
 
 func _check_field_clear() -> void:

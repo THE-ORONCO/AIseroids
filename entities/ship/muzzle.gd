@@ -1,7 +1,8 @@
 class_name Muzzle
 extends Marker2D
 
-@onready var shot: PackedScene = preload("uid://bgqdgtlshk4yf")
+const SHOT: PackedScene = preload("uid://bgqdgtlshk4yf")
+
 @export_range(1., 100.) var max_shots: int = 5
 @export_range(0.01, 2.) var cooldown: float = .3
 @export_range(0.1, 3.) var reload_time: float = 1.
@@ -12,6 +13,7 @@ extends Marker2D
 @onready var out_of_ammo: AudioStreamPlayer = $OutOfAmmo
 
 var _current_shots: int = 0
+var _shot_blueprint: S_Shot
 
 var current_shots: int:
 	get: return _current_shots
@@ -24,6 +26,13 @@ func _ready() -> void:
 	reset_weapon()
 	reload_timer.timeout.connect(_reload)
 
+func configure(blueprint: S_Muzzle) -> void:
+	self.max_shots = blueprint.max_shots
+	self.cooldown = blueprint.cooldown
+	self.reload_time = blueprint.reload_time
+	self._shot_blueprint = blueprint.shot
+	reset_weapon()
+
 func get_state_for_ai() -> Array:
 	return [
 		max_shots,
@@ -32,7 +41,7 @@ func get_state_for_ai() -> Array:
 		reload_timer.time_left,
 	]
 
-func fire(reference_velocity: Vector2, team: Fight.Team) -> void:
+func fire(reference_velocity: Vector2, team: S_Team) -> void:
 	if !shot_cooldown_timer.is_stopped():
 		#print("the weapon is on cooldown")
 		return
@@ -42,16 +51,16 @@ func fire(reference_velocity: Vector2, team: Fight.Team) -> void:
 		out_of_ammo.play()
 		return 
 
-	var bullet: Shot = shot.instantiate()
+	var bullet: Shot = SHOT.instantiate()
+	get_viewport().add_child(bullet)
 	bullet.add_to_group("SplitsAsteroids")
 	if bullet.damage > 0:
 		bullet.add_to_group("DamageCollider")
 	bullet.transform = self.global_transform
 	bullet.linear_velocity = reference_velocity
-	bullet.team = team  
+	bullet.configure(self._shot_blueprint, team)
 	bullet.set_meta("origin", self.get_path())
 	
-	get_viewport().add_child(bullet)
 	
 	_current_shots -= 1
 	shot_cooldown_timer.start()

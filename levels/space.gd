@@ -5,7 +5,7 @@ extends Node2D
 
 ## this decides if this is a highscore game or if all progress is reset after the time is up.
 @export var play_mode: bool = false
-@export var fit_to_screen := true
+@export var fit_to_screen := false
 
 @export_group("asteroid spawning")
 ## The delay in seconds after which the space checks if new asteroids should spawn.

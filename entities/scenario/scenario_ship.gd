@@ -20,6 +20,9 @@ extends Resource
 @export_group("stats")
 ## max health of the ship
 @export_range(0, 20) var max_health: int = 5
+@export_range(0.01, 10.) var mass: float = 1.
+@export var muzzle: S_Muzzle = S_Muzzle.new()
+
 
 @export_subgroup("movement")
 @export_range(1., 3000., 1., "or_greater") 	var thruster_power: float 	= 500.

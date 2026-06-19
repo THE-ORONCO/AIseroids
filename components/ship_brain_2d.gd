@@ -38,11 +38,8 @@ var needs_reset := false
 
 var _score_before := 0
 var _health_before := 0
-var _last_thrust_time := Time.get_ticks_msec()
-var _last_score_time := Time.get_ticks_msec()
 var _last_reset_time := Time.get_ticks_msec()
 var _turn_average := 0.
-var _speed_average := 0.
 var _number_of_asteroids_destroyed_this_episode := 0.
 
 var _aggregator: Dictionary[String, float] = {}
@@ -66,20 +63,20 @@ func get_obs() -> Dictionary:
 	#print(ship_info)
 	obs.append_array(sensor_info)
 	
+	assert(obs.size() == 619, "wrong amount of observations")
+	
 	return {"obs": obs}
 
 
 func get_reward() -> float:
 	var rewards: Dictionary[String, float] = {}
 	var context: Dictionary= _build_reward_context()
-	var unnamed_policy_count: int = 0 # Needed as a fallback so unnamed policies dont get lost.
 	
 	for policy in PolicyManager.policy_instances:
 		if policy == null or not policy.enabled: continue
 		var p_name = policy.policy_name
-		if p_name == "" or p_name == null:
-			unnamed_policy_count += 1
-			p_name = "unnamed policy %d" % unnamed_policy_count
+		if p_name == "" or p_name == null:		
+			p_name = "unnamed %s" % [(get_script() as Script).get_global_name()]
 		var val := policy.evaluate(context)
 		rewards[p_name] = val
 	

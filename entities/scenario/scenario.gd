@@ -7,12 +7,17 @@ extends Resource
 ## They will be spawned in a circle in the center of the play field.
 @export var ships: Array[S_Ship] = []
 
+@export_group("learning")
+@export var policies: Array[RewardPolicy] = []
 
 @export_group("gameplay")
 @export var limit_time: bool = false
 ## The amount of time that is available to clear the wave.
 @export_range(0, 120, .1, "or_greater") var time_clear_max_time: float = 120
-
+## if the play field should be fit to the screen
+@export var fit_to_screen := false
+## the extent to be used for the playfield if it does not fit to screen
+@export var playfield_extent := Vector2(1000, 1000)
 
 @export_group("asteroid spawning")
 ## The delay in seconds after which the space checks if new asteroids should spawn.
@@ -30,8 +35,6 @@ extends Resource
 
 
 @export_group("visuals & sfx")
-## if the play field should be fit to the screen
-@export var fit_to_screen := true
 ## if debug graphics should be shown
 @export var debug_info := false
 ## if the sounds should be muted globally
