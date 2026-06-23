@@ -3,7 +3,7 @@ extends Node
 
 
 const POLICIES_FOLDER_PATH: String = "res://components/policies/"
-var policy_instances: Array[RewardPolicy] = []
+var policy_instances: Dictionary[String, RewardPolicy] = {}
 
 func _ready() -> void:
 	_discover_and_instantiate_policies()
@@ -23,12 +23,11 @@ func _discover_and_instantiate_policies() -> void:
 			if script:
 				var instance = script.new()
 				if instance is RewardPolicy:
-					policy_instances.append(instance)
+					policy_instances.set(instance.policy_name, instance)
 		file_name = dir.get_next()
 	dir.list_dir_end()
-	print(policy_instances)
 
 ## Should be called each episode start
 func reset_all_policies() -> void:
-	for p in policy_instances:
+	for p: RewardPolicy in policy_instances.values():
 		if p: p.reset()

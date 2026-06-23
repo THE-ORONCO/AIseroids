@@ -1,6 +1,7 @@
 class_name WaveClearProgressPolicy
 extends RewardPolicy
 
+
 @export var progress_multiplier: float = 0.05
 @export var early_progress_bonus: float = 2.0
 @export var early_progress_window_msec: int = 60000
@@ -9,8 +10,6 @@ extends RewardPolicy
 
 var _asteroids_destroyed: float = 0.0
 
-func _init():
-	policy_name = "wave_clear_progress"
 
 func evaluate_unmodified(context: Dictionary) -> float:
 	assert(context.has("score_delta"), "Missing required context key: score_delta")

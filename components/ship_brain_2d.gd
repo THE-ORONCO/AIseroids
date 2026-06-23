@@ -70,15 +70,13 @@ func get_obs() -> Dictionary:
 
 func get_reward() -> float:
 	var rewards: Dictionary[String, float] = {}
-	var context: Dictionary= _build_reward_context()
+	var context: Dictionary = _build_reward_context()
 	
-	for policy in PolicyManager.policy_instances:
+	for policy_key in PolicyManager.policy_instances:
+		var policy: RewardPolicy = PolicyManager[policy_key]
 		if policy == null or not policy.enabled: continue
-		var p_name = policy.policy_name
-		if p_name == "" or p_name == null:		
-			p_name = "unnamed %s" % [(get_script() as Script).get_global_name()]
 		var val := policy.evaluate(context)
-		rewards[p_name] = val
+		rewards[policy_key] = val
 	
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
 	
@@ -247,9 +245,12 @@ func zero_reward():
 
 func _build_reward_context() -> Dictionary:
 	var now := Time.get_ticks_msec()
-	var sensor := controller.sensor if controller.sensor is SensorSuite else null
+	assert(controller.sensor is SensorSuite, "Controller sensor must be of type SensorSuite")
+	var sensor := controller.sensor as SensorSuite 
 	var score_delta = controller.score - _score_before
+	assert(abs(score_delta) < 5, "Score changed by an unreasonable amount in a few physics ticks")
 	var health_delta = controller.health - _health_before
+	assert(abs(health_delta) < 5, "Health changed by an unreasonable amount in a few physics ticks")
 	  
 	var context := {
 		"now": now,

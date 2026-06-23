@@ -2,9 +2,6 @@ class_name SelfDamagePolicy
 extends RewardPolicy
 
 
-func _init():
-	policy_name = "self_damage"
-
 func evaluate_unmodified(context: Dictionary) -> float:
 	assert(context.has("controller"), "Missing required context key: controller")
 	assert(context.has("health_delta"), "Missing required context key: health_delta")
