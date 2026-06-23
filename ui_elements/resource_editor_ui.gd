@@ -27,17 +27,17 @@ func _build() -> void:
 		var hint_string := String(p.hint_string)
 		
 		if !(usage & PropertyUsageFlags.PROPERTY_USAGE_SCRIPT_VARIABLE):
-			continue		
-
+			continue
+		
+		if prop_name.begins_with("_"):
+			continue
+		
 		var editor := _make_editor_for_type(target, typ, prop_name, p)
 		if editor == null:
 			continue
 		editor.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-
 		self.add_child(editor)
-		
-		
-		
+
 
 static func _make_editor_for_type(res: Resource, typ: int, prop_name: String, p: Dictionary) -> Control:
 	var v = res.get(prop_name)
@@ -59,8 +59,8 @@ static func _make_editor_for_type(res: Resource, typ: int, prop_name: String, p:
 	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 	var label := Label.new()
-	label.text = prop_name
-	label.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	label.text = "- " + prop_name
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(label)
 	
 	# bool		

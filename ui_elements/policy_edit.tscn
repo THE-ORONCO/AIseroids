@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://q57ustllbxm6"]
+
+[ext_resource type="Script" uid="uid://cyyebf8hi1lu" path="res://ui_elements/policy_edit.gd" id="1_mgvdd"]
+
+[node name="PolicyEdit" type="VBoxContainer" unique_id=1439417985]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_mgvdd")
+
+[node name="Header" type="HBoxContainer" parent="." unique_id=766627495]
+layout_mode = 2
+
+[node name="PolicyName" type="Button" parent="Header" unique_id=519309155]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Policy Name"
+alignment = 0
+
+[node name="CheckBox" type="CheckBox" parent="Header" unique_id=193383115]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1924842003]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="ParameterContainer" type="VBoxContainer" parent="MarginContainer" unique_id=2042056653]
+layout_mode = 2
