@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="PolicyCollection" format=3 uid="uid://cbfvd3iuuvb7o"]
+
+[ext_resource type="Script" uid="uid://i3uqldsfkuix" path="res://components/policies/reward_policy.gd" id="1_qhq8m"]
+[ext_resource type="Script" uid="uid://bp0thtlrxfp4" path="res://components/policies/wave_clear_progress_policy.gd" id="2_qsktm"]
+[ext_resource type="Script" uid="uid://c7tjn2kvfdfhb" path="res://components/policies/turn_bias_policy.gd" id="3_wihj1"]
+[ext_resource type="Script" uid="uid://b812ny6yi6yg" path="res://components/policies/health_delta_policy.gd" id="4_qdum2"]
+[ext_resource type="Script" uid="uid://civir3yaraemi" path="res://components/policies/empty_mag_policy.gd" id="5_yakav"]
+[ext_resource type="Script" uid="uid://0s4cqfsxa3o5" path="res://components/policies/self_damage_policy.gd" id="6_e16ht"]
+[ext_resource type="Script" uid="uid://vj1mdesmpujf" path="res://components/policies/score_delta_policy.gd" id="7_1322e"]
+[ext_resource type="Script" uid="uid://bubxsx618d4og" path="res://components/policies/too_fast_policy.gd" id="8_q72hi"]
+[ext_resource type="Script" uid="uid://cx6t5l3ik6dqj" path="res://components/policies/keep_distance_policy.gd" id="9_3i3t1"]
+[ext_resource type="Script" uid="uid://c120me0uacck0" path="res://components/policy_collection.gd" id="10_8eal0"]
+
+[sub_resource type="Resource" id="Resource_pq0gm"]
+script = ExtResource("5_yakav")
+policy_name = "empty_mag_policy"
+
+[sub_resource type="Resource" id="Resource_nqctg"]
+script = ExtResource("4_qdum2")
+policy_name = "health_delta_policy"
+
+[sub_resource type="Resource" id="Resource_m25sq"]
+script = ExtResource("9_3i3t1")
+policy_name = "keep_distance_policy"
+
+[sub_resource type="Resource" id="Resource_kvrbq"]
+script = ExtResource("7_1322e")
+policy_name = "score_delta_policy"
+
+[sub_resource type="Resource" id="Resource_gm7uh"]
+script = ExtResource("6_e16ht")
+policy_name = "self_damage_policy"
+
+[sub_resource type="Resource" id="Resource_yjpih"]
+script = ExtResource("8_q72hi")
+policy_name = "too_fast_policy"
+
+[sub_resource type="Resource" id="Resource_b3s8m"]
+script = ExtResource("3_wihj1")
+policy_name = "turn_bias_policy"
+
+[sub_resource type="Resource" id="Resource_fvyq0"]
+script = ExtResource("2_qsktm")
+policy_name = "wave_clear_progress_policy"
+
+[resource]
+script = ExtResource("10_8eal0")
+policy_dict = Dictionary[String, ExtResource("1_qhq8m")]({
+"empty_mag_policy": SubResource("Resource_pq0gm"),
+"health_delta_policy": SubResource("Resource_nqctg"),
+"keep_distance_policy": SubResource("Resource_m25sq"),
+"score_delta_policy": SubResource("Resource_kvrbq"),
+"self_damage_policy": SubResource("Resource_gm7uh"),
+"too_fast_policy": SubResource("Resource_yjpih"),
+"turn_bias_policy": SubResource("Resource_b3s8m"),
+"wave_clear_progress_policy": SubResource("Resource_fvyq0")
+})
