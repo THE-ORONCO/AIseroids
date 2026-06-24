@@ -40,7 +40,9 @@ func _build() -> void:
 			check_box.toggled.connect(func(val: bool): target.set(fp.prop_name, val))
 			continue
 		
-		var parameter := _make_editor_for_type(target, fp)
+		var value: Variant = target.get(fp.prop_name)
+		var setter := func(val): target.set(fp.prop_name, val)
+		var parameter := _make_editor_for_type(value, setter, fp)
 		if parameter == null:
 			continue
 		parameter.size_flags_horizontal = Control.SIZE_EXPAND_FILL

@@ -42,16 +42,17 @@ func _build() -> void:
 		
 		if fp.prop_name.begins_with("_"):
 			continue
-		
-		var editor := _make_editor_for_type(target, fp)
+		var value: Variant = target.get(fp.prop_name)
+		var setter := func(val): 
+			target.set(fp.prop_name, val)
+		var editor := _make_editor_for_type(value, setter, fp)
 		if editor == null:
 			continue
 		editor.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		self.add_child(editor)
 
-
-static func _make_editor_for_type(res: Resource, p: FieldProps) -> Control:
-	var v = res.get(p.prop_name)
+## the callable should just accept the new value and return nothing
+static func _make_editor_for_type(v: Variant, setter: Callable, p: FieldProps) -> Control:
 
 	if p.typ == TYPE_ARRAY:
 		return _array_control(v, p)
@@ -75,7 +76,7 @@ static func _make_editor_for_type(res: Resource, p: FieldProps) -> Control:
 	if p.typ == TYPE_BOOL:
 		var cb := CheckBox.new()
 		cb.button_pressed = bool(v)
-		cb.toggled.connect(func(val: bool): res.set(p.prop_name, val))
+		cb.toggled.connect(setter)
 		row.add_child(cb)
 		return row
 
@@ -86,7 +87,7 @@ static func _make_editor_for_type(res: Resource, p: FieldProps) -> Control:
 		sb.min_value = -2147483648
 		sb.max_value = 2147483647
 		sb.value = int(v)
-		sb.value_changed.connect(func(val: float): res.set(p.prop_name, int(val)))
+		sb.value_changed.connect(setter)
 		row.add_child(sb)
 		return row
 
@@ -97,7 +98,7 @@ static func _make_editor_for_type(res: Resource, p: FieldProps) -> Control:
 		sb.min_value = -1000000000.0
 		sb.max_value = 1000000000.0
 		sb.value = float(v)
-		sb.value_changed.connect(func(val: float): res.set(p.prop_name, val))
+		sb.value_changed.connect(setter)
 		row.add_child(sb)
 		return row
 
@@ -105,7 +106,8 @@ static func _make_editor_for_type(res: Resource, p: FieldProps) -> Control:
 	if p.typ == TYPE_STRING:
 		var le := LineEdit.new()
 		le.text = str(v)
-		le.text_changed.connect(func(val: String): res.set(p.prop_name, val))
+		le.text_submitted.connect(setter)
+		le.text_changed.connect(setter)
 		row.add_child(le)
 		return row
 
@@ -119,9 +121,9 @@ static func _make_editor_for_type(res: Resource, p: FieldProps) -> Control:
 		x.value = v.x
 		y.value = v.y
 		x.value_changed.connect(func(val: float):
-			res.set(p.prop_name, Vector2(val, y.value)))
+			setter.call(Vector2(val, y.value)))
 		y.value_changed.connect(func(val: float):
-			res.set(p.prop_name, Vector2(x.value, val)))
+			setter.call(Vector2(x.value, val)))
 		c.add_child(x); c.add_child(y)
 		row.add_child(c)
 		return row
@@ -130,7 +132,7 @@ static func _make_editor_for_type(res: Resource, p: FieldProps) -> Control:
 	if p.typ == TYPE_COLOR:
 		var cp := ColorPickerButton.new()
 		cp.color = v
-		cp.color_changed.connect(func(col: Color): res.set(p.prop_name, col))
+		cp.color_changed.connect(setter)
 		row.add_child(cp)
 		return row
 
@@ -184,6 +186,7 @@ static func _array_control(array: Array, p: FieldProps) -> Control:
 			#recurse.target = val
 			#vbox.add_child(recurse)
 			return _object_control(val, fp)
+		# TODO do this for the rest of the types
 	fold.fold()
 	return fold
 
