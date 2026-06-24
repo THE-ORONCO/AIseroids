@@ -3,21 +3,71 @@
 [ext_resource type="Script" uid="uid://bd1djwacfi835" path="res://ui_elements/main_menu.gd" id="1_vecha"]
 [ext_resource type="Script" uid="uid://dmqh1ocwln0r5" path="res://components/onnx_file_db.gd" id="2_ovtgx"]
 [ext_resource type="Script" uid="uid://f7wxq248cbgx" path="res://ui_elements/ai_demo/solo_ai_demo_pannel.gd" id="3_3c7g6"]
+[ext_resource type="Script" uid="uid://dnedwfllgyfav" path="res://ui_elements/train_panel.gd" id="3_13ucg"]
 [ext_resource type="PackedScene" uid="uid://cbcjt4hg011py" path="res://ui_elements/ai_selector.tscn" id="3_ovtgx"]
 [ext_resource type="Script" uid="uid://i3uqldsfkuix" path="res://components/policies/reward_policy.gd" id="4_c58ti"]
-[ext_resource type="Script" uid="uid://bvw4yradmltby" path="res://entities/scenario/scenario.gd" id="4_y6ahl"]
-[ext_resource type="Script" uid="uid://by2mdqrrhfsa3" path="res://entities/scenario/scenario_ship.gd" id="5_iavgl"]
+[ext_resource type="Script" uid="uid://c3ox7qlsgn0i6" path="res://components/training/hyper_params.gd" id="4_pp7ww"]
+[ext_resource type="Script" uid="uid://bvw4yradmltby" path="res://components/scenario/scenario.gd" id="4_y6ahl"]
+[ext_resource type="Script" uid="uid://by2mdqrrhfsa3" path="res://components/scenario/scenario_ship.gd" id="5_iavgl"]
 [ext_resource type="Script" uid="uid://mns1wrjgs0vl" path="res://ui_elements/ai_demo/ai_vs_ai_demo_panel.gd" id="5_v0w7t"]
-[ext_resource type="Script" uid="uid://vybsjiuth0xg" path="res://entities/scenario/scenario_muzzle.gd" id="7_c58ti"]
-[ext_resource type="Script" uid="uid://k2y5frwnrrwx" path="res://entities/scenario/scenario_team.gd" id="7_iteyy"]
-[ext_resource type="Script" uid="uid://whenjsnth0xi" path="res://entities/scenario/control_mode_inference.gd" id="8_iavgl"]
+[ext_resource type="Script" uid="uid://b812ny6yi6yg" path="res://components/policies/health_delta_policy.gd" id="6_1kwqo"]
+[ext_resource type="Script" uid="uid://vybsjiuth0xg" path="res://components/scenario/scenario_muzzle.gd" id="7_c58ti"]
+[ext_resource type="Script" uid="uid://dnpjairwsvvow" path="res://components/scenario/control_mode_training.gd" id="7_hkaby"]
+[ext_resource type="Script" uid="uid://k2y5frwnrrwx" path="res://components/scenario/scenario_team.gd" id="7_iteyy"]
+[ext_resource type="Script" uid="uid://whenjsnth0xi" path="res://components/scenario/control_mode_inference.gd" id="8_iavgl"]
 [ext_resource type="Script" uid="uid://bssvsd1t72ym" path="res://ui_elements/policy_editor_ui.gd" id="12_4h2b7"]
+[ext_resource type="Script" uid="uid://b1oyqaj8c2ekd" path="res://components/training/training_run.gd" id="12_ap04m"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_b2u01"]
 font_size = 40
 outline_size = 10
 outline_color = Color(0.35686275, 0.8862745, 0.95686275, 1)
 shadow_size = 0
+
+[sub_resource type="Resource" id="Resource_4undi"]
+script = ExtResource("4_pp7ww")
+metadata/_custom_type_script = "uid://c3ox7qlsgn0i6"
+
+[sub_resource type="Resource" id="Resource_11bt4"]
+script = ExtResource("6_1kwqo")
+metadata/_custom_type_script = "uid://b812ny6yi6yg"
+
+[sub_resource type="Resource" id="Resource_gddxo"]
+script = ExtResource("7_hkaby")
+metadata/_custom_type_script = "uid://dnpjairwsvvow"
+
+[sub_resource type="Resource" id="Resource_n2k7i"]
+script = ExtResource("7_c58ti")
+metadata/_custom_type_script = "uid://vybsjiuth0xg"
+
+[sub_resource type="Resource" id="Resource_iy840"]
+script = ExtResource("7_iteyy")
+metadata/_custom_type_script = "uid://k2y5frwnrrwx"
+
+[sub_resource type="Resource" id="Resource_e3s60"]
+script = ExtResource("5_iavgl")
+name = "testy"
+mode = SubResource("Resource_gddxo")
+team = SubResource("Resource_iy840")
+mute = true
+muzzle = SubResource("Resource_n2k7i")
+metadata/_custom_type_script = "uid://by2mdqrrhfsa3"
+
+[sub_resource type="Resource" id="Resource_ewwjc"]
+script = ExtResource("4_y6ahl")
+ships = Array[ExtResource("5_iavgl")]([SubResource("Resource_e3s60")])
+metadata/_custom_type_script = "uid://bvw4yradmltby"
+
+[sub_resource type="Resource" id="Resource_csuuw"]
+script = ExtResource("12_ap04m")
+experiment_name = "testy"
+scenario = SubResource("Resource_ewwjc")
+horizontal_spaces = 1
+vertical_spaces = 1
+policies = Array[ExtResource("4_c58ti")]([SubResource("Resource_11bt4")])
+hyper_params = SubResource("Resource_4undi")
+timesteps = null
+metadata/_custom_type_script = "uid://b1oyqaj8c2ekd"
 
 [sub_resource type="Resource" id="Resource_hkaby"]
 script = ExtResource("8_iavgl")
@@ -189,6 +239,8 @@ text = "Highscore"
 [node name="Train Panel" type="VBoxContainer" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels" unique_id=287760998]
 layout_mode = 2
 size_flags_horizontal = 6
+script = ExtResource("3_13ucg")
+trainging_run = SubResource("Resource_csuuw")
 
 [node name="Label" type="Label" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel" unique_id=365279229]
 layout_mode = 2

@@ -73,7 +73,7 @@ func get_reward() -> float:
 	var context: Dictionary = _build_reward_context()
 	
 	for policy_key in PolicyManager.policy_instances:
-		var policy: RewardPolicy = PolicyManager[policy_key]
+		var policy := PolicyManager.policy_instances[policy_key]
 		if policy == null or not policy.enabled: continue
 		var val := policy.evaluate(context)
 		rewards[policy_key] = val
@@ -217,6 +217,7 @@ func reset():
 	# print aggregate reward over training run
 	var now := Time.get_ticks_msec()
 	var sum: float = _aggregator.values().reduce(func(a,b): return a+b, 0.)
+	# TODO propagate the information on the specific training run + grid position here somehow
 	print_rich("[b]%s[/b], %8d,\t%4.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(_aggregator)])
 	for k in _aggregator.keys():
 		_aggregator.set(k, 0.)

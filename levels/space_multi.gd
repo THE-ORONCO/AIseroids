@@ -94,8 +94,7 @@ func configure(blueprint: Scenario) -> void:
 	# TODO use these somehow
 	blueprint.debug_info
 	blueprint.mute_sounds
-	blueprint.policies
-	reset_playfield()
+	reset_playfield(false)
 
 func spawn_or_wait():
 	if asteroid_spawner.get_child_count() < target_asteroid_instances:

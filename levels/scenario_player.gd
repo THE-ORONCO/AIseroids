@@ -1,7 +1,7 @@
+## Utility class to simply play one scenario for players and inference
 class_name ScenarioPlayer
-extends Node
+extends Node2D
 
-const SHIP = preload("uid://cunuddi5si8ua")
 const SPACE_MULTI = preload("uid://d07sfwm8fs1hr")
 const Sync: Script = preload("uid://cecwd02nv3ery")
 
@@ -19,4 +19,3 @@ func _ready() -> void:
 		var sync: Sync = Sync.new()
 		sync.action_repeat = 1
 		self.add_child(sync)
-	

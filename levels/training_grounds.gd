@@ -1,19 +1,18 @@
 class_name TrainingGrounds
 extends Node2D
 
-const WRAP = preload("uid://dq5kaans1s87n")
-const SHIP = preload("uid://cunuddi5si8ua")
-const TRAINING_SPACE = preload("uid://6k24nqcbijxg")
-
-@export_range(1, 16) var x: int = 4
-@export_range(1, 9) var y: int = 3 
+@export var training_run: TrainingRun
 @export_range(1, 500) var padding: int = 500
 
 @onready var camera: Camera2D = %Camera
 @onready var agent_label: Label = %AgentLabel
 @onready var end_ratios: Label = %EndRatios
 
-var spaces: Array[Space] = []
+const SPACE_MULTI: PackedScene = preload("uid://d07sfwm8fs1hr")
+const Sync: Script = preload("uid://cecwd02nv3ery")
+
+
+var spaces: Array[SpaceMulti] = []
 var _camera_tween: Tweener = null
 var _zoom_tween: Tweener = null
 var _current_agent := 0
@@ -37,9 +36,14 @@ var _self_kills := 0.:
 		update_ratios()
 
 func _ready() -> void:
+	var scenario := training_run.scenario
+	
 	for bus_i in range(AudioServer.bus_count):
 		AudioServer.set_bus_mute(bus_i, true)
 	
+	
+	var y := training_run.vertical_spaces
+	var x := training_run.horizontal_spaces
 	for dy: int in range(y):
 		for dx: int in range(x):
 			var viewportContainer := SubViewportContainer.new()
@@ -50,9 +54,7 @@ func _ready() -> void:
 			viewport.disable_3d = true
 			viewportContainer.add_child(viewport)
 			
-			
-			var space: Space = TRAINING_SPACE.instantiate()
-			space.ai_mode = Space.AiMode.LEARNING
+			var space: SpaceMulti = SPACE_MULTI.instantiate()
 			viewport.add_child(space)
 			
 			# add metadata for clean logging
@@ -60,8 +62,8 @@ func _ready() -> void:
 			for child in space.get_children():
 				child.set_meta("agent_no", dy * x + dx)
 			
-			var playfield_width := space.wrap.extent.x
-			var playfield_height := space.wrap.extent.y
+			var playfield_width := space.wrap_border.extent.x
+			var playfield_height := space.wrap_border.extent.y
 			
 			var xi := padding + (playfield_width + padding) * dx
 			var yi := padding + (playfield_height + padding) * dy
@@ -77,10 +79,16 @@ func _ready() -> void:
 			space.end_through_timeout.connect(func(): _timeouts += 1.)
 			space.end_through_win.connect(func(): _wins += 1.)
 			
+			space.configure(scenario)
+
 			spaces.append(space)
 
 	place_camera.call_deferred(_current_agent)
 	update_label.call_deferred()
+	#
+	#var sync = Sync.new()
+	#sync.action_repeat = training_run.action_repeat
+	#self.add_child.call_deferred(sync)
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_right"):
@@ -122,7 +130,7 @@ func update_ratios() -> void:
 func place_camera(agent_no: int) -> void:
 	var actual_agent_no := clampi(agent_no, 0, spaces.size() - 1)
 	var space := spaces[actual_agent_no]
-	var field_middle := space.global_position + space.wrap.extent / 2.
+	var field_middle := space.global_position + space.wrap_border.extent / 2.
 	
 	if _camera_tween:
 		_camera_tween.free()

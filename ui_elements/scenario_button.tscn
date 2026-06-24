@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://c2wxhqwot22fk"]
+
+[ext_resource type="Script" uid="uid://b6r5q87vm1k4j" path="res://ui_elements/resource_editor_ui.gd" id="1_7ow4n"]
+[ext_resource type="Script" uid="uid://dnpjairwsvvow" path="res://components/scenario/control_mode_training.gd" id="2_u40n5"]
+[ext_resource type="Script" uid="uid://vybsjiuth0xg" path="res://components/scenario/scenario_muzzle.gd" id="3_dc8v8"]
+[ext_resource type="Script" uid="uid://by2mdqrrhfsa3" path="res://components/scenario/scenario_ship.gd" id="4_883ih"]
+[ext_resource type="Script" uid="uid://k2y5frwnrrwx" path="res://components/scenario/scenario_team.gd" id="5_tx7hp"]
+
+[sub_resource type="Resource" id="Resource_4undi"]
+script = ExtResource("2_u40n5")
+metadata/_custom_type_script = "uid://dnpjairwsvvow"
+
+[sub_resource type="Resource" id="Resource_11bt4"]
+script = ExtResource("3_dc8v8")
+metadata/_custom_type_script = "uid://vybsjiuth0xg"
+
+[sub_resource type="Resource" id="Resource_gddxo"]
+script = ExtResource("5_tx7hp")
+metadata/_custom_type_script = "uid://k2y5frwnrrwx"
+
+[sub_resource type="Resource" id="Resource_n2k7i"]
+script = ExtResource("4_883ih")
+mode = SubResource("Resource_4undi")
+team = SubResource("Resource_gddxo")
+muzzle = SubResource("Resource_11bt4")
+metadata/_custom_type_script = "uid://by2mdqrrhfsa3"
+
+[node name="ScenarioButton" type="Button" unique_id=1059050598]
+
+[node name="PopupMenu" type="PopupPanel" parent="." unique_id=1383079053]
+unique_name_in_owner = true
+oversampling_override = 1.0
+visible = true
+
+[node name="ResourceUI" type="VBoxContainer" parent="PopupMenu" unique_id=1903227542]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 96.0
+size_flags_horizontal = 3
+script = ExtResource("1_7ow4n")
+target = SubResource("Resource_n2k7i")
+metadata/_custom_type_script = "uid://b6r5q87vm1k4j"

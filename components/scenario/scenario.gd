@@ -7,9 +7,6 @@ extends Resource
 ## They will be spawned in a circle in the center of the play field.
 @export var ships: Array[S_Ship] = []
 
-@export_group("learning")
-@export var policies: Array[RewardPolicy] = []
-
 @export_group("gameplay")
 @export var limit_time: bool = false
 ## The amount of time that is available to clear the wave.
