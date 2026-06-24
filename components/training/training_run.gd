@@ -22,9 +22,9 @@ extends Resource
 ## where to save the onnx model to (relative to the models folder) TODO
 @export var onnx_export_path: String
 ## how often snapshots of the model are saved TODO
-@export_range(0, 100000, 100, "or_greater") var save_checkpoint_frequency: int = 50000  
+@export_range(0, 100_000, 100, "or_greater") var save_checkpoint_frequency: int = 50000  
 ## how long to run the training for TODO
-@export_range(0, 1000000000,1000, "or_greater") var timesteps
+@export_range(0, 1_000_000_000,1000, "or_greater") var timesteps: int = 1_000_000
 
 @export_group("variable learning params")
 ## if the learning rate should decrease linearly to 0 over the training run TODO

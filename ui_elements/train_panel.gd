@@ -3,10 +3,12 @@ extends VBoxContainer
 
 @export var trainging_run: TrainingRun
 
+@onready var number_of_agents: Label = %NumberOfAgents
+
 @onready var x_input: LineEdit = %XInput
 @onready var y_input: LineEdit = %YInput
 @onready var start_training: Button = %StartTraining
-@onready var number_of_agents: Label = %NumberOfAgents
+
 
 const TRAINING_GROUNDS: PackedScene = preload("uid://baw6jdbx8dn5d")
 
@@ -21,6 +23,7 @@ func _ready() -> void:
 		training_grounds.training_run = trainging_run
 		get_tree().change_scene_to_node(training_grounds)
 		)
+		
 
 func _get_field_size() -> Vector2i:
 	return Vector2i(\

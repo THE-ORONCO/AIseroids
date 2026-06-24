@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://6eyrpuclq763"]
+
+[ext_resource type="Script" uid="uid://c6c5i6nvnc822" path="res://ui_elements/training_run_edit/training_run_edit.gd" id="1_6se1q"]
+[ext_resource type="Script" uid="uid://b6r5q87vm1k4j" path="res://ui_elements/resource_editor_ui.gd" id="2_sp8ai"]
+
+[node name="TrainingRunEdit" type="ConfirmationDialog" unique_id=2133770567]
+oversampling_override = 1.0
+title = "Configure training Run"
+position = Vector2i(0, 36)
+ok_button_text = "Confirm"
+cancel_button_text = "Reset"
+script = ExtResource("1_6se1q")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=893894524]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 192.0
+offset_bottom = 51.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ResourceUI" type="VBoxContainer" parent="ScrollContainer" unique_id=1301961414]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("2_sp8ai")
+metadata/_custom_type_script = "uid://b6r5q87vm1k4j"
