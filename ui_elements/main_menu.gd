@@ -7,8 +7,10 @@ enum FileDialogMode {
 }
 
 const SPACE: PackedScene = preload("uid://cujdj2kfjxl54")
+const TRAINING_GROUNDS = preload("uid://baw6jdbx8dn5d")
 
 @onready var play_solo_button: Button = %PlaySoloButton
+@onready var start_training: Button = %StartTraining
 @onready var policy_editor_button: Button = %PolicyEditorButton
 @onready var close_button: Button = %CloseButton
 @onready var load_button: Button = %LoadButton
