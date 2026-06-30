@@ -34,6 +34,7 @@ signal health_reached_zero
 @onready var health_bar: HealthBar = %HealthBar
 @onready var invincibility_timer: Timer = %InvincibilityTimer
 @onready var ship_sprite: Sprite2D = %ShipSprite
+@onready var shots_left_ui: ShotsLeftUI = %ShotsLeftUI
 
 ## TODO find the actual cause as this is just a hack to stop the agent from firing immediatelly
 var _was_just_reset: bool = false
@@ -45,6 +46,7 @@ const DEFAULT_MUZZLE: PackedScene = preload("uid://c2qcohstk8elv")
 func reset_ship(reset_position: Vector2 = Vector2.ZERO) -> void:
 	health_manager.reset_health()
 	muzzle.reset_weapon()
+	self.shots_left_ui.configure(muzzle.max_shots) # Can be deleted as soon as ship.configure() is used in all modes
 	
 	self.set_deferred("linear_velocity", Vector2.ZERO)
 	self.set_deferred("angular_velocity", 0.)
@@ -89,6 +91,7 @@ func configure(blueprint: S_Ship, ctrlr: ShipController) -> void:
 		self.team = blueprint.team
 		
 		self.muzzle.configure(blueprint.muzzle)
+		self.shots_left_ui.configure(blueprint.muzzle.max_shots)
 	
 	if ctrlr:
 		self.controller = ctrlr
@@ -118,6 +121,8 @@ func _apply_team_color(new_team: S_Team) -> void:
 	if !ship_sprite || !new_team:
 		return
 	ship_sprite.modulate = new_team.color
+	shots_left_ui.modulate = new_team.color
+
 
 func _rotate(delta: float) -> void:
 	var rotation_input: float = controller.turn
@@ -140,6 +145,7 @@ func _strafe() -> void:
 func _fire() -> void:
 	if controller.shoot and not _was_just_reset:
 		muzzle.fire(self.linear_velocity, team)
+	shots_left_ui.show_shots(muzzle.current_shots)
 
 func _check_for_damage(body: Node) -> void:
 	#print("check")
