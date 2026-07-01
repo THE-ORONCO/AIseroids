@@ -12,8 +12,8 @@ func update_inputs(
 
 func get_ship_state() -> Array:
 	return [
-		self.shots_max,
-		self.current_shots,
-		self.time_till_reload,
-		self.shot_cooldown,
+		float(self.current_shots) / float(self.shots_max),
+		self.time_till_reload / self.reload_time,
+		self.shot_cooldown / self.cooldown_time,
+		self.current_speed / self.max_velocity
 	]

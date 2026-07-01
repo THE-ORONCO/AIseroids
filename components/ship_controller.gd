@@ -13,11 +13,15 @@ var shoot: bool = false
 var health: int
 var health_max: int = 5
 var last_damage_was_self_damage: bool = false
+var last_damage_was_enemy_damage: bool = false
 var score: int = 0
 var shots_max: int = 0
 var current_shots: int = 0
+var reload_time: float = 0.
 var time_till_reload: float = 0.
+var cooldown_time: float = 0.
 var shot_cooldown: float = 0.
+var max_velocity: float = 0.
 var current_speed: float = 0.
 
 func _init() -> void:
