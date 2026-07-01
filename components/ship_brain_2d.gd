@@ -72,8 +72,8 @@ func get_reward() -> float:
 	var rewards: Dictionary[String, float] = {}
 	var context: Dictionary = _build_reward_context()
 	
-	for policy_key in PolicyManager.loaded_policy_collection:
-		var policy = PolicyManager.loaded_policy_collection[policy_key]
+	for policy_key in PolicyManager.loaded_policy_collection.policy_dict:
+		var policy = PolicyManager.loaded_policy_collection.policy_dict[policy_key]
 		if policy == null or not policy.enabled: continue
 		var val = policy.evaluate(context)
 		rewards[policy_key] = val
@@ -139,7 +139,7 @@ func _reward_string(rewards: Dictionary[String,float]) -> String:
 	var keys := _known_rewards.keys()
 	keys.sort()
 	for key in keys:
-		line.append("%2s, %03.1f" % [key, rewards.get(key, 0.)])
+		line.append("%2s: %03.1f" % [key, rewards.get(key, 0.)])
 	return line.reduce(func(a,b): return a+ ",\t" + b, "")
 
 func get_action_space() -> Dictionary:
@@ -213,6 +213,8 @@ func reset():
 	controller.turn = 0.
 	controller.thrust = 0.
 	controller.last_damage_was_self_damage = false
+	controller.health = controller.health_max
+	controller.score = 0
 	
 	# print aggregate reward over training run
 	var now := Time.get_ticks_msec()
@@ -250,8 +252,11 @@ func _build_reward_context() -> Dictionary:
 	var sensor := controller.sensor as SensorSuite 
 	var score_delta = controller.score - _score_before
 	assert(abs(score_delta) < 5, "Score changed by an unreasonable amount in a few physics ticks")
+	_score_before = controller.score
+
 	var health_delta = controller.health - _health_before
 	assert(abs(health_delta) < 5, "Health changed by an unreasonable amount in a few physics ticks")
+	_health_before = controller.health
 	  
 	var context := {
 		"now": now,

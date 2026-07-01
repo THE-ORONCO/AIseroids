@@ -1,7 +1,7 @@
 class_name SignalBus 
 extends Node
 
-signal asteroid_destroyed(points_earned: int)
+signal asteroid_destroyed(team: S_Team, points_earned: int)
 
-func signal_asteroid_destoryed(_size: float):
-	asteroid_destroyed.emit(1)
+func signal_asteroid_destoryed(team: S_Team):
+	asteroid_destroyed.emit(team, 1)

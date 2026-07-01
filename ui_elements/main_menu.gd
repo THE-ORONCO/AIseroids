@@ -9,14 +9,12 @@ enum FileDialogMode {
 const SPACE: PackedScene = preload("uid://cujdj2kfjxl54")
 const TRAINING_GROUNDS = preload("uid://baw6jdbx8dn5d")
 
-@onready var play_solo_button: Button = %PlaySoloButton
 @onready var training_panel: TrainingPanel = %TrainingPanel
 @onready var policy_editor_button: Button = %PolicyEditorButton
 @onready var close_button: Button = %CloseButton
 @onready var load_button: Button = %LoadButton
 @onready var load_previous_button: Button = %LoadPreviousButton
 @onready var export_button: Button = %ExportButton
-@onready var number_of_agents: Label = %NumberOfAgents
 @onready var onnx_file_db: OnnxFileDB = %OnnxFileDB
 @onready var main_screen: MarginContainer = %MainScreen
 @onready var policy_editor_screen: MarginContainer = %PolicyEditorScreen
@@ -47,9 +45,7 @@ func _ready() -> void:
 	load_previous_button.pressed.connect(open_file_dialogue.bind(FileDialogMode.LOAD_PREVIOUS))
 	export_button.pressed.connect(open_file_dialogue.bind(FileDialogMode.EXPORT_POLICY_PRESET))
 	file_dialog.file_selected.connect(_on_file_selected)
-	
-	play_solo_button.pressed.connect(func(): get_tree().change_scene_to_packed(SPACE))
-	
+		
 	onnx_file_db.scan_dir(default_model_dir)
 
 func _on_file_selected(file_path: String) -> void:

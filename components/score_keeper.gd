@@ -3,8 +3,8 @@ extends Node
 
 @export var bus: SignalBus
 
-var scores: Dictionary[Fight.Team, int] = {}
-var bests: Dictionary[Fight.Team, int] = {}
+var scores: Dictionary[S_Team, int] = {}
+var bests: Dictionary[S_Team, int] = {}
 
 var score: int = 0:
 	set(value):
@@ -25,9 +25,7 @@ signal score_changed(new_score: int)
 signal best_changed(new_best: int)
 
 func _ready() -> void:
-	bus.asteroid_destroyed.connect.call_deferred(
-		func(points):score += points
-	)
+	bus.asteroid_destroyed.connect.call_deferred(_increment_score)
 
 ## Reset the scores
 func reset_score() -> void:
@@ -40,7 +38,12 @@ func get_score(team: Fight.Team) -> int:
 func get_best(team: Fight.Team) -> int:
 	return bests.get(team, 0.)
 
-func set_score(team: Fight.Team, value: int) -> void:
+func _increment_score(team: S_Team, value: int) -> void:
+	var score_before: int = scores.get(team, 0)
+	var new_score := score_before + value
+	set_score(team, new_score)
+	
+func set_score(team: S_Team, value: int) -> void:
 		value = max(0, value)
 		score_changed_for.emit(value, team)
 		scores[team] = value

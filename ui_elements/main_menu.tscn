@@ -3,18 +3,22 @@
 [ext_resource type="Script" uid="uid://bd1djwacfi835" path="res://ui_elements/main_menu.gd" id="1_vecha"]
 [ext_resource type="Script" uid="uid://dmqh1ocwln0r5" path="res://components/onnx_file_db.gd" id="2_ovtgx"]
 [ext_resource type="Script" uid="uid://f7wxq248cbgx" path="res://ui_elements/ai_demo/solo_ai_demo_pannel.gd" id="3_3c7g6"]
+[ext_resource type="Script" uid="uid://fhasuxtfg1vs" path="res://ui_elements/solo_play/play_solo_panel.gd" id="3_7gt6l"]
 [ext_resource type="Script" uid="uid://dnedwfllgyfav" path="res://ui_elements/train_panel.gd" id="3_13ucg"]
 [ext_resource type="PackedScene" uid="uid://cbcjt4hg011py" path="res://ui_elements/ai_selector.tscn" id="3_ovtgx"]
 [ext_resource type="Script" uid="uid://i3uqldsfkuix" path="res://components/policies/reward_policy.gd" id="4_c58ti"]
+[ext_resource type="Script" uid="uid://dn2qoge5xeuf3" path="res://ui_elements/scenario_edit/configure_scenario_button.gd" id="4_evc5y"]
 [ext_resource type="Script" uid="uid://c3ox7qlsgn0i6" path="res://components/training/hyper_params.gd" id="4_pp7ww"]
 [ext_resource type="Script" uid="uid://bvw4yradmltby" path="res://components/scenario/scenario.gd" id="4_y6ahl"]
 [ext_resource type="Script" uid="uid://by2mdqrrhfsa3" path="res://components/scenario/scenario_ship.gd" id="5_iavgl"]
 [ext_resource type="Script" uid="uid://mns1wrjgs0vl" path="res://ui_elements/ai_demo/ai_vs_ai_demo_panel.gd" id="5_v0w7t"]
 [ext_resource type="Script" uid="uid://b812ny6yi6yg" path="res://components/policies/health_delta_policy.gd" id="6_1kwqo"]
 [ext_resource type="Script" uid="uid://vybsjiuth0xg" path="res://components/scenario/scenario_muzzle.gd" id="7_c58ti"]
+[ext_resource type="Script" uid="uid://bkinpokoa3dwa" path="res://components/scenario/control_mode_player.gd" id="7_efy2p"]
 [ext_resource type="Script" uid="uid://dnpjairwsvvow" path="res://components/scenario/control_mode_training.gd" id="7_hkaby"]
 [ext_resource type="Script" uid="uid://k2y5frwnrrwx" path="res://components/scenario/scenario_team.gd" id="7_iteyy"]
 [ext_resource type="Script" uid="uid://whenjsnth0xi" path="res://components/scenario/control_mode_inference.gd" id="8_iavgl"]
+[ext_resource type="Script" uid="uid://cmxhbbtqcfr0w" path="res://components/scenario/scenario_shot.gd" id="9_4undi"]
 [ext_resource type="Script" uid="uid://bssvsd1t72ym" path="res://ui_elements/policy_editor_ui.gd" id="12_4h2b7"]
 [ext_resource type="Script" uid="uid://b1oyqaj8c2ekd" path="res://components/training/training_run.gd" id="12_ap04m"]
 [ext_resource type="Script" uid="uid://bbv5lb3cqric4" path="res://ui_elements/training_run_edit/edit_training_run_button.gd" id="13_ap04m"]
@@ -24,6 +28,41 @@ font_size = 40
 outline_size = 10
 outline_color = Color(0.35686275, 0.8862745, 0.95686275, 1)
 shadow_size = 0
+
+[sub_resource type="Resource" id="Resource_f0df6"]
+script = ExtResource("7_efy2p")
+metadata/_custom_type_script = "uid://bkinpokoa3dwa"
+
+[sub_resource type="Resource" id="Resource_1uad1"]
+script = ExtResource("9_4undi")
+metadata/_custom_type_script = "uid://cmxhbbtqcfr0w"
+
+[sub_resource type="Resource" id="Resource_40370"]
+script = ExtResource("7_c58ti")
+shot = SubResource("Resource_1uad1")
+metadata/_custom_type_script = "uid://vybsjiuth0xg"
+
+[sub_resource type="Resource" id="Resource_bpllx"]
+script = ExtResource("7_iteyy")
+name = "gamer"
+color = Color(5.7756904e-07, 0.88966584, 0, 1)
+metadata/_custom_type_script = "uid://k2y5frwnrrwx"
+
+[sub_resource type="Resource" id="Resource_qpgvr"]
+script = ExtResource("5_iavgl")
+name = "player"
+mode = SubResource("Resource_f0df6")
+team = SubResource("Resource_bpllx")
+mute = true
+muzzle = SubResource("Resource_40370")
+metadata/_custom_type_script = "uid://by2mdqrrhfsa3"
+
+[sub_resource type="Resource" id="Resource_crg5a"]
+script = ExtResource("4_y6ahl")
+ships = Array[ExtResource("5_iavgl")]([SubResource("Resource_qpgvr")])
+fit_to_screen = true
+mute_sounds = false
+metadata/_custom_type_script = "uid://bvw4yradmltby"
 
 [sub_resource type="Resource" id="Resource_4undi"]
 script = ExtResource("4_pp7ww")
@@ -243,25 +282,38 @@ theme_override_constants/separation = 30
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels" unique_id=2098287212]
+[node name="PlaySoloPanel" type="VBoxContainer" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels" unique_id=141484434]
+layout_mode = 2
+script = ExtResource("3_7gt6l")
+
+[node name="Label" type="Label" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/PlaySoloPanel" unique_id=2098287212]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Play"
 label_settings = SubResource("LabelSettings_b2u01")
 horizontal_alignment = 1
 
-[node name="PlaySoloButton" type="Button" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels" unique_id=1611668476]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/PlaySoloPanel" unique_id=992620086]
+layout_mode = 2
+
+[node name="PlaySoloButton" type="Button" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/PlaySoloPanel/HBoxContainer" unique_id=1611668476]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Highscore"
+
+[node name="ConfigureScenario" type="Button" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/PlaySoloPanel/HBoxContainer" unique_id=1154138742]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Configure Scenario"
+script = ExtResource("4_evc5y")
+scenario = SubResource("Resource_crg5a")
 
 [node name="TrainingPanel" type="VBoxContainer" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels" unique_id=287760998]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 script = ExtResource("3_13ucg")
-trainging_run = SubResource("Resource_csuuw")
 
 [node name="Label" type="Label" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/TrainingPanel" unique_id=365279229]
 layout_mode = 2
