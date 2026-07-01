@@ -185,6 +185,22 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_vecha")
 
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1907224128]
+unique_name_in_owner = true
+oversampling_override = 1.0
+initial_position = 1
+display_mode = 1
+filters = PackedStringArray("*.tres", "*.res")
+use_native_dialog = true
+
+[node name="ErrorNotification" type="AcceptDialog" parent="." unique_id=875311422]
+unique_name_in_owner = true
+oversampling_override = 1.0
+initial_position = 1
+size = Vector2i(360, 100)
+popup_window = true
+dialog_autowrap = true
+
 [node name="OnnxFileDB" type="Node" parent="." unique_id=329193761]
 unique_name_in_owner = true
 script = ExtResource("2_ovtgx")
@@ -433,6 +449,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 
 [node name="PolicyEditorUI" type="ScrollContainer" parent="PolicyEditorScreen/VBoxContainer" unique_id=1243711823]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -443,12 +460,31 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="CloseButton" type="Button" parent="PolicyEditorScreen/VBoxContainer" unique_id=2134735478]
+[node name="ButtonContainer" type="HBoxContainer" parent="PolicyEditorScreen/VBoxContainer" unique_id=652523313]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="CloseButton" type="Button" parent="PolicyEditorScreen/VBoxContainer/ButtonContainer" unique_id=2134735478]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Close"
+
+[node name="LoadPreviousButton" type="Button" parent="PolicyEditorScreen/VBoxContainer/ButtonContainer" unique_id=1695432156]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load Previous"
+
+[node name="LoadButton" type="Button" parent="PolicyEditorScreen/VBoxContainer/ButtonContainer" unique_id=1818899412]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load Preset"
+
+[node name="ExportButton" type="Button" parent="PolicyEditorScreen/VBoxContainer/ButtonContainer" unique_id=1518040725]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Export Preset"
 
 [node name="Footer" type="MarginContainer" parent="." unique_id=407630944]
 unique_name_in_owner = true

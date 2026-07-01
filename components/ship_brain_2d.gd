@@ -73,9 +73,9 @@ func get_reward() -> float:
 	var context: Dictionary = _build_reward_context()
 	
 	for policy_key in PolicyManager.policy_instances:
-		var policy := PolicyManager.policy_instances[policy_key]
+		var policy = PolicyManager.policy_instances[policy_key]
 		if policy == null or not policy.enabled: continue
-		var val := policy.evaluate(context)
+		var val = policy.evaluate(context)
 		rewards[policy_key] = val
 	
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)

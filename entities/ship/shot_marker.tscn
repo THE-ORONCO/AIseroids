@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dxaftm04ytjgs"]
+
+[node name="ShotMarker" type="PathFollow2D" unique_id=1937608009]
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1006147297]
+polygon = PackedVector2Array(0, -2, 1, -2, 2, -1, 2, 0, 2, 1, 1, 2, 0, 2, -1, 2, -2, 1, -2, 0, -2, -1, -1, -2)
+uv = PackedVector2Array(0, -2, 1, -2, 2, -1, 2, 0, 2, 1, 1, 2, 0, 2, -1, 2, -2, 1, -2, 0, -2, -1, -1, -2)

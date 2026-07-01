@@ -7,6 +7,10 @@
 [ext_resource type="Script" uid="uid://cngsnhnnpaxnx" path="res://components/advanced_raycast_sensor_2D.gd" id="5_3if2u"]
 [ext_resource type="Script" uid="uid://c668ga3p1e8kn" path="res://ui_elements/speedometer.gd" id="7_3ywi2"]
 [ext_resource type="PackedScene" uid="uid://bocdkmbu367mf" path="res://ui_elements/health_bar.tscn" id="7_53e7a"]
+[ext_resource type="Script" uid="uid://bin2qh5u0yhkm" path="res://entities/ship/shots_left_ui.gd" id="8_3ywi2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
+radius = 30.0
 
 [sub_resource type="Curve" id="Curve_tua1r"]
 _data = [Vector2(0, 0), 0.0, 2.669076, 0, 0, Vector2(0.27272725, 0.4451902), 0.0, 0.0, 0, 0, Vector2(0.4545455, 0), 0.0, 0.0, 0, 0]
@@ -52,11 +56,14 @@ turbulence_noise_speed_random = 4.0
 turbulence_influence_min = 0.0
 turbulence_influence_max = 0.08800001
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_xikw6"]
-radius = 30.0
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_tua1r"]
 radius = 70.0
+
+[sub_resource type="Curve2D" id="Curve2D_53e7a"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 45, 0, 0, 0, 0, -30, 30, 0, 0, 0, 0, -45, 0, 0, 0, 0, 0, -30, -30, 0, 0, 0, 0, 0, -45, 0, 0, 0, 0, 30, -30, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 45)
+}
+point_count = 9
 
 [node name="Ship" type="RigidBody2D" unique_id=1181218062]
 gravity_scale = 0.0
@@ -66,7 +73,11 @@ angular_damp = 100.0
 script = ExtResource("1_tivcy")
 metadata/_custom_type_script = "uid://c5gxdwhsxj7mf"
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1623896605]
+shape = SubResource("CircleShape2D_xikw6")
+
 [node name="ThrusterParticles" type="GPUParticles2D" parent="." unique_id=2098380072]
+unique_name_in_owner = true
 position = Vector2(0, 12)
 amount = 200
 trail_enabled = true
@@ -83,9 +94,6 @@ texture = ExtResource("2_53e7a")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1623896605]
-shape = SubResource("CircleShape2D_xikw6")
-
 [node name="SensorSuite" type="Node2D" parent="." unique_id=704550922]
 unique_name_in_owner = true
 script = ExtResource("4_tua1r")
@@ -98,14 +106,15 @@ collision_mask = 33
 collide_with_areas = true
 n_rays = 60.0
 ray_length = 500.0
+debug_draw = false
 metadata/_custom_type_script = "uid://cngsnhnnpaxnx"
 
-[node name="NearFieldSensor" type="Area2D" parent="SensorSuite" unique_id=898996425]
+[node name="NearFieldSensor" type="Area2D" parent="." unique_id=898996425]
 unique_name_in_owner = true
 visible = false
 collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SensorSuite/NearFieldSensor" unique_id=1510114050]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NearFieldSensor" unique_id=1510114050]
 shape = SubResource("CircleShape2D_tua1r")
 
 [node name="InvincibilityTimer" type="Timer" parent="." unique_id=977439268]
@@ -116,7 +125,7 @@ one_shot = true
 [node name="Muzzle" parent="." unique_id=571023481 instance=ExtResource("4_53e7a")]
 unique_name_in_owner = true
 position = Vector2(0, -68)
-max_shots = 5
+max_shots = 7
 cooldown = 0.1
 reload_time = 1.0
 
@@ -130,6 +139,7 @@ offset_top = -5.0
 offset_right = 20.0
 offset_bottom = 5.0
 size_flags_horizontal = 3
+metadata/_edit_use_anchors_ = true
 
 [node name="Speedometer" type="Control" parent="." unique_id=196597760]
 custom_minimum_size = Vector2(30, 20)
@@ -142,6 +152,7 @@ offset_right = 15.0
 offset_bottom = 20.0
 grow_horizontal = 2
 script = ExtResource("7_3ywi2")
+metadata/_edit_use_anchors_ = true
 
 [node name="SpeedLabel" type="Label" parent="Speedometer" unique_id=1958891833]
 unique_name_in_owner = true
@@ -156,3 +167,14 @@ grow_horizontal = 2
 text = "000.0"
 horizontal_alignment = 1
 vertical_alignment = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="ShipCore" type="Node2D" parent="." unique_id=947130586]
+unique_name_in_owner = true
+
+[node name="ShotsLeftUI" type="Node2D" parent="." unique_id=1706591979]
+unique_name_in_owner = true
+script = ExtResource("8_3ywi2")
+
+[node name="RotationPath" type="Path2D" parent="ShotsLeftUI" unique_id=1623334481]
+curve = SubResource("Curve2D_53e7a")
