@@ -95,6 +95,13 @@ parser.add_argument(
          "value. Note: On resuming training, the schedule will reset. If disabled, constant LR will be used.",
 )
 parser.add_argument(
+    "--net_arch",
+    default=[64,64],
+    nargs="+",
+    type=int,
+    help="the internal layer architecture of the neural net",
+)
+parser.add_argument(
     "--viz",
     action="store_true",
     help="If set, the simulation will be displayed in a window during training. Otherwise "
@@ -196,7 +203,7 @@ def linear_schedule(initial_value: float) -> Callable[[float], float]:
 learning_rate = args.learning_rate if not args.linear_lr_schedule else linear_schedule(args.learning_rate)
 
 if args.resume_model_path is None:
-    # policy_kwargs = dict(net_arch=dict(pi=[32, 32], vf=[32, 32]))
+    policy_kwargs = dict(net_arch=dict(pi=args.net_arch, vf=args.net_arch))
 
     model: PPO = PPO(
         "MultiInputPolicy",
@@ -207,7 +214,7 @@ if args.resume_model_path is None:
         tensorboard_log=args.experiment_dir,
         learning_rate=learning_rate,
         clip_range=args.clip_range,
-        # policy_kwargs=policy_kwargs
+        policy_kwargs=policy_kwargs
     )
 else:
     path_zip = pathlib.Path(args.resume_model_path)
