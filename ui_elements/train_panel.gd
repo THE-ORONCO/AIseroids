@@ -23,7 +23,7 @@ func _ready() -> void:
 		training_grounds.training_run = trainging_run
 		get_tree().change_scene_to_node(training_grounds)
 		)
-		
+
 
 func _get_field_size() -> Vector2i:
 	return Vector2i(\
@@ -34,4 +34,6 @@ func _get_field_size() -> Vector2i:
 
 func _update_agent_count(_input) -> void:
 	var field_size := _get_field_size()
+	trainging_run.horizontal_spaces = field_size.x
+	trainging_run.vertical_spaces = field_size.y
 	number_of_agents.text = "=  %d Agents" % (field_size.x * field_size.y)

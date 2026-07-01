@@ -82,6 +82,7 @@ static func _make_editor_for_type(v: Variant, setter: Callable, p: FieldProps) -
 
 	# int
 	if p.typ == TYPE_INT:
+		# TODO parse out min and max values
 		var sb := SpinBox.new()
 		sb.step = 1
 		sb.min_value = -2147483648
@@ -93,6 +94,7 @@ static func _make_editor_for_type(v: Variant, setter: Callable, p: FieldProps) -
 
 	# float
 	if p.typ == TYPE_FLOAT:
+		# TODO parse out min and max values
 		var sb := SpinBox.new()
 		sb.step = 0.01
 		sb.min_value = -1000000000.0
@@ -118,6 +120,9 @@ static func _make_editor_for_type(v: Variant, setter: Callable, p: FieldProps) -
 		var y := SpinBox.new()
 		x.step = 0.01
 		y.step = 0.01
+		# TODO parse out min and max values
+		x.prefix = "x "
+		y.prefix = "y "
 		x.value = v.x
 		y.value = v.y
 		x.value_changed.connect(func(val: float):
@@ -141,29 +146,28 @@ static func _make_editor_for_type(v: Variant, setter: Callable, p: FieldProps) -
 	# We'll treat it as int for now (good enough to start).
 	if p.typ == TYPE_INT:
 		return null
-	
 
 	return null
 
 static func _array_control(array: Array, p: FieldProps) -> Control:
-	var fold := FoldableContainer.new()
+	var fold := FoldableContainer.new()	
 	fold.title = p.prop_name
-	var vbox := VBoxContainer.new()
-	fold.add_child(vbox)
-	
+	fold.fold()
+
 	var elem_type: int
 	var elem_hint: int
 	var elem_hint_string: String
 	var array_nesting: int # TODO implement nested array stuff
 	
 	if p.hint == PROPERTY_HINT_TYPE_STRING:
+		# see the docs why we do this weird string splitting
 		var s := p.hint_string.split("/")
 		match s.size():
-			1: 
+			1: # no further type hints
 				var structure := s[0].split(":")
 				array_nesting = structure.size() - 1
 				elem_type = int(structure[structure.size()-1])
-			2:
+			2: # type hints are present
 				var structure := s[0].split(":")
 				array_nesting = structure.size() - 1
 				elem_type = int(structure[structure.size()-1])
@@ -185,9 +189,10 @@ static func _array_control(array: Array, p: FieldProps) -> Control:
 			#var recurse := ResourceUI.new()
 			#recurse.target = val
 			#vbox.add_child(recurse)
-			return _object_control(val, fp)
+			var control := _object_control(val, fp)
+			fold.add_child(control)
+			return fold
 		# TODO do this for the rest of the types
-	fold.fold()
 	return fold
 
 static func _object_control(v: Object, p: FieldProps) -> Control:
