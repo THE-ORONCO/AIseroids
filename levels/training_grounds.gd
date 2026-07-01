@@ -7,9 +7,9 @@ extends Node2D
 @onready var camera: Camera2D = %Camera
 @onready var agent_label: Label = %AgentLabel
 @onready var end_ratios: Label = %EndRatios
+@onready var sync: Node = %Sync
 
 const SPACE_MULTI: PackedScene = preload("uid://d07sfwm8fs1hr")
-const Sync: Script = preload("uid://cecwd02nv3ery")
 
 
 var spaces: Array[SpaceMulti] = []
@@ -85,10 +85,8 @@ func _ready() -> void:
 
 	place_camera.call_deferred(_current_agent)
 	update_label.call_deferred()
-	#
-	#var sync = Sync.new()
-	#sync.action_repeat = training_run.action_repeat
-	#self.add_child.call_deferred(sync)
+
+	sync.action_repeat = training_run.action_repeat
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_right"):
