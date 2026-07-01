@@ -42,6 +42,7 @@ var _last_reset_time := Time.get_ticks_msec()
 var _turn_average := 0.
 var _number_of_asteroids_destroyed_this_episode := 0.
 
+var _context: Dictionary = {}
 var _aggregator: Dictionary[String, float] = {}
 
 func _init(c: ShipController) -> void:
@@ -70,12 +71,14 @@ func get_obs() -> Dictionary:
 
 func get_reward() -> float:
 	var rewards: Dictionary[String, float] = {}
-	var context: Dictionary = _build_reward_context()
+	var env_context := _build_reward_context()
+	_context.merge(env_context, true)
+	assert(_context.size() > 0, "something went wrong during context merges")
 	
 	for policy_key in PolicyManager.loaded_policy_collection.policy_dict:
 		var policy = PolicyManager.loaded_policy_collection.policy_dict[policy_key]
 		if policy == null or not policy.enabled: continue
-		var val = policy.evaluate(context)
+		var val = policy.evaluate(_context)
 		rewards[policy_key] = val
 	
 	var sum:float = rewards.values().reduce(func(a,b): return a+b, 0.)
@@ -200,6 +203,8 @@ func get_obs_space():
 
 
 func reset():
+	_context = {}
+	
 	n_steps = 0
 	needs_reset = false
 	_score_before = 0

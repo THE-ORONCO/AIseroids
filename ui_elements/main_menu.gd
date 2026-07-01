@@ -32,13 +32,6 @@ func _ready() -> void:
 
 	policy_editor_screen.hide()
 	
-	training_panel.training_started.connect(func():
-		var training_start_time := Time.get_datetime_string_from_system().replace(":", "-").replace("T", "_")
-		training_start_time = training_start_time.substr(0, training_start_time.length() - 3)
-		var policy_log_save_path := PolicyManager.FOLDER_PATHS.logs + training_start_time + ".tres"
-		PolicyManager.save_loaded_policy_collection(policy_log_save_path)
-		)
-	
 	policy_editor_button.pressed.connect(toggle_policy_editor_ui)
 	close_button.pressed.connect(toggle_policy_editor_ui)
 	load_button.pressed.connect(open_file_dialogue.bind(FileDialogMode.LOAD_POLICY_PRESET))
