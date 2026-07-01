@@ -72,8 +72,8 @@ func get_reward() -> float:
 	var rewards: Dictionary[String, float] = {}
 	var context: Dictionary = _build_reward_context()
 	
-	for policy_key in PolicyManager.policy_instances:
-		var policy = PolicyManager.policy_instances[policy_key]
+	for policy_key in PolicyManager.loaded_policy_collection:
+		var policy = PolicyManager.loaded_policy_collection[policy_key]
 		if policy == null or not policy.enabled: continue
 		var val = policy.evaluate(context)
 		rewards[policy_key] = val

@@ -256,71 +256,37 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Highscore"
 
-[node name="Train Panel" type="VBoxContainer" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels" unique_id=287760998]
+[node name="TrainingPanel" type="VBoxContainer" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels" unique_id=287760998]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 script = ExtResource("3_13ucg")
 trainging_run = SubResource("Resource_csuuw")
 
-[node name="Label" type="Label" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel" unique_id=365279229]
+[node name="Label" type="Label" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/TrainingPanel" unique_id=365279229]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Train"
 label_settings = SubResource("LabelSettings_b2u01")
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel" unique_id=1147217439]
+[node name="TrainButtons" type="HBoxContainer" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/TrainingPanel" unique_id=1094281515]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Label" type="Label" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel/HBoxContainer" unique_id=1262162935]
-layout_mode = 2
-text = "Size of training field: "
-
-[node name="XInput" type="LineEdit" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel/HBoxContainer" unique_id=430998727]
-unique_name_in_owner = true
-layout_mode = 2
-text = "3"
-placeholder_text = "3"
-alignment = 1
-max_length = 2
-virtual_keyboard_type = 2
-
-[node name="X" type="Label" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel/HBoxContainer" unique_id=188284692]
-layout_mode = 2
-text = "x"
-
-[node name="YInput" type="LineEdit" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel/HBoxContainer" unique_id=1387314309]
-unique_name_in_owner = true
-layout_mode = 2
-text = "3"
-placeholder_text = "3"
-alignment = 1
-max_length = 2
-virtual_keyboard_type = 2
-
-[node name="NumberOfAgents" type="Label" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel/HBoxContainer" unique_id=364932372]
-unique_name_in_owner = true
-layout_mode = 2
-text = "= 9 Agents"
-
-[node name="TrainButtons" type="HBoxContainer" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel" unique_id=1094281515]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="StartTraining" type="Button" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel/TrainButtons" unique_id=1860362502]
+[node name="StartTraining" type="Button" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/TrainingPanel/TrainButtons" unique_id=1860362502]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Start Training
 "
 
-[node name="PolicyEditorButton" type="Button" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel/TrainButtons" unique_id=1997946514]
+[node name="PolicyEditorButton" type="Button" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/TrainingPanel/TrainButtons" unique_id=1997946514]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Edit Policies"
 
-[node name="EditTrainingRunButton" type="Button" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/Train Panel/TrainButtons" unique_id=858491908]
+[node name="EditTrainingRunButton" type="Button" parent="MainScreen/VBoxContainer/MenuPanels/LeftPanels/TrainingPanel/TrainButtons" unique_id=858491908]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Configure Training Run"

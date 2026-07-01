@@ -1,4 +1,4 @@
-class_name TrainingPannel
+class_name TrainingPanel
 extends VBoxContainer
 
 @export var trainging_run: TrainingRun
@@ -9,15 +9,13 @@ extends VBoxContainer
 @onready var y_input: LineEdit = %YInput
 @onready var start_training: Button = %StartTraining
 
+signal training_started
 
 const TRAINING_GROUNDS: PackedScene = preload("uid://baw6jdbx8dn5d")
 
 
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	x_input.text_changed.connect(_update_agent_count)
-	y_input.text_changed.connect(_update_agent_count)
-	
+func _ready() -> void:	
 	start_training.pressed.connect(func():
 		var training_grounds: TrainingGrounds = TRAINING_GROUNDS.instantiate()
 		training_grounds.training_run = trainging_run
