@@ -7,3 +7,7 @@ extends ConfirmationDialog
 func _ready() -> void:
 	resource_ui.target = training_run
 	resource_ui._build()
+
+func refresh(new_run: TrainingRun) -> void:
+	training_run = new_run
+	resource_ui.rebuild(new_run)

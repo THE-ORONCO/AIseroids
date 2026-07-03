@@ -19,3 +19,6 @@ func _ready() -> void:
 func _show_editor() -> void:
 	_training_run_edit.popup_centered_ratio(0.7)
 	
+func refresh(run: TrainingRun) -> void:
+	training_run = run
+	_training_run_edit.refresh(run)

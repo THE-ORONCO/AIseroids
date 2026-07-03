@@ -2,9 +2,9 @@ class_name TrainingRun
 extends Resource
 
 ## Name of the experiment that was trained
-@export var experiment_name: String
+@export var experiment_name: String = "experiment"
 ## Root dir where all experiments will be stored
-@export var experiment_dir: String
+@export var experiment_dir: String = "logs".path_join("sb3")
 
 ## the scenario used for the training
 @export var scenario: Scenario
@@ -13,7 +13,7 @@ extends Resource
 ## number of vertical spaces
 @export_range(1, 10, 1, "or_greater") var vertical_spaces: int = 3
 ## the policies used for rewards
-@export var policies: Array[RewardPolicy]
+@export_storage var policies: Array[RewardPolicy]
 
 ## fixed hyper params that cannot be changed between training runs
 @export var hyper_params: HyperParams
@@ -22,7 +22,7 @@ extends Resource
 ## if the model should use a previous model for training
 @export var resume_model_path: String
 ## where to save the trained model to TODO
-@export var save_model_path: String
+@export_storage var save_model_path: String
 ## where to save the onnx model to (relative to the models folder) TODO
 @export var onnx_export_path: String
 ## how often snapshots of the model are saved TODO
@@ -49,3 +49,6 @@ extends Resource
 @export_range(400, 5000, 1, "or_greater") var minimum_space_height: int = 1000
 ## maximum height of the space trained in TODO
 @export_range(400, 5000, 1, "or_greater") var maximum_space_height: int = 1000
+
+func checkpoint_path() -> String:
+	return experiment_dir.path_join(experiment_name + "_checkpoints")

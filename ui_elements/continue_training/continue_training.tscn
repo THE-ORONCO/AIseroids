@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://8pxcbth366x1"]
+
+[ext_resource type="Script" uid="uid://dhwpk5twrgdto" path="res://ui_elements/continue_training/continue_training.gd" id="1_0trn5"]
+
+[node name="ContinueTraining" type="Button" unique_id=1382641801]
+size_flags_horizontal = 3
+text = "Continue"
+script = ExtResource("1_0trn5")
+
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1428868523]
+unique_name_in_owner = true
+title = "Open a File"
+file_mode = 0
+root_subfolder = "res://logs/sb3/"
+filters = PackedStringArray("*.tres")
+use_native_dialog = true

@@ -19,6 +19,10 @@ class FieldProps:
 		hint = int(p.hint)
 		hint_string = String(p.hint_string)
 
+func rebuild(new_target: Resource) -> void:
+	target = new_target
+	_build()
+
 func _ready() -> void:
 	if target == null:
 		return
@@ -37,8 +41,8 @@ func _build() -> void:
 
 		var fp := FieldProps.new(p)
 		
-		if !(fp.usage & PropertyUsageFlags.PROPERTY_USAGE_SCRIPT_VARIABLE):
-			continue
+		if !(fp.usage & PropertyUsageFlags.PROPERTY_USAGE_SCRIPT_VARIABLE):	continue
+		if !(fp.usage & PropertyUsageFlags.PROPERTY_USAGE_EDITOR):			continue
 		
 		if fp.prop_name.begins_with("_"):
 			continue
@@ -83,7 +87,7 @@ static func _array_control(array: Array, p: FieldProps) -> Control:
 	var elem_hint: int
 	var elem_hint_string: String
 	var array_nesting: int # TODO implement nested array stuff
-	
+
 	if p.hint == PROPERTY_HINT_TYPE_STRING:
 		# see the docs why we do this weird string splitting
 		var s := p.hint_string.split("/")
@@ -116,10 +120,8 @@ static func _array_control(array: Array, p: FieldProps) -> Control:
 			#vbox.add_child(recurse)
 			var control := _object_control(val, fp)
 			list.add_child(control)
-		# TODO do this for the rest of the types
 		
-		else:
-			
+		else: # TODO do this for the rest of the types
 			var fp = FieldProps.new({
 				"name": "",
 				"type": elem_type,

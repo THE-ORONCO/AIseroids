@@ -35,12 +35,6 @@ func reset_score() -> void:
 	score = 0
 	scores = {}
 
-func get_score(team: Fight.Team) -> int:
-	return scores.get(team, 0.)
-
-func get_best(team: Fight.Team) -> int:
-	return bests.get(team, 0.)
-
 func _increment_score(team: S_Team, value: int) -> void:
 	var score_before: int = scores.get(team, 0)
 	var new_score := score_before + value
