@@ -14,6 +14,7 @@
 [sub_resource type="Resource" id="Resource_pq0gm"]
 script = ExtResource("5_yakav")
 policy_name = "empty_mag_policy"
+weight = 0.050010000000000006
 
 [sub_resource type="Resource" id="Resource_nqctg"]
 script = ExtResource("4_qdum2")
@@ -22,6 +23,7 @@ policy_name = "health_delta_policy"
 [sub_resource type="Resource" id="Resource_m25sq"]
 script = ExtResource("9_3i3t1")
 policy_name = "keep_distance_policy"
+weight = 0.10001
 
 [sub_resource type="Resource" id="Resource_kvrbq"]
 script = ExtResource("7_1322e")
@@ -34,10 +36,12 @@ policy_name = "self_damage_policy"
 [sub_resource type="Resource" id="Resource_yjpih"]
 script = ExtResource("8_q72hi")
 policy_name = "too_fast_policy"
+weight = 0.50001
 
 [sub_resource type="Resource" id="Resource_b3s8m"]
 script = ExtResource("3_wihj1")
 policy_name = "turn_bias_policy"
+weight = 0.50001
 
 [sub_resource type="Resource" id="Resource_fvyq0"]
 script = ExtResource("2_qsktm")
