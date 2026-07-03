@@ -119,18 +119,16 @@ static func _array_control(array: Array, p: FieldProps) -> Control:
 		# TODO do this for the rest of the types
 		
 		else:
-			var line := _array_line(array)
-
-			list.add_child(line)
+			
 			var fp = FieldProps.new({
-				"name": str(i),
+				"name": "",
 				"type": elem_type,
 				"usage": p.usage,
 				"hint": elem_hint,
 				"hint_string": elem_hint_string
 			})
-			var control := _basic_type_control(val, func(new_val): array[i] = new_val, fp)
-			line.add_child(control)
+			var line := _array_line(array, i, fp)
+			list.add_child(line)
 	
 	var add_button := Button.new()
 	add_button.text = "+"
@@ -139,19 +137,16 @@ static func _array_control(array: Array, p: FieldProps) -> Control:
 		# TODO maybe support objects here
 		var default = default_for_variant_type(elem_type)
 		array.resize(array.size() + 1)
-		var last_index := array.size() - 1
 		var fp = FieldProps.new({
-				"name": str(last_index),
+				"name": "",
 				"type": elem_type,
 				"usage": p.usage,
 				"hint": elem_hint,
 				"hint_string": elem_hint_string
 			})
-		var control := _basic_type_control(default, func(new_val): array[last_index] = new_val, fp)
-		
-		var new_line := _array_line(array)
-		new_line.add_child(control)
-		
+			
+		var new_line := _array_line(array, array.size() - 1, fp)
+
 		var control_index := maxi(0,list.get_child_count() - 1)
 		list.add_child(new_line)
 		list.move_child(new_line, control_index)
@@ -161,18 +156,24 @@ static func _array_control(array: Array, p: FieldProps) -> Control:
 	
 	return fold
 
-static func _array_line(array: Array) -> Control:
+static func _array_line(array: Array, index: int, fp: FieldProps) -> Control:
+	var line := HBoxContainer.new()
+	
+	var val = array[index]
+	# This is kind of hacky and requires no other nodes to exist before the list of lines 
+	var control := _basic_type_control(val, func(new_val): array[line.get_index()] = new_val, fp)
+	line.add_child(control)
+
 	var delete_button := Button.new()
 	delete_button.text = "🗑️"
-	
-	var line := HBoxContainer.new()
-	line.add_child(delete_button)
 	delete_button.pressed.connect(func():
 		# This is kind of hacky and requires no other nodes to exist before the list of lines 
-		var index := line.get_index() 
+		var current_index := line.get_index() 
 		line.queue_free()
-		array.remove_at(index) 
+		array.remove_at(current_index) 
 		)
+	line.add_child(delete_button)
+
 	return line
 
 static func _object_control(v: Object, p: FieldProps) -> Control:
@@ -184,25 +185,27 @@ static func _object_control(v: Object, p: FieldProps) -> Control:
 	fold.fold()
 	return fold
 
-static func _basic_type_control(v: Variant, setter: Callable, p:FieldProps) -> Control:
-	var row := HSplitContainer.new()
-	row.split_offsets = [150]
-	row.dragging_enabled = false
-	row.dragger_visibility = SplitContainer.DRAGGER_HIDDEN
-	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-
+static func _prop_row(name: String, control: Control) -> Control:
+	var row := HBoxContainer.new()
 	var label := Label.new()
-	label.text = p.prop_name
+	label.text = name
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(label)
+	control.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(control)
+	
+	return row
+
+static func _basic_type_control(v: Variant, setter: Callable, p:FieldProps) -> Control:
+
+	
 	
 	# bool		
 	if p.typ == TYPE_BOOL:
 		var cb := CheckBox.new()
 		cb.button_pressed = bool(v)
 		cb.toggled.connect(setter)
-		row.add_child(cb)
-		return row
+		return _prop_row(p.prop_name, cb)
 
 	# int
 	if p.typ == TYPE_INT:
@@ -213,8 +216,8 @@ static func _basic_type_control(v: Variant, setter: Callable, p:FieldProps) -> C
 		sb.max_value = 2147483647
 		sb.value = int(v)
 		sb.value_changed.connect(setter)
-		row.add_child(sb)
-		return row
+		sb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		return _prop_row(p.prop_name, sb)
 
 	# float
 	if p.typ == TYPE_FLOAT:
@@ -225,8 +228,8 @@ static func _basic_type_control(v: Variant, setter: Callable, p:FieldProps) -> C
 		sb.max_value = 1000000000.0
 		sb.value = float(v)
 		sb.value_changed.connect(setter)
-		row.add_child(sb)
-		return row
+		sb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		return _prop_row(p.prop_name, sb)
 
 	# string
 	if p.typ == TYPE_STRING:
@@ -234,8 +237,8 @@ static func _basic_type_control(v: Variant, setter: Callable, p:FieldProps) -> C
 		le.text = str(v)
 		le.text_submitted.connect(setter)
 		le.text_changed.connect(setter)
-		row.add_child(le)
-		return row
+		le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		return _prop_row(p.prop_name, le)
 
 	# Vector2
 	if p.typ == TYPE_VECTOR2:
@@ -254,16 +257,16 @@ static func _basic_type_control(v: Variant, setter: Callable, p:FieldProps) -> C
 		y.value_changed.connect(func(val: float):
 			setter.call(Vector2(x.value, val)))
 		c.add_child(x); c.add_child(y)
-		row.add_child(c)
-		return row
+		c.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		return _prop_row(p.prop_name, c)
 
 	# Color
 	if p.typ == TYPE_COLOR:
 		var cp := ColorPickerButton.new()
 		cp.color = v
 		cp.color_changed.connect(setter)
-		row.add_child(cp)
-		return row
+		cp.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		return _prop_row(p.prop_name, cp)
 		
 	return null
 	
