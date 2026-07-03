@@ -1,10 +1,12 @@
 class_name ScoreKeeper 
 extends Node
 
+
 @export var bus: SignalBus
 
 var scores: Dictionary[S_Team, int] = {}
 var bests: Dictionary[S_Team, int] = {}
+var _score_lists: ScoreLists
 
 var score: int = 0:
 	set(value):
@@ -26,6 +28,7 @@ signal best_changed(new_best: int)
 
 func _ready() -> void:
 	bus.asteroid_destroyed.connect.call_deferred(_increment_score)
+	_score_lists = ScoreLists.load_or_create()
 
 ## Reset the scores
 func reset_score() -> void:
@@ -51,4 +54,7 @@ func set_score(team: S_Team, value: int) -> void:
 		if value > best_before:
 			bests[team] = value
 			best_changed_for.emit(value, team)
-		
+
+func save_highscore(game_mode: String, entry_name: String, highscore: int) -> void:
+	assert(_score_lists != null, "Can't save! No scorelist resource was loaded.")
+	_score_lists.save_score(game_mode, entry_name, highscore)

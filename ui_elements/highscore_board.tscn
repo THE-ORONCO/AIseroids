@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://sa38oahqcuaj"]
+
+[ext_resource type="Script" uid="uid://cyg7g4w5qd4ba" path="res://ui_elements/highscore_board.gd" id="1_2gkgi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2gkgi"]
+
+[node name="HighscoreBoard" type="PanelContainer" unique_id=2146682399]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_2gkgi")
+script = ExtResource("1_2gkgi")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=823775501]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=374554731]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=859657376]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Highscores"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=1256204086]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=1762724356]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScoresContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer" unique_id=99658630]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=2026878157]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "Close"
