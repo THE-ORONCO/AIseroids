@@ -73,7 +73,11 @@ func _ready() -> void:
 	health_manager.health_changed.connect(func(nh, by): 
 		controller.health = nh
 		if by is Shot: 
-			controller.last_damage_was_self_damage = true
+			var shot: Shot = by
+			if shot.team == self.team:
+				controller.last_damage_was_self_damage = true
+			else:
+				controller.last_damage_was_enemy_damage = true
 		health_changed.emit(nh)
 	)
 	_apply_team_color(team)
@@ -112,9 +116,12 @@ func _integrate_forces(_state: PhysicsDirectBodyState2D) -> void:
 func _update_ship_info() -> void:
 	controller.health_max = max_health
 	controller.shots_max = muzzle.max_shots
-	controller.current_shots = muzzle.current_shots
+	controller.current_shots = muzzle.current_shots 
+	controller.reload_time =  muzzle.reload_time
 	controller.time_till_reload = muzzle.time_till_reload
+	controller.cooldown_time = muzzle.cooldown
 	controller.shot_cooldown = muzzle.cooldown_left
+	controller.max_velocity = self.max_velocity
 	controller.current_speed = sensor_suit.speed
 
 func _apply_team_color(new_team: S_Team) -> void:

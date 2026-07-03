@@ -166,7 +166,7 @@ func set_action(action) -> void:
 	controller.update_inputs(
 		clampf(action["thrust"][0], 0., 1.0),
 		clampf(action["turn"][0], -1.0, 1.0),
-		action["shoot"][0] >= 0.5,
+		action["shoot"][0] > 0.,
 	)
 
 #-----------------------------------------------------------------------------#
@@ -218,6 +218,7 @@ func reset():
 	controller.turn = 0.
 	controller.thrust = 0.
 	controller.last_damage_was_self_damage = false
+	controller.last_damage_was_enemy_damage = false
 	controller.health = controller.health_max
 	controller.score = 0
 	
@@ -226,6 +227,7 @@ func reset():
 	var sum: float = _aggregator.values().reduce(func(a,b): return a+b, 0.)
 	# TODO propagate the information on the specific training run + grid position here somehow
 	print_rich("[b]%s[/b], %8d,\t%4.3f%s" % [self.get_meta("agent_no", -1), now, sum, _reward_string(_aggregator)])
+	# TODO make this a bar chart for each metric at the bottom of the screen in training view
 	for k in _aggregator.keys():
 		_aggregator.set(k, 0.)
 

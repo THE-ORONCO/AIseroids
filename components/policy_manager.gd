@@ -3,9 +3,9 @@ extends Node
 
 
 const FOLDER_PATHS: Dictionary = {
-	"policy_scripts": "res://components/policies/",
-	"logs": "res://logs/sb3/policy_collection_log/",
-	"presets": "res://policy_collection_presets/",
+	"policy_scripts": 	"res://components/policies/",
+	"logs": 			"res://logs/sb3/policy_collection_log/",
+	"presets": 			"res://policy_collection_presets/",
 }
 
 var loaded_policy_collection: PolicyCollection:
