@@ -8,4 +8,4 @@ extends Resource
 ## the number of ticks between history states TODO
 @export_range(1, 10, 1) var history_skip: int = 1
 ## architecture of the hidden model layers TODO
-@export var arch: Array[int] = [64,64]
+@export var net_arch: Array[int] = [64,64]

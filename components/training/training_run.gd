@@ -3,6 +3,8 @@ extends Resource
 
 ## Name of the experiment that was trained
 @export var experiment_name: String
+## Root dir where all experiments will be stored
+@export var experiment_dir: String
 
 ## the scenario used for the training
 @export var scenario: Scenario
@@ -17,6 +19,8 @@ extends Resource
 @export var hyper_params: HyperParams
 
 @export_group("model params")
+## if the model should use a previous model for training
+@export var resume_model_path: String
 ## where to save the trained model to TODO
 @export var save_model_path: String
 ## where to save the onnx model to (relative to the models folder) TODO
