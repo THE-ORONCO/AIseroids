@@ -12,13 +12,17 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_2gkgi")
 script = ExtResource("1_2gkgi")
+_test_mode = true
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=823775501]
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=374554731]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer" unique_id=859657376]
 unique_name_in_owner = true
@@ -29,17 +33,16 @@ horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=1256204086]
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 5
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=1762724356]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 3
 
 [node name="ScoresContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer" unique_id=99658630]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 6
 size_flags_vertical = 3
 
 [node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=2026878157]

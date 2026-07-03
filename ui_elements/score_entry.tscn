@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://0ky1jyextjw7"]
 
-[ext_resource type="Script" uid="uid://csvbk2okk4yty" path="res://score_entry.gd" id="1_gq3sg"]
+[ext_resource type="Script" uid="uid://csvbk2okk4yty" path="res://ui_elements/score_entry.gd" id="1_gq3sg"]
 
 [node name="ScoreEntry" type="HBoxContainer" unique_id=154578532]
 anchors_preset = 15
