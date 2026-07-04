@@ -225,7 +225,7 @@ static func _basic_type_control(v: Variant, setter: Callable, p:FieldProps) -> C
 	if p.typ == TYPE_FLOAT:
 		# TODO parse out min and max values
 		var sb := SpinBox.new()
-		sb.step = 0.01
+		sb.step = 0.01 if v > 0.01 else 0.000001
 		sb.min_value = -1000000000.0
 		sb.max_value = 1000000000.0
 		sb.value = float(v)

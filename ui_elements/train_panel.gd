@@ -34,7 +34,7 @@ func _ready() -> void:
 
 		get_tree().root.tree_exiting.connect(func():
 			if !DirAccess.dir_exists_absolute(dir):
-				print("aaaaaa")
+				assert(false, "This directory should exist at the time of exiting")
 			var save_path := dir.path_join(run.experiment_name + ".tres")
 			var err := ResourceSaver.save(run, save_path)
 			if err:	push_error("Error %d while saving %s" % [err, save_path])

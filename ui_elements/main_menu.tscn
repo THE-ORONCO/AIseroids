@@ -106,7 +106,6 @@ metadata/_custom_type_script = "uid://bvw4yradmltby"
 
 [sub_resource type="Resource" id="Resource_csuuw"]
 script = ExtResource("12_ap04m")
-experiment_name = "testy"
 experiment_dir = null
 scenario = SubResource("Resource_ewwjc")
 hyper_params = SubResource("Resource_4undi")
