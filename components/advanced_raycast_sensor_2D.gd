@@ -128,7 +128,7 @@ func get_observation() -> Array:
 func calculate_raycasts() -> Array:
 	var result = []
 	var distances: Array[float] = []
-	var types: Array[ShapeId.EntityType] = []
+	var types: Array[float] = []
 	var close_asteroid_found: bool = false
 	
 	if debug_draw:
@@ -188,8 +188,9 @@ func _cast_wrapping(from: Vector2, to: Vector2, mask: int, max_depth := 3, depth
 		_tos.append(result.position)
 		var distance := (result.position as Vector2 - from).length()
 		
-		if result.collider is RayWrap:
-			var wrap_border: RayWrap = result.collider
+		var collider: Node2D = result.collider
+		if collider is RayWrap:
+			var wrap_border: RayWrap = collider
 			var hit_pos: Vector2 = result.position
 			var direction := (to - from).normalized()
 			var shift_delta := wrap_border.wrap_ray(hit_pos, to)
@@ -206,7 +207,7 @@ func _cast_wrapping(from: Vector2, to: Vector2, mask: int, max_depth := 3, depth
 					"type": recurse_cast.get("type")
 					}
 		else:
-			return {"distance": distance, "type": ShapeId.identify(result.collider)}
+			return {"distance": distance, "type": ShapeId.identify(collider)}
 	else:
 		_tos.append(to)
 		return {}
