@@ -27,6 +27,8 @@ func _ready() -> void:
 	reset()
 	
 func _draw() -> void:
+	if !debug: return
+	
 	draw_line(self.position, velocity, Color.YELLOW, 2)
 	var a := to_local(self.global_position + Vector2(0,-100).rotated(_rotation_history[0] * PI))
 	draw_line(self.position, a, Color.YELLOW, 2)
