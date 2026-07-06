@@ -98,14 +98,14 @@ unique_name_in_owner = true
 script = ExtResource("4_tua1r")
 debug = true
 
-[node name="RaySensor" type="Node2D" parent="SensorSuite" unique_id=1112416718]
+[node name="RaySensor" type="Node2D" parent="SensorSuite" unique_id=1112416718 node_paths=PackedStringArray("ship_body")]
 unique_name_in_owner = true
 script = ExtResource("5_3if2u")
+ship_body = NodePath("../..")
 collision_mask = 33
 collide_with_areas = true
 n_rays = 60.0
-ray_length = 500.0
-debug_draw = false
+ray_length = 700.0
 metadata/_custom_type_script = "uid://cngsnhnnpaxnx"
 
 [node name="NearFieldSensor" type="Area2D" parent="." unique_id=898996425]

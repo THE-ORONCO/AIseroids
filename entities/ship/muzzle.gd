@@ -10,7 +10,7 @@ const SHOT: PackedScene = preload("uid://bgqdgtlshk4yf")
 @onready var shot_cooldown_timer: Timer = %ShotCooldown
 @onready var reload_timer: Timer = %ReloadTimer
 @onready var pew: AudioStreamPlayer = %Pew
-@onready var out_of_ammo: AudioStreamPlayer = $OutOfAmmo
+@onready var reload: AudioStreamPlayer = %Reload
 
 var _current_shots: int = 0
 var _shot_blueprint: S_Shot
@@ -47,8 +47,6 @@ func fire(reference_velocity: Vector2, team: S_Team) -> void:
 		return
 	if _current_shots <= 0 :
 		#print("no bullets left!")
-		out_of_ammo.pitch_scale = randf_range(0.97, 1.03)
-		out_of_ammo.play()
 		return 
 
 	var bullet: Shot = SHOT.instantiate()
@@ -86,5 +84,7 @@ func reset_weapon() -> void:
 
 func _reload() -> void:
 	self._current_shots = move_toward(_current_shots, max_shots, 1)
+	reload.pitch_scale = randf_range(0.97, 1.03)
+	reload.play()
 	if _current_shots >= max_shots:
 		reload_timer.stop()

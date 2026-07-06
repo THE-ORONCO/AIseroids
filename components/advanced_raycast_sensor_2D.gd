@@ -2,6 +2,9 @@
 class_name AdvancedRaycastSensor2D
 extends ISensor2D
 
+@export var ship_body: RigidBody2D
+@onready var self_rid: RID = ship_body.get_rid()
+
 @export_flags_2d_physics var collision_mask := 1:
 	get:
 		return collision_mask
@@ -49,6 +52,7 @@ extends ISensor2D
 	set(value):
 		debug_draw = value
 		_update()
+
 
 var _angles = []
 var _froms: Array[Vector2]= []
@@ -207,7 +211,7 @@ func _cast_wrapping(from: Vector2, to: Vector2, mask: int, max_depth := 3, depth
 					"type": recurse_cast.get("type")
 					}
 		else:
-			return {"distance": distance, "type": ShapeId.identify(collider)}
+			return {"distance": distance, "type": ShapeId.identify(collider, self_rid)}
 	else:
 		_tos.append(to)
 		return {}

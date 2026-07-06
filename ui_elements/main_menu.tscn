@@ -229,6 +229,7 @@ script = ExtResource("5_iavgl")
 name = "flimbo"
 mode = SubResource("Resource_hkaby")
 team = SubResource("Resource_pp7ww")
+show_debug = true
 muzzle = SubResource("Resource_7gt6l")
 metadata/_custom_type_script = "uid://by2mdqrrhfsa3"
 
