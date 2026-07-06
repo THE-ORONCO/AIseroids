@@ -31,7 +31,10 @@ static func next_training_run_dir(run: TrainingRun) -> String:
 				latest_exp_num = exp_num
 				latest_exp = file
 	
+	if !latest_exp.is_empty():
+		print("Found the experiment directory '%s' for the given run %s" % [latest_exp, run.experiment_name])
+	
 	var experiment_folder := run.experiment_name + "_" + str(latest_exp_num + 1)
-	var exp_dir := DirAccess.open(experiment_folder)
+	#var exp_dir := DirAccess.open(experiment_folder)
 		
 	return run.experiment_dir.path_join(experiment_folder)

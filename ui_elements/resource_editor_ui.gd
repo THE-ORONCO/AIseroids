@@ -136,9 +136,10 @@ static func _array_control(array: Array, p: FieldProps) -> Control:
 	add_button.text = "+"
 	add_button.pressed.connect(func():
 		
-		# TODO maybe support objects here
-		var default = default_for_variant_type(elem_type)
+		
 		array.resize(array.size() + 1)
+		var default = default_for_variant_type(elem_type)
+		array[array.size()-1] = default
 		var fp = FieldProps.new({
 				"name": "",
 				"type": elem_type,
@@ -162,6 +163,7 @@ static func _array_line(array: Array, index: int, fp: FieldProps) -> Control:
 	var line := HBoxContainer.new()
 	
 	var val = array[index]
+	# TODO maybe support objects here
 	# This is kind of hacky and requires no other nodes to exist before the list of lines 
 	var control := _basic_type_control(val, func(new_val): array[line.get_index()] = new_val, fp)
 	line.add_child(control)
@@ -187,10 +189,10 @@ static func _object_control(v: Object, p: FieldProps) -> Control:
 	fold.fold()
 	return fold
 
-static func _prop_row(name: String, control: Control) -> Control:
+static func _prop_row(prop_name: String, control: Control) -> Control:
 	var row := HBoxContainer.new()
 	var label := Label.new()
-	label.text = name
+	label.text = prop_name
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(label)
 	control.size_flags_horizontal = Control.SIZE_EXPAND_FILL

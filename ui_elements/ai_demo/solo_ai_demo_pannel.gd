@@ -1,5 +1,6 @@
 extends VBoxContainer
 
+const MODE: String = "SOLO AI"
 const SPACE_MULTI = preload("uid://d07sfwm8fs1hr")
 
 @export var scenario: Scenario
@@ -23,6 +24,6 @@ func prepare_scenario(sno: Scenario) -> Scenario:
 
 func start_demo() -> void:
 	var sno := prepare_scenario(scenario)
-	var sp := ScenarioPlayer.new(sno)
+	var sp := ScenarioPlayer.new(sno, MODE, true)
 	get_tree().change_scene_to_node(sp)
 	

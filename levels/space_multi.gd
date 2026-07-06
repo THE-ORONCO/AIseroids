@@ -27,6 +27,7 @@ signal end_through_death
 signal end_through_self
 signal end_through_win
 signal end_through_timeout
+signal round_finished(scores: Dictionary[S_Team, int])
 
 @onready var brains: Dictionary[NodePath, ShipBrain2D] = {}
 @onready var score_keeper: ScoreKeeper = %ScoreKeeper
@@ -146,6 +147,8 @@ func reset_playfield(report_to_agent := true) -> void:
 		_timeout_timer.start(time_clear_max_time)
 	
 	_is_resetting = false
+	
+	round_finished.emit(score_keeper.bests)
 
 
 func _reset_with_success(_ship: Ship, brain: ShipBrain2D) -> void:

@@ -1,5 +1,7 @@
 extends PanelContainer
 
+const MODE: String = "AI VS AI"
+
 @export var scenario: Scenario
 
 @onready var ai_demo_btn: Button = %AiVsAiBtn
@@ -10,7 +12,7 @@ extends PanelContainer
 func _ready() -> void:
 	ai_demo_btn.pressed.connect(func(): 		
 		var sno := prepare_scenario(scenario)
-		var sp := ScenarioPlayer.new(sno)
+		var sp := ScenarioPlayer.new(sno, MODE, true)
 		get_tree().change_scene_to_node(sp)
 		)
 

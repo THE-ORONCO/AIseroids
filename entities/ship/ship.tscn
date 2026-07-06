@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://c2qcohstk8elv" path="res://entities/ship/muzzle.tscn" id="4_53e7a"]
 [ext_resource type="Script" uid="uid://clls47afawh5h" path="res://entities/ship/sensor_suite.gd" id="4_tua1r"]
 [ext_resource type="Script" uid="uid://cngsnhnnpaxnx" path="res://components/advanced_raycast_sensor_2D.gd" id="5_3if2u"]
-[ext_resource type="Script" uid="uid://c668ga3p1e8kn" path="res://ui_elements/speedometer.gd" id="7_3ywi2"]
 [ext_resource type="PackedScene" uid="uid://bocdkmbu367mf" path="res://ui_elements/health_bar.tscn" id="7_53e7a"]
 [ext_resource type="Script" uid="uid://bin2qh5u0yhkm" path="res://entities/ship/shots_left_ui.gd" id="8_3ywi2"]
 
@@ -139,34 +138,6 @@ offset_top = -5.0
 offset_right = 20.0
 offset_bottom = 5.0
 size_flags_horizontal = 3
-metadata/_edit_use_anchors_ = true
-
-[node name="Speedometer" type="Control" parent="." unique_id=196597760]
-custom_minimum_size = Vector2(30, 20)
-layout_mode = 3
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -15.0
-offset_right = 15.0
-offset_bottom = 20.0
-grow_horizontal = 2
-script = ExtResource("7_3ywi2")
-metadata/_edit_use_anchors_ = true
-
-[node name="SpeedLabel" type="Label" parent="Speedometer" unique_id=1958891833]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -21.0
-offset_right = 21.0
-offset_bottom = 23.0
-grow_horizontal = 2
-text = "000.0"
-horizontal_alignment = 1
-vertical_alignment = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="ShipCore" type="Node2D" parent="." unique_id=947130586]
