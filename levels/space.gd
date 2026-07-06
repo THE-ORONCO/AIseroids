@@ -139,8 +139,8 @@ func _reset_with_failure() -> void:
 		_ship_brain.done = true
 		_ship_brain.is_success = false
 
-	if ship.controller.last_damage_was_self_damage:	end_through_self.emit()
-	else: 											end_through_death.emit()
+	if ship.controller.shot_self:	end_through_self.emit()
+	else: 							end_through_death.emit()
 
 	reset_playfield.call_deferred()
 

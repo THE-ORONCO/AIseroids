@@ -217,8 +217,9 @@ func reset():
 	controller.shoot = false
 	controller.turn = 0.
 	controller.thrust = 0.
-	controller.last_damage_was_self_damage = false
-	controller.last_damage_was_enemy_damage = false
+	controller.shot_self = false
+	controller.shot_by_enemy = false
+	controller.shot_enemy = false
 	controller.health = controller.health_max
 	controller.score = 0
 	

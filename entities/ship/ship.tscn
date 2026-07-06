@@ -64,7 +64,7 @@ _data = {
 }
 point_count = 9
 
-[node name="Ship" type="RigidBody2D" unique_id=1181218062]
+[node name="Ship" type="RigidBody2D" unique_id=1181218062 groups=["DamageCollider", "SplitsAsteroids"]]
 gravity_scale = 0.0
 contact_monitor = true
 max_contacts_reported = 1
@@ -126,7 +126,6 @@ unique_name_in_owner = true
 position = Vector2(0, -68)
 max_shots = 7
 cooldown = 0.1
-reload_time = 1.0
 
 [node name="HealthBar" parent="." unique_id=1407290129 instance=ExtResource("7_53e7a")]
 unique_name_in_owner = true

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://43mmtutgw08d" path="res://levels/space_multi.gd" id="1_khl3c"]
 [ext_resource type="PackedScene" uid="uid://dq5kaans1s87n" path="res://entities/wrap/wrap.tscn" id="3_0c28y"]
+[ext_resource type="Script" uid="uid://bfmd8jae4whoy" path="res://components/trauma_camera.gd" id="3_6n87h"]
 [ext_resource type="Script" uid="uid://dd478rmnll5y" path="res://components/asteroid_spawner.gd" id="4_isswm"]
 [ext_resource type="Script" uid="uid://c0sajahomp6o5" path="res://components/score_keeper.gd" id="5_p1x55"]
 [ext_resource type="Script" uid="uid://bfkrxk2ds5p8c" path="res://components/signal_bus.gd" id="6_xc71q"]
@@ -19,9 +20,11 @@ target_asteroid_instances = 15
 unique_name_in_owner = true
 fallback_size = Vector2(1000, 1000)
 
-[node name="Camera" type="Camera2D" parent="." unique_id=1711227385]
+[node name="Camera" type="Camera2D" parent="." unique_id=1666187555]
 unique_name_in_owner = true
 position = Vector2(371, 223)
+script = ExtResource("3_6n87h")
+metadata/_custom_type_script = "uid://bfmd8jae4whoy"
 
 [node name="AsteroidSpawner" type="Node2D" parent="." unique_id=1429533558 node_paths=PackedStringArray("wrap_instance", "bus")]
 unique_name_in_owner = true

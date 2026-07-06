@@ -61,6 +61,19 @@ func _ready() -> void:
 	asteroid_spawner.wave_destroyed.connect(reset_playfield)
 	
 	signal_bus.asteroid_destroyed.connect(func(_t,_p): camera.shake_screen(5))
+	signal_bus.shot_hit_ship.connect(func(shot: Shot, hit_ship: Ship):
+		# TODO find a better solution than to itterate all ships (though with so few ships it should not matter)
+		for ship in ships:
+			if ship == hit_ship:
+				if shot.team == ship.team: # self damage
+					ship.controller.shot_self = true
+				if shot.team != ship.team: # other team hit
+					ship.controller.shot_by_enemy = true
+			# TODO associate the shot with the ship that shot so we do not use the team here
+			#  this will break if we ever put more than one ship in a team
+			if ship.team == shot.team:
+				ship.controller.shot_enemy = true
+		)
 	
 	_timeout_timer = Timer.new()
 	_timeout_timer.autostart = true
@@ -78,6 +91,7 @@ func configure(blueprint: Scenario) -> void:
 	for ship_blueprint in blueprint.ships:
 		var ship := _create_ship(ship_blueprint)
 		ship.health_reached_zero.connect(reset_playfield)
+		ship.bus = signal_bus
 		score_keeper.score_changed_for.connect(func(new_score: int, team: S_Team): 
 				if ship.team == team:
 					ship.controller.score = new_score
@@ -173,8 +187,8 @@ func _reset_with_failure(ship: Ship, brain: ShipBrain2D) -> void:
 		brain.done = true
 		brain.is_success = false
 
-	if ship.controller.last_damage_was_self_damage:	end_through_self.emit()
-	else: 											end_through_death.emit()
+	if ship.controller.shot_self:	end_through_self.emit()
+	else: 							end_through_death.emit()
 
 
 func _reset_with_timeout(_ship: Ship, brain: ShipBrain2D) -> void:

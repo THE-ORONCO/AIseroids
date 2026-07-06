@@ -21,7 +21,7 @@ signal health_reached_zero
 		controller = val
 		controller.sensor = sensor_suit
 @export var health_manager: HealthManager = null
-
+@export var bus: SignalBus = null
 @export_group("movement")
 @export_range(1., 3000.) var thruster_power: float = 500.
 @export_range(1., 3000.) var strafe_power: float = 500.
@@ -72,12 +72,6 @@ func _ready() -> void:
 	health_manager.health_reached_zero.connect(health_reached_zero.emit)
 	health_manager.health_changed.connect(func(nh, by): 
 		controller.health = nh
-		if by is Shot: 
-			var shot: Shot = by
-			if shot.team == self.team:
-				controller.last_damage_was_self_damage = true
-			else:
-				controller.last_damage_was_enemy_damage = true
 		health_changed.emit(nh)
 	)
 	_apply_team_color(team)
@@ -158,9 +152,21 @@ func _check_for_damage(body: Node) -> void:
 	#print("check")
 	if body.is_in_group(&"DamageCollider"):
 		if invincibility_timer.is_stopped():
+			
+			if body is Shot: # only damage if we shot ourselves
+				var shot: Shot = body
+				if bus: bus.signal_shot_hit_ship(shot, self)
+				if shot.team == self.team:
+					health_manager.apply_health_change(-(body.damage), body)
+					invincibility_timer.start()
+				else:
+					# do not damage the ship through enemy shots 
+					controller.shot_by_enemy = true
+			else:
+				health_manager.apply_health_change(-1, body)
+				invincibility_timer.start()
+
 			#print(body.damage)
-			health_manager.apply_health_change(-(body.damage), body)
-			invincibility_timer.start()
 			Audio.hit()
 			#print("took damage")
 		else:
