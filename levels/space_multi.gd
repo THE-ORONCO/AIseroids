@@ -34,7 +34,8 @@ signal round_finished(scores: Dictionary[S_Team, int])
 @onready var hud: Hud = %Hud
 @onready var asteroid_spawner: AsteroidSpawner = %AsteroidSpawner
 @onready var wrap_border: Wrap = %Wrap
-@onready var camera: Camera2D = %Camera
+@onready var camera: TraumaCamera = %Camera
+@onready var signal_bus: SignalBus = %SignalBus
 
 var middle_of_wrap: Vector2:
 	get: return wrap_border.global_position + wrap_border.extent / 2.
@@ -58,6 +59,9 @@ func _ready() -> void:
 	wrap_border.do_fit_to_screen(fit_to_screen)
 	
 	asteroid_spawner.wave_destroyed.connect(reset_playfield)
+	
+	signal_bus.asteroid_destroyed.connect(func(_t,_p): camera.shake_screen(5))
+	
 	_timeout_timer = Timer.new()
 	_timeout_timer.autostart = true
 	_timeout_timer.one_shot = true
@@ -68,6 +72,7 @@ func _ready() -> void:
 	score_keeper.best_changed_for.connect(hud.show_best)
 	
 	self.ready.connect(reset_playfield, CONNECT_ONE_SHOT)
+	
 
 func configure(blueprint: Scenario) -> void:
 	for ship_blueprint in blueprint.ships:
@@ -77,6 +82,7 @@ func configure(blueprint: Scenario) -> void:
 				if ship.team == team:
 					ship.controller.score = new_score
 				)
+		ship.health_changed.connect(func(n): camera.shake_screen())
 		
 	self.time_clear_max_time = blueprint.time_clear_max_time
 	
