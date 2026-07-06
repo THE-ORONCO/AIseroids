@@ -19,7 +19,14 @@ func _ready() -> void:
 	copy_solo_command.pressed.connect(func(): _command_to_clipboard(edit_solo_training_run_button.training_run))
 	copy_multi_command.pressed.connect(func(): _command_to_clipboard(edit_multi_training_run_button.training_run))
 	
-	continue_training.continuation_selected.connect(edit_solo_training_run_button.refresh)
+	continue_training.continuation_selected.connect(func(run: TrainingRun):
+		var previous_run := edit_solo_training_run_button.training_run
+		var multiple_ships := previous_run.scenario.ships
+		var new_run: TrainingRun = run.duplicate_deep(Resource.DEEP_DUPLICATE_ALL)
+		new_run.scenario.ships = multiple_ships
+		
+		edit_solo_training_run_button.refresh(new_run)
+		)
 	continue_training.continuation_selected.connect(func(run: TrainingRun):
 		var previous_run := edit_multi_training_run_button.training_run
 		var multiple_ships := previous_run.scenario.ships

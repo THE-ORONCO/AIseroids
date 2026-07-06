@@ -46,7 +46,7 @@ const DEFAULT_MUZZLE: PackedScene = preload("uid://c2qcohstk8elv")
 func reset_ship(reset_position: Vector2 = Vector2.ZERO) -> void:
 	health_manager.reset_health()
 	muzzle.reset_weapon()
-	self.shots_left_ui.configure(muzzle.max_shots) # Can be deleted as soon as ship.configure() is used in all modes
+	self.shots_left_ui.reset() # Can be deleted as soon as ship.configure() is used in all modes
 	
 	self.set_deferred("linear_velocity", Vector2.ZERO)
 	self.set_deferred("angular_velocity", 0.)
