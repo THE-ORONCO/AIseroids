@@ -18,7 +18,8 @@ func _ready() -> void:
 func setup() -> void:
 	self.linear_velocity = self.transform.y * -speed
 	despawn_timer.start(despawn_after)
-	body_entered.connect(func(_a): self.queue_free())
+	if !body_entered.is_connected(_free_self):
+		body_entered.connect(_free_self)
 	_apply_team_color(team)
 
 func configure(blueprint: S_Shot, shooting_team: S_Team) -> void:
@@ -30,6 +31,9 @@ func configure(blueprint: S_Shot, shooting_team: S_Team) -> void:
 	if shooting_team:
 		self.team = shooting_team
 	setup()
+
+func _free_self(_ignored) -> void:
+	self.queue_free()
 
 func _apply_team_color(shooting_team: S_Team) -> void:
 	if !sprite || !shooting_team:

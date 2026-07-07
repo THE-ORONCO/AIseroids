@@ -5,7 +5,9 @@ const SHIP = preload("uid://cunuddi5si8ua")
 
 
 ## this decides if this is a highscore game or if all progress is reset after the time is up.
-@export var play_mode: bool = false
+@export var limit_time: bool = false
+## if the game has multiple waves or if it ends after one
+@export var multi_wave: bool = true
 @export var fit_to_screen := false
 @export var playfield_extent := Vector2(1000., 1000.)
 
@@ -48,7 +50,7 @@ var _wave_spawn_timer: Timer
 var _timeout_timer: Timer
 var _is_resetting: bool = false
 
-func _ready() -> void:
+func _ready() -> void:	
 	_wave_spawn_timer = Timer.new()
 	_wave_spawn_timer.autostart = true
 	_wave_spawn_timer.one_shot = true
@@ -58,7 +60,7 @@ func _ready() -> void:
 	wrap_border.fallback_size = self.playfield_extent
 	wrap_border.do_fit_to_screen(fit_to_screen)
 	
-	asteroid_spawner.wave_destroyed.connect(reset_playfield)
+	asteroid_spawner.wave_destroyed.connect(_handle_wave_destroyed)
 	
 	signal_bus.asteroid_destroyed.connect(func(_t,_p): camera.shake_screen(5))
 	signal_bus.shot_hit_ship.connect(func(shot: Shot, hit_ship: Ship):
@@ -75,8 +77,8 @@ func _ready() -> void:
 				ship.controller.shot_enemy = true
 		)
 	
+	
 	_timeout_timer = Timer.new()
-	_timeout_timer.autostart = true
 	_timeout_timer.one_shot = true
 	_timeout_timer.timeout.connect(reset_playfield)
 	add_child(_timeout_timer)
@@ -84,19 +86,19 @@ func _ready() -> void:
 	score_keeper.score_changed_for.connect(hud.show_score)
 	score_keeper.best_changed_for.connect(hud.show_best)
 	
-	self.ready.connect(reset_playfield, CONNECT_ONE_SHOT)
-	
+	#self.ready.connect(reset_playfield, CONNECT_ONE_SHOT)
+
+func _shake_camera(_ignored) -> void:
+	camera.shake_screen()
+
 
 func configure(blueprint: Scenario) -> void:
 	for ship_blueprint in blueprint.ships:
 		var ship := _create_ship(ship_blueprint)
 		ship.health_reached_zero.connect(reset_playfield)
 		ship.bus = signal_bus
-		score_keeper.score_changed_for.connect(func(new_score: int, team: S_Team): 
-				if ship.team == team:
-					ship.controller.score = new_score
-				)
-		ship.health_changed.connect(func(n): camera.shake_screen())
+		score_keeper.score_changed_for.connect(ship.apply_score)
+		ship.health_changed.connect(_shake_camera)
 		
 	self.time_clear_max_time = blueprint.time_clear_max_time
 	
@@ -108,7 +110,8 @@ func configure(blueprint: Scenario) -> void:
 	
 	self.fit_to_screen = blueprint.fit_to_screen
 	self.playfield_extent = blueprint.playfield_extent
-	self.play_mode = blueprint.limit_time
+	self.limit_time = blueprint.limit_time
+	self.multi_wave = blueprint.multi_wave
 	self.target_asteroid_instances = blueprint.target_asteroid_instances
 	
 	
@@ -123,7 +126,7 @@ func spawn_or_wait():
 			if !_wave_spawn_timer.is_stopped():
 				await _wave_spawn_timer.timeout
 			await asteroid_spawner.finished_wave
-	if play_mode:
+	if !limit_time:
 		get_tree().create_timer(10).timeout.connect(spawn_or_wait, CONNECT_ONE_SHOT)
 
 func random_wave() -> void:
@@ -131,7 +134,7 @@ func random_wave() -> void:
 	var random_spawn_delay := asteroid_spawn_delay + randf_range(-asteroid_spawn_delay_max_deviation, asteroid_spawn_delay_max_deviation)
 	asteroid_spawner.spawn_wave(random_wave_size, random_spawn_delay)
 
-func reset_playfield(report_to_agent := true) -> void:
+func reset_playfield(report_reset := true) -> void:
 	wrap_border.fallback_size = self.playfield_extent
 	wrap_border.do_fit_to_screen(fit_to_screen)
 	camera.global_position = middle_of_wrap
@@ -142,7 +145,7 @@ func reset_playfield(report_to_agent := true) -> void:
 	for i in range(ships.size()):
 		var ship: Ship = ships[i]
 		var brain: ShipBrain2D = brains.get(ship.get_path(), null)
-		if report_to_agent: # TODO check if this toggle is the right solution
+		if report_reset: # TODO check if this toggle is the right solution
 			if ship.health_manager.health_current == 0:
 				_reset_with_failure(ship, brain)
 			elif _timeout_timer && _timeout_timer.is_stopped():
@@ -160,16 +163,16 @@ func reset_playfield(report_to_agent := true) -> void:
 			brain.reset()
 	
 	# setup the timeout
-	if play_mode:
-		spawn_or_wait()
-	else:
+	if limit_time:
 		_wave_spawn_timer.start(wave_trigger_check_delay)
 		_timeout_timer.start(time_clear_max_time)
+	else:
+		spawn_or_wait()
 	
 	_is_resetting = false
 	
-	round_finished.emit(score_keeper.bests)
-
+	if report_reset:
+		round_finished.emit(score_keeper.bests)
 
 func _reset_with_success(_ship: Ship, brain: ShipBrain2D) -> void:
 	if _is_resetting: return
@@ -242,37 +245,7 @@ func _create_ship(blueprint: S_Ship) -> Ship:
 
 	return ship
 	
-	
-	
-#func _add_ship(ship: Ship) -> void:
-	#var i := ships.find(ship)
-	#if i >= 0: return # unknown ship
-	#
-	#ships.append(ship)
-	#print("added ship")
-	#if ship.controller is AiController:
-		#var brain := ShipBrain2D.new(ship.controller)
-		#brains[ship.get_path()] = brain
-		#add_child(brain)
-#
-		#match ai_mode:
-			#AiMode.NONE: 		pass
-			#AiMode.LEARNING:	
-				#brain.control_mode = ShipBrain2D.ControlModes.TRAINING
-				#print("added learnign brain for ship ", ship.get_path())
-#
-			#AiMode.REPLAY:
-				#brain.control_mode = ShipBrain2D.ControlModes.ONNX_INFERENCE
-				#brain.onnx_model_path = onnx_model_path
-				#print("added brain for ship ", ship.get_path(), " using model: ", onnx_model_path)
-				#
-#
-#func _remove_ship(ship: Ship) -> void:
-	#var i := ships.find(ship)
-	#if i < 0: return # unknown ship
-	#
-	#
-	#if brains.erase(ship.get_path()):
-		#print("removed brain of ship ", ship.get_path())
-	#ships.remove_at(i)
-	#print("remove ship")
+
+func _handle_wave_destroyed() -> void:
+	if !multi_wave:
+		reset_playfield(false)

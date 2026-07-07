@@ -156,14 +156,16 @@ func _check_for_damage(body: Node) -> void:
 			if body is Shot: # only damage if we shot ourselves
 				var shot: Shot = body
 				if bus: bus.signal_shot_hit_ship(shot, self)
-				if shot.team == self.team:
+				if shot.team.name == self.team.name:
 					health_manager.apply_health_change(-(body.damage), body)
 					invincibility_timer.start()
 				else:
 					# do not damage the ship through enemy shots 
 					controller.shot_by_enemy = true
 			else:
-				health_manager.apply_health_change(-1, body)
+				if body is Asteroid:
+					var a: Asteroid = body
+					health_manager.apply_health_change(-(a.damage), body)
 				invincibility_timer.start()
 
 			#print(body.damage)
@@ -173,3 +175,7 @@ func _check_for_damage(body: Node) -> void:
 			pass 
 			#print("invincible")
 		# TODO apply force to both rigid bodies to push them appart
+
+func apply_score(new_score: int, team: S_Team) -> void:
+	if self.team == team:
+		self.controller.score = new_score

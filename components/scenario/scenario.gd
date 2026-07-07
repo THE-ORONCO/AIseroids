@@ -8,6 +8,7 @@ extends Resource
 @export var ships: Array[S_Ship] = []
 
 @export_group("gameplay")
+@export var multi_wave: bool = false
 @export var limit_time: bool = false
 ## The amount of time that is available to clear the wave.
 @export_range(0, 120, .1, "or_greater") var time_clear_max_time: float = 120

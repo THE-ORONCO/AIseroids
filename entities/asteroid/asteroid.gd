@@ -53,8 +53,10 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		if collider_obj.is_in_group("SplitsAsteroids"):
 			split()
 			if bus: 
-				if collider_obj is Shot: 	bus.signal_asteroid_destoryed(collider_obj.team)
-				elif collider_obj is Ship: 	bus.signal_asteroid_destoryed(collider_obj.team)
+				if collider_obj is Shot: 
+					bus.signal_asteroid_destoryed(collider_obj.team)
+				elif collider_obj is Ship && splits: 
+					bus.signal_asteroid_destoryed(collider_obj.team)
 			return
 		if collider_obj is Asteroid:
 			var impulse_vec := state.get_contact_impulse(i)

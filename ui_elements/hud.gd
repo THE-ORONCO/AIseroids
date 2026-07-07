@@ -1,5 +1,5 @@
 class_name Hud
-extends MarginContainer
+extends Control
 
 @export var wrap_space: Wrap
 
@@ -15,6 +15,7 @@ func show_score(score: int, team: S_Team) -> void:
 		add_team(team)
 
 	shown_teams[team].show_score(score)
+	resize_to_wrap() # TODO hacky fix
 
 	
 func show_best(best: int, team: S_Team) -> void:
@@ -22,15 +23,17 @@ func show_best(best: int, team: S_Team) -> void:
 		add_team(team)
 	
 	shown_teams[team].show_best(best)
+	resize_to_wrap() # TODO hacky fix
 
 
 func _ready() -> void:
-	resize_to_wrap()
 	wrap_space.size_changed.connect(resize_to_wrap)
-	
+	resize_to_wrap()
+
 
 func resize_to_wrap() -> void:
-	self.custom_minimum_size = wrap_space.extent
+	self.custom_minimum_size.x = wrap_space.extent.x
+	self.global_position = wrap_space.global_position
 
 func add_team(team: S_Team) -> void:
 	if shown_teams.has(team):

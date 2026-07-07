@@ -43,4 +43,10 @@ script = ExtResource("6_xc71q")
 
 [node name="Hud" parent="." unique_id=421406941 node_paths=PackedStringArray("wrap_space") instance=ExtResource("7_4l8q4")]
 unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 143.0
+offset_bottom = 113.0
+grow_horizontal = 1
 wrap_space = NodePath("../Wrap")
