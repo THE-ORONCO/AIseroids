@@ -47,6 +47,10 @@ SplitsAsteroids="Bodies that split asteroids on collision"
 DamageCollider=""
 Muzzle="marks muzzles to be used in a ship"
 
+[gui]
+
+theme/custom="uid://w4jagflgjplm"
+
 [input]
 
 strafe_left={

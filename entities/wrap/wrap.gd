@@ -62,6 +62,7 @@ func _fixed_size() -> void:
 	update_border_positions()
 
 func move_boundaries_to_screen_border() -> void:
+	if !self.is_inside_tree(): return 
 	var view_rect := self.get_viewport_rect()
 	var cam := self.get_viewport().get_camera_2d()
 	extent = view_rect.size

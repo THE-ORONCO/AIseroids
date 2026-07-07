@@ -24,23 +24,6 @@
 [ext_resource type="Script" uid="uid://bbv5lb3cqric4" path="res://ui_elements/training_run_edit/edit_training_run_button.gd" id="12_efy2p"]
 [ext_resource type="PackedScene" uid="uid://8pxcbth366x1" path="res://ui_elements/continue_training/continue_training.tscn" id="17_efy2p"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oj1pa"]
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-bg_color = Color(0.1, 0.1, 0.1, 0.6)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_blend = true
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-corner_detail = 5
-
 [sub_resource type="LabelSettings" id="LabelSettings_b2u01"]
 font_size = 40
 outline_size = 10
@@ -214,38 +197,6 @@ vertical_spaces = 2
 hyper_params = SubResource("Resource_4undi")
 metadata/_custom_type_script = "uid://b1oyqaj8c2ekd"
 
-[sub_resource type="Resource" id="Resource_hkaby"]
-script = ExtResource("8_iavgl")
-metadata/_custom_type_script = "uid://whenjsnth0xi"
-
-[sub_resource type="Resource" id="Resource_7gt6l"]
-script = ExtResource("7_c58ti")
-max_shots = null
-cooldown = null
-reload_time = null
-metadata/_custom_type_script = "uid://vybsjiuth0xg"
-
-[sub_resource type="Resource" id="Resource_pp7ww"]
-script = ExtResource("7_iteyy")
-name = "team"
-color = Color(0, 0.7983431, 3.85046e-07, 1)
-metadata/_custom_type_script = "uid://k2y5frwnrrwx"
-
-[sub_resource type="Resource" id="Resource_1kwqo"]
-script = ExtResource("5_iavgl")
-name = "flimbo"
-mode = SubResource("Resource_hkaby")
-team = SubResource("Resource_pp7ww")
-muzzle = SubResource("Resource_7gt6l")
-metadata/_custom_type_script = "uid://by2mdqrrhfsa3"
-
-[sub_resource type="Resource" id="Resource_ap04m"]
-script = ExtResource("4_y6ahl")
-ships = Array[ExtResource("5_iavgl")]([SubResource("Resource_1kwqo")])
-multi_wave = true
-fit_to_screen = true
-metadata/_custom_type_script = "uid://bvw4yradmltby"
-
 [sub_resource type="Resource" id="Resource_5e5tm"]
 script = ExtResource("8_iavgl")
 metadata/_custom_type_script = "uid://whenjsnth0xi"
@@ -259,7 +210,7 @@ metadata/_custom_type_script = "uid://vybsjiuth0xg"
 
 [sub_resource type="Resource" id="Resource_4h2b7"]
 script = ExtResource("7_iteyy")
-name = "A"
+name = "Big Space"
 color = Color(0, 0.8180512, 0, 1)
 metadata/_custom_type_script = "uid://k2y5frwnrrwx"
 
@@ -270,6 +221,13 @@ mode = SubResource("Resource_5e5tm")
 team = SubResource("Resource_4h2b7")
 muzzle = SubResource("Resource_evc5y")
 metadata/_custom_type_script = "uid://by2mdqrrhfsa3"
+
+[sub_resource type="Resource" id="Resource_h4wi2"]
+script = ExtResource("4_y6ahl")
+ships = Array[ExtResource("5_iavgl")]([SubResource("Resource_iteyy")])
+multi_wave = true
+fit_to_screen = true
+metadata/_custom_type_script = "uid://bvw4yradmltby"
 
 [sub_resource type="Resource" id="Resource_244nw"]
 script = ExtResource("8_iavgl")
@@ -338,9 +296,15 @@ metadata/_custom_type_script = "uid://dmqh1ocwln0r5"
 [node name="MainScreen" type="MarginContainer" parent="." unique_id=783828129]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -604.0
+offset_top = -418.0
+offset_right = 604.0
+offset_bottom = 418.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 100
@@ -384,24 +348,24 @@ theme_override_constants/separation = 20
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels" unique_id=16253013]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 30
 alignment = 1
 
 [node name="Play" type="PanelContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer" unique_id=130843915]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
+size_flags_horizontal = 6
 
 [node name="MarginContainer" type="MarginContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play" unique_id=176060900]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="PlaySoloPanel" type="VBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer" unique_id=141484434]
+[node name="PlaySoloPanel" type="GridContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer" unique_id=768714264]
 layout_mode = 2
-theme_override_constants/separation = 10
 
 [node name="Label" type="Label" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel" unique_id=2098287212]
 layout_mode = 2
@@ -412,7 +376,6 @@ horizontal_alignment = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel" unique_id=1155773381]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
 
 [node name="MarginContainer" type="MarginContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel/PanelContainer" unique_id=1783068108]
 layout_mode = 2
@@ -421,8 +384,9 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Solo" type="HBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel/PanelContainer/MarginContainer" unique_id=992620086]
+[node name="Solo" type="GridContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel/PanelContainer/MarginContainer" unique_id=689959518]
 layout_mode = 2
+columns = 3
 script = ExtResource("3_7gt6l")
 
 [node name="Label" type="Label" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel/PanelContainer/MarginContainer/Solo" unique_id=115432311]
@@ -447,7 +411,6 @@ text = "▶️ Play"
 
 [node name="PanelContainer2" type="PanelContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel" unique_id=1687027197]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
 
 [node name="MarginContainer" type="MarginContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel/PanelContainer2" unique_id=1828402002]
 layout_mode = 2
@@ -462,6 +425,7 @@ script = ExtResource("11_4undi")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel/PanelContainer2/MarginContainer/SoloVsAi" unique_id=1552799639]
 layout_mode = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel/PanelContainer2/MarginContainer/SoloVsAi/HBoxContainer" unique_id=1868604119]
 layout_mode = 2
@@ -473,9 +437,15 @@ horizontal_alignment = 1
 [node name="ConfigureVsAiScenario" type="Button" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel/PanelContainer2/MarginContainer/SoloVsAi/HBoxContainer" unique_id=673853911]
 unique_name_in_owner = true
 layout_mode = 2
-text = "🔧 Configure Scenario"
+text = "🔧 Configure
+    Scenario"
 script = ExtResource("4_evc5y")
 scenario = SubResource("Resource_yxcsb")
+
+[node name="PlayerVsAiSelector" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel/PanelContainer2/MarginContainer/SoloVsAi/HBoxContainer" unique_id=124244841 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
+unique_name_in_owner = true
+layout_mode = 2
+db = NodePath("../../../../../../../../../../../../OnnxFileDB")
 
 [node name="PlayVsAiButton" type="Button" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel/PanelContainer2/MarginContainer/SoloVsAi/HBoxContainer" unique_id=35178576]
 unique_name_in_owner = true
@@ -483,14 +453,9 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "▶️ Play"
 
-[node name="AiSelector" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Play/MarginContainer/PlaySoloPanel/PanelContainer2/MarginContainer/SoloVsAi" unique_id=124244841 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
-layout_mode = 2
-db = NodePath("../../../../../../../../../../../OnnxFileDB")
-
 [node name="Train" type="PanelContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer" unique_id=1504774958]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
 
 [node name="MarginContainer" type="MarginContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Train" unique_id=2106136537]
 layout_mode = 2
@@ -533,7 +498,6 @@ theme_override_constants/separation = 10
 
 [node name="PanelContainer5" type="PanelContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Train/MarginContainer/TrainingPanel/HBoxContainer" unique_id=1786053887]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
 
 [node name="MarginContainer" type="MarginContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Train/MarginContainer/TrainingPanel/HBoxContainer/PanelContainer5" unique_id=101541779]
 layout_mode = 2
@@ -577,7 +541,6 @@ text = "▶️ Start Training
 
 [node name="PanelContainer6" type="PanelContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Train/MarginContainer/TrainingPanel/HBoxContainer" unique_id=1038142816]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
 
 [node name="MarginContainer" type="MarginContainer" parent="MainScreen/VBoxContainer/LeftPanels/HBoxContainer/Train/MarginContainer/TrainingPanel/HBoxContainer/PanelContainer6" unique_id=1578195371]
 layout_mode = 2
@@ -621,121 +584,112 @@ text = "▶️ Start Training
 
 [node name="AiShowcase" type="PanelContainer" parent="MainScreen/VBoxContainer/LeftPanels" unique_id=1605871963]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
+size_flags_horizontal = 4
 
 [node name="Marge" type="MarginContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase" unique_id=1203431731]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="SoloAiDemoPannel" type="VBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge" unique_id=1116792224]
+[node name="AiDemoPannel" type="VBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge" unique_id=1116792224]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 6
 theme_override_constants/separation = 10
-script = ExtResource("3_3c7g6")
-scenario = SubResource("Resource_ap04m")
 
-[node name="AI" type="Label" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel" unique_id=1746480024]
+[node name="AI" type="Label" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel" unique_id=1746480024]
 layout_mode = 2
 text = "AI showcase"
 label_settings = SubResource("LabelSettings_b2u01")
 horizontal_alignment = 1
 
-[node name="PanelContainer" type="HBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel" unique_id=1080409981]
+[node name="PanelContainer" type="HBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel" unique_id=1080409981]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="SoloPanel" type="PanelContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer" unique_id=2018128507]
+[node name="SoloPanel" type="PanelContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer" unique_id=2018128507]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
+script = ExtResource("3_3c7g6")
+scenario = SubResource("Resource_h4wi2")
 
-[node name="Marge" type="MarginContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/SoloPanel" unique_id=549047548]
+[node name="Marge" type="MarginContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/SoloPanel" unique_id=549047548]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/SoloPanel/Marge" unique_id=649231152]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/SoloPanel/Marge/HBoxContainer" unique_id=1820977133]
+[node name="VBoxContainer" type="HBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/SoloPanel/Marge" unique_id=72664565]
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 1
 
-[node name="Solo AI" type="Label" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/SoloPanel/Marge/HBoxContainer/VBoxContainer" unique_id=52678261]
+[node name="Label2" type="Label" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/SoloPanel/Marge/VBoxContainer" unique_id=21788706]
 layout_mode = 2
-text = "solo"
+size_flags_horizontal = 4
+text = "Solo "
+label_settings = SubResource("LabelSettings_efy2p")
 horizontal_alignment = 1
 
-[node name="AiSelector" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/SoloPanel/Marge/HBoxContainer/VBoxContainer" unique_id=184672023 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
+[node name="AiSelector" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/SoloPanel/Marge/VBoxContainer" unique_id=184672023 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
 unique_name_in_owner = true
 layout_mode = 2
-db = NodePath("../../../../../../../../../../../../OnnxFileDB")
+db = NodePath("../../../../../../../../../../../OnnxFileDB")
 
-[node name="AiDemoBtn" type="Button" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/SoloPanel/Marge/HBoxContainer" unique_id=738145307]
+[node name="AiDemoBtn" type="Button" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/SoloPanel/Marge/VBoxContainer" unique_id=738145307]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Go"
+text = "▶️"
 
-[node name="AiVsAiPanel" type="PanelContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer" unique_id=1607922368]
+[node name="AiVsAiPanel" type="PanelContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer" unique_id=1607922368]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_oj1pa")
 script = ExtResource("5_v0w7t")
 scenario = SubResource("Resource_c58ti")
 
-[node name="Marge" type="MarginContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/AiVsAiPanel" unique_id=1349214459]
+[node name="Marge" type="MarginContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/AiVsAiPanel" unique_id=1349214459]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/AiVsAiPanel/Marge" unique_id=761198909]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer" unique_id=601642717]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 4
-
-[node name="AI vs AI" type="Label" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer" unique_id=1375772267]
-layout_mode = 2
-text = "AI vs AI"
-horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer" unique_id=1383426768]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/AiVsAiPanel/Marge" unique_id=1383426768]
 layout_mode = 2
 alignment = 1
 
-[node name="AI1" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=992225921 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
+[node name="Label3" type="Label" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer2" unique_id=1429875273]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "AI vs AI"
+label_settings = SubResource("LabelSettings_efy2p")
+horizontal_alignment = 1
+
+[node name="AI1" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer2" unique_id=992225921 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-db = NodePath("../../../../../../../../../../../../../OnnxFileDB")
+db = NodePath("../../../../../../../../../../../OnnxFileDB")
 
-[node name="Vs" type="Label" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=2037346993]
+[node name="Vs" type="Label" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer2" unique_id=2037346993]
 layout_mode = 2
 text = "vs"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AI2" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1755844893 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
+[node name="AI2" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer2" unique_id=1755844893 node_paths=PackedStringArray("db") instance=ExtResource("3_ovtgx")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-db = NodePath("../../../../../../../../../../../../../OnnxFileDB")
+db = NodePath("../../../../../../../../../../../OnnxFileDB")
 
-[node name="AiVsAiBtn" type="Button" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/SoloAiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer" unique_id=584552040]
+[node name="AiVsAiBtn" type="Button" parent="MainScreen/VBoxContainer/LeftPanels/AiShowcase/Marge/AiDemoPannel/PanelContainer/AiVsAiPanel/Marge/HBoxContainer2" unique_id=1622881145]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Go"
+text = "▶️"
 
 [node name="PolicyEditorScreen" type="MarginContainer" parent="." unique_id=1359837837]
 unique_name_in_owner = true

@@ -4,7 +4,7 @@ const MODE: String = "SOLO"
 
 @onready var play_vs_ai_button: Button = %PlayVsAiButton
 @onready var configure_vs_ai_scenario: ConfigureScenarioButton = %ConfigureVsAiScenario
-@onready var ai_selector: AiSelector = $AiSelector
+@onready var ai_selector: AiSelector = %PlayerVsAiSelector
 
 func _ready() -> void:
 	play_vs_ai_button.pressed.connect(start_vs_ai_play)

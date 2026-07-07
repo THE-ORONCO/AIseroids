@@ -1,4 +1,4 @@
-extends VBoxContainer
+extends Control
 
 const MODE: String = "SOLO AI"
 const SPACE_MULTI = preload("uid://d07sfwm8fs1hr")
