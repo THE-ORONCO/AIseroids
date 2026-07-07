@@ -23,6 +23,7 @@ buses/default_bus_layout="uid://dnsm760l76r6q"
 
 Audio="*uid://duokd6sayynua"
 PolicyManager="*uid://b8xsb4d4ucuut"
+ExitManager="*uid://ctmy3ddxvg2uj"
 
 [dotnet]
 

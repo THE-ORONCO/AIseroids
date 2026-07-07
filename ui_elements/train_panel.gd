@@ -61,14 +61,16 @@ func _start_training(run: TrainingRun) -> void:
 	
 	if !run.save_model_path:
 		run.save_model_path = dir.path_join(run.experiment_name + ".zip")
-
-	get_tree().root.tree_exiting.connect(func(): _save_run(run, dir))
 	
 	var training_grounds: TrainingGrounds = TRAINING_GROUNDS.instantiate()
 	training_grounds.training_run = run
+	#training_grounds.tree_exiting.connect(func(): _save_run(run, dir))
+	ExitManager.exiting.connect(_save_run.bindv([run, dir]))
+	get_tree().create_timer(10).timeout.connect(_save_run.bindv([run, dir]))
+	
 	get_tree().change_scene_to_node(training_grounds)
 	
-func _save_run(run: TrainingRun, dir: String) -> void:
+static func _save_run(run: TrainingRun, dir: String) -> void:
 	if !DirAccess.dir_exists_absolute(dir):
 		assert(false, "This directory should exist at the time of exiting")
 	var save_path := dir.path_join(run.experiment_name + ".tres")

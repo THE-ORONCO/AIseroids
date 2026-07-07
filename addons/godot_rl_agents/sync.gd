@@ -379,6 +379,7 @@ func _get_dict_json_message():
 		stream.poll()
 		if stream.get_status() != 2:
 			print("server disconnected status, closing")
+			ExitManager.signal_exiting()
 			get_tree().quit()
 			return null
 
@@ -469,6 +470,7 @@ func handle_message() -> bool:
 	var message = _get_dict_json_message()
 	if message["type"] == "close":
 		print("received close message, closing game")
+		ExitManager.signal_exiting()
 		get_tree().quit()
 		get_tree().set_pause(false)
 		return true
