@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://w4jagflgjplm" path="res://theme.tres" id="1_4fmvf"]
 [ext_resource type="Script" uid="uid://d27or7c6qc6hb" path="res://ui_elements/team_score.gd" id="1_i6044"]
 
-[node name="PanelContainer" type="PanelContainer" unique_id=1144978298]
+[node name="TeamScore" type="PanelContainer" unique_id=1144978298]
 offset_right = 4.0
 offset_bottom = 4.0
 theme = ExtResource("1_4fmvf")
