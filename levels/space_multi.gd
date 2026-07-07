@@ -248,4 +248,4 @@ func _create_ship(blueprint: S_Ship) -> Ship:
 
 func _handle_wave_destroyed() -> void:
 	if !multi_wave:
-		reset_playfield(false)
+		reset_playfield()
